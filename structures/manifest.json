@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "source_archive": "归档.zip",
+  "source_archive_sha256": "4a0598c7734b8799da4ddbf4743569501320c1fcc5bf5072e3c7d3de43ac25f3",
+  "generated_on": "2026-10-10",
+  "phase_cif_to_poscar_method": "CIF P1 explicit atom rows, atomic species normalized, direct fractional coords; no structure optimization",
+  "bulk": [
+    {
+      "name": "Mg2Ni",
+      "elements": [
+        "Mg",
+        "Ni"
+      ],
+      "counts": [
+        12,
+        6
+      ],
+      "natoms": 18,
+      "volume_A3": 300.36648,
+      "cif_path": "structures/bulk/Mg2Ni/Mg2Ni.cif",
+      "poscar_path": "structures/bulk/Mg2Ni/POSCAR",
+      "source": "基础结构/Mg2Ni.cif"
+    },
+    {
+      "name": "MgH2",
+      "elements": [
+        "Mg",
+        "H"
+      ],
+      "counts": [
+        2,
+        4
+      ],
+      "natoms": 6,
+      "volume_A3": 59.9728,
+      "cif_path": "structures/bulk/MgH2/MgH2.cif",
+      "poscar_path": "structures/bulk/MgH2/POSCAR",
+      "source": "基础结构/MgH2.cif"
+    },
+    {
+      "name": "CaH2",
+      "elements": [
+        "Ca",
+        "H"
+      ],
+      "counts": [
+        4,
+        8
+      ],
+      "natoms": 12,
+      "volume_A3": 142.59599,
+      "cif_path": "structures/bulk/CaH2/CaH2.cif",
+      "poscar_path": "structures/bulk/CaH2/POSCAR",
+      "source": "基础结构/CaH2.cif"
+    },
+    {
+      "name": "Mg",
+      "elements": [
+        "Mg"
+      ],
+      "counts": [
+        2
+      ],
+      "natoms": 2,
+      "volume_A3": 44.799,
+      "cif_path": "structures/bulk/Mg/Mg.cif",
+      "poscar_path": "structures/bulk/Mg/POSCAR",
+      "source": "基础结构/Mg.cif"
+    },
+    {
+      "name": "LaH3",
+      "elements": [
+        "La",
+        "H"
+      ],
+      "counts": [
+        4,
+        12
+      ],
+      "natoms": 16,
+      "volume_A3": 173.08424,
+      "cif_path": "structures/bulk/LaH3/LaH3.cif",
+      "poscar_path": "structures/bulk/LaH3/POSCAR",
+      "source": "基础结构/LaH3.cif"
+    },
+    {
+      "name": "CaMg2",
+      "elements": [
+        "Ca",
+        "Mg"
+      ],
+      "counts": [
+        4,
+        8
+      ],
+      "natoms": 12,
+      "volume_A3": 337.90278,
+      "cif_path": "structures/bulk/CaMg2/CaMg2.cif",
+      "poscar_path": "structures/bulk/CaMg2/POSCAR",
+      "source": "基础结构/CaMg2.cif"
+    },
+    {
+      "name": "LaH2",
+      "elements": [
+        "La",
+        "H"
+      ],
+      "counts": [
+        4,
+        8
+      ],
+      "natoms": 12,
+      "volume_A3": 180.97031,
+      "cif_path": "structures/bulk/LaH2/LaH2.cif",
+      "poscar_path": "structures/bulk/LaH2/POSCAR",
+      "source": "基础结构/LaH2.cif"
+    },
+    {
+      "name": "Mg2NiH4",
+      "elements": [
+        "Mg",
+        "Ni",
+        "H"
+      ],
+      "counts": [
+        16,
+        8,
+        32
+      ],
+      "natoms": 56,
+      "volume_A3": 531.84329,
+      "cif_path": "structures/bulk/Mg2NiH4/Mg2NiH4.cif",
+      "poscar_path": "structures/bulk/Mg2NiH4/POSCAR",
+      "source": "基础结构/Mg2NiH4.cif"
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "Mg_LaH3_Mg1120_LaH3_110",
+      "source_folder": "Mg相关界面/01_Mg_LaH3_interface_Mg1120_LaH3_110/",
+      "files": [
+        "POSCAR",
+        "CONTCAR"
+      ],
+      "elements": [
+        "Mg",
+        "La",
+        "H"
+      ],
+      "counts": [
+        24,
+        16,
+        48
+      ],
+      "natoms": 88,
+      "source_files": {
+        "POSCAR": "Mg相关界面/01_Mg_LaH3_interface_Mg1120_LaH3_110/POSCAR",
+        "CONTCAR": "Mg相关界面/01_Mg_LaH3_interface_Mg1120_LaH3_110/CONTCAR"
+      }
+    },
+    {
+      "name": "Mg_Mg2Ni_Mg10-10_Mg2Ni_100",
+      "source_folder": "Mg相关界面/02_Mg_Mg2Ni_interface_Mg10-10_Mg2Ni_100/",
+      "files": [
+        "POSCAR",
+        "CONTCAR"
+      ],
+      "elements": [
+        "Mg",
+        "Ni"
+      ],
+      "counts": [
+        36,
+        6
+      ],
+      "natoms": 42,
+      "source_files": {
+        "POSCAR": "Mg相关界面/02_Mg_Mg2Ni_interface_Mg10-10_Mg2Ni_100/POSCAR",
+        "CONTCAR": "Mg相关界面/02_Mg_Mg2Ni_interface_Mg10-10_Mg2Ni_100/CONTCAR"
+      }
+    },
+    {
+      "name": "MgH2_Mg2Ni",
+      "source_folder": "MgH2相关界面/MgH2_Mg2Ni_opt/",
+      "files": [
+        "POSCAR"
+      ],
+      "elements": [
+        "Mg",
+        "Ni",
+        "H"
+      ],
+      "counts": [
+        30,
+        6,
+        36
+      ],
+      "natoms": 72,
+      "source_files": {
+        "POSCAR": "MgH2相关界面/MgH2_Mg2Ni_opt/POSCAR"
+      }
+    },
+    {
+      "name": "MgH2_Mg2NiH4",
+      "source_folder": "MgH2相关界面/MgH2_Mg2NiH4_opt/",
+      "files": [
+        "POSCAR",
+        "CONTCAR"
+      ],
+      "elements": [
+        "Mg",
+        "Ni",
+        "H"
+      ],
+      "counts": [
+        20,
+        8,
+        40
+      ],
+      "natoms": 68,
+      "source_files": {
+        "POSCAR": "MgH2相关界面/MgH2_Mg2NiH4_opt/POSCAR",
+        "CONTCAR": "MgH2相关界面/MgH2_Mg2NiH4_opt/CONTCAR"
+      }
+    },
+    {
+      "name": "MgH2_LaH3",
+      "source_folder": "MgH2相关界面/MgH2_LaH3_opt/",
+      "files": [
+        "POSCAR",
+        "CONTCAR"
+      ],
+      "elements": [
+        "Mg",
+        "La",
+        "H"
+      ],
+      "counts": [
+        12,
+        16,
+        72
+      ],
+      "natoms": 100,
+      "source_files": {
+        "POSCAR": "MgH2相关界面/MgH2_LaH3_opt/POSCAR",
+        "CONTCAR": "MgH2相关界面/MgH2_LaH3_opt/CONTCAR"
+      }
+    }
+  ],
+  "excluded_potcar_count": 1,
+  "excluded_tiff_count": 4,
+  "files": [
+    {
+      "path": "structures/README.md",
+      "sha256": "b7c9dc85b6dc53d8665452f613baad8d25feedef156419d7d11f6b458d088952",
+      "size_bytes": 2639
+    },
+    {
+      "path": "structures/bulk/CaH2/CaH2.cif",
+      "sha256": "5b8315dfa1123d5be759a64c78c5a498eded3e9a847008d6697ede1592be8a3b",
+      "size_bytes": 1355
+    },
+    {
+      "path": "structures/bulk/CaH2/POSCAR",
+      "sha256": "fa496ccceaff784a1e0a5c5c0ddc2a252caffce73e94fb6ec285692dee0325c8",
+      "size_bytes": 823
+    },
+    {
+      "path": "structures/bulk/CaMg2/CaMg2.cif",
+      "sha256": "c9edbdd133dac5059c20bf63c1080467d9129a1c840420e8a93405b2f82fc557",
+      "size_bytes": 1282
+    },
+    {
+      "path": "structures/bulk/CaMg2/POSCAR",
+      "sha256": "a83f59ead398846f900bb6035af903fc2867b0558e22b4654d07c1aca4323873",
+      "size_bytes": 825
+    },
+    {
+      "path": "structures/bulk/LaH2/LaH2.cif",
+      "sha256": "afa574ffcd5480be60d6b089cf5f4b6a0d4fcb5bf3c2aad38e71dce68b4bfc92",
+      "size_bytes": 1355
+    },
+    {
+      "path": "structures/bulk/LaH2/POSCAR",
+      "sha256": "0463fa988c6bd48e306b5c214e84c835d8b70b8fe97a5517713e7f3e4907bd10",
+      "size_bytes": 823
+    },
+    {
+      "path": "structures/bulk/LaH3/LaH3.cif",
+      "sha256": "8adca004847ccc4a37c9c02960612a2b1547bb281086c6b6dbc2bc1b1cdbe1b1",
+      "size_bytes": 1564
+    },
+    {
+      "path": "structures/bulk/LaH3/POSCAR",
+      "sha256": "af737528a6c8c44e04295ef27d47d48b077d027f827bf19095a5d1fefa4cce0e",
+      "size_bytes": 1012
+    },
+    {
+      "path": "structures/bulk/Mg/Mg.cif",
+      "sha256": "af828694d5d0469c11e205c6fbfb8a936921f58c4abcb6b76d30552c6ca3a43c",
+      "size_bytes": 817
+    },
+    {
+      "path": "structures/bulk/Mg/POSCAR",
+      "sha256": "05c77e5c8d82d22fc84400c180fe15db361ae8deb628c2eabc5a3a983eb547b3",
+      "size_bytes": 347
+    },
+    {
+      "path": "structures/bulk/Mg2Ni/Mg2Ni.cif",
+      "sha256": "a2747fa32f3c1b965dc66f1ff056f3df1792596238273274eb8cf222a951e559",
+      "size_bytes": 1602
+    },
+    {
+      "path": "structures/bulk/Mg2Ni/POSCAR",
+      "sha256": "0b1f2efae560bda7a7c2ba73c2bbd7d848af2fbfc5b0a8aea56c582b2d035111",
+      "size_bytes": 1108
+    },
+    {
+      "path": "structures/bulk/Mg2NiH4/Mg2NiH4.cif",
+      "sha256": "198e00e4c0663725bbae76c57887c9f981c4651756485ba92f159fcee8b1ed96",
+      "size_bytes": 3560
+    },
+    {
+      "path": "structures/bulk/Mg2NiH4/POSCAR",
+      "sha256": "808407148d8d5b081f6b0a1a96682778b16c43c8fe4b8e604766948f35b5613a",
+      "size_bytes": 2901
+    },
+    {
+      "path": "structures/bulk/MgH2/MgH2.cif",
+      "sha256": "d4d75729b4b4e9c96cd2051b8e0af557aa297df7dee188e75dee84837869fb25",
+      "size_bytes": 1040
+    },
+    {
+      "path": "structures/bulk/MgH2/POSCAR",
+      "sha256": "1571c2793d9dfb13b621837009157e0d460cdca2715d5ba809fd25e20d1e09aa",
+      "size_bytes": 541
+    },
+    {
+      "path": "structures/interfaces/MgH2_LaH3/CONTCAR",
+      "sha256": "225a5ba1776ca54ffdd47fcfbdd40ae2f7bb87970908303ff977dd00b073102a",
+      "size_bytes": 11314
+    },
+    {
+      "path": "structures/interfaces/MgH2_LaH3/POSCAR",
+      "sha256": "38ca838e06618b74b563733359e7e8928b44953143c73b3003f7198f01e7c55a",
+      "size_bytes": 5343
+    },
+    {
+      "path": "structures/interfaces/MgH2_Mg2Ni/POSCAR",
+      "sha256": "67e714607b96f57002544e49f9bede403ce2177c24088e478759223bf72f4db4",
+      "size_bytes": 3964
+    },
+    {
+      "path": "structures/interfaces/MgH2_Mg2NiH4/CONTCAR",
+      "sha256": "316018c9d2e2970fa48adafe5ef82e9a1d632a17af2dec7c4c01c79ec559bebe",
+      "size_bytes": 7794
+    },
+    {
+      "path": "structures/interfaces/MgH2_Mg2NiH4/POSCAR",
+      "sha256": "7bb04bd9b041d308e037ac705eddce7e81cb560aca3cea5142658849d82a2732",
+      "size_bytes": 3725
+    },
+    {
+      "path": "structures/interfaces/Mg_LaH3_Mg1120_LaH3_110/CONTCAR",
+      "sha256": "80e034c8443aaf8091753481ddaaa56d60a6f9169d1216b1a8520ff4629c8802",
+      "size_bytes": 9994
+    },
+    {
+      "path": "structures/interfaces/Mg_LaH3_Mg1120_LaH3_110/POSCAR",
+      "sha256": "355359ffa9a3c90e21064de4dd912628fc25e8a21a6a3219d7af40589a73a900",
+      "size_bytes": 4749
+    },
+    {
+      "path": "structures/interfaces/Mg_Mg2Ni_Mg10-10_Mg2Ni_100/CONTCAR",
+      "sha256": "2e8bb43230a38567dd048b6d7f2011f2d029bff80a7439f4f8405509e17bab34",
+      "size_bytes": 4923
+    },
+    {
+      "path": "structures/interfaces/Mg_Mg2Ni_Mg10-10_Mg2Ni_100/POSCAR",
+      "sha256": "4038e5c6694b3541bbd7ff39f0d032e66c93535059bedffbb57d4fd0ca5202d4",
+      "size_bytes": 2398
+    }
+  ]
+}
