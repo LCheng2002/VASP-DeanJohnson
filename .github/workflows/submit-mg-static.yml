@@ -1,0 +1,35 @@
+name: Submit Mg Bulk Static to Siyuan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'requests/submit_mg_bulk_static_20261010.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mg-bulk-static-20261010
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Transfer and submit one static Mg job
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: bash scripts/submit_mg_static.sh

@@ -1,0 +1,20 @@
+SYSTEM = Mg_bulk_static_20261010
+# Consistent with prior Mg-La-Ni settings; reference-cell static energy only
+ENCUT = 520
+PREC = Accurate
+EDIFF = 1E-6
+NELM = 120
+ALGO = Normal
+ISPIN = 2
+MAGMOM = 2*0.0
+ISMEAR = 1
+SIGMA = 0.2
+IBRION = -1
+NSW = 0
+ISTART = 0
+ICHARG = 2
+LREAL = .FALSE.
+LASPH = .TRUE.
+LDAU = .FALSE.
+LWAVE = .FALSE.
+LCHARG = .FALSE.
