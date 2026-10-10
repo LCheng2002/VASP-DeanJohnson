@@ -25,19 +25,19 @@ for p in POSCAR INCAR KPOINTS job.slurm; do
 done
 
 # Pin the inputs for this one trial. Never execute silently changed job scripts.
-declare -A expected=(
-  [POSCAR]=c33c8efd5116272ebfea023d21b4d9ceb7fe4fa3
-  [INCAR]=e94cc193cbefd3abe2eb1533ab9649259f475b38
-  [KPOINTS]=058220a09049879e8a43e546470302356f4a0e10
-  [job.slurm]=a1aca2cb014b28a27637900c1331f507b70de5fe
-)
-for p in POSCAR INCAR KPOINTS job.slurm; do
-  actual="$(git hash-object "$CALC/$p")"
-  [[ "$actual" == "${expected[$p]}" ]] || {
+check_sha() {
+  p="$1"
+  expected_sha="$2"
+  actual_sha="$(git hash-object "$CALC/$p")"
+  [[ "$actual_sha" == "$expected_sha" ]] || {
     echo "Input $p was changed since approval; refusing to submit." >&2
     exit 3
   }
-done
+}
+check_sha POSCAR c33c8efd5116272ebfea023d21b4d9ceb7fe4fa3
+check_sha INCAR e94cc193cbefd3abe2eb1533ab9649259f475b38
+check_sha KPOINTS 058220a09049879e8a43e546470302356f4a0e10
+check_sha job.slurm a1aca2cb014b28a27637900c1331f507b70de5fe
 
 ssh_opts=(-F /dev/null
           -o BatchMode=yes
