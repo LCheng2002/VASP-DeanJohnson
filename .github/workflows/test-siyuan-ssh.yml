@@ -1,0 +1,77 @@
+name: Test Siyuan HPC SSH
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  connection-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+
+    steps:
+      - name: Test SSH certificate authentication
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+
+          for name in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            if [[ -z "${!name:-}" ]]; then
+              echo "::error::Missing GitHub secret or variable: $name"
+              exit 1
+            fi
+          done
+
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_automation"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_automation-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_automation" "$HOME/.ssh/known_hosts"
+          chmod 644 "$HOME/.ssh/hpc_automation-cert.pub"
+
+          cat > "$RUNNER_TEMP/ssh-askpass.sh" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/ssh-askpass.sh"
+
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/ssh-askpass.sh" \
+            SSH_ASKPASS_REQUIRE=force ssh-add "$HOME/.ssh/hpc_automation" </dev/null
+
+          ssh_opts=(
+            -F /dev/null
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o ConnectTimeout=15
+            -i "$HOME/.ssh/hpc_automation"
+            -o CertificateFile="$HOME/.ssh/hpc_automation-cert.pub"
+          )
+
+          echo "Testing sylogin..."
+          ssh "${ssh_opts[@]}" "$HPC_USER@sylogin.hpc.sjtu.edu.cn" \
+            'whoami; hostname; command -v sbatch'
+
+          echo "Testing sydata (SFTP)..."
+          printf 'pwd\n' | sftp -F /dev/null -b - \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=15 \
+            -o CertificateFile="$HOME/.ssh/hpc_automation-cert.pub" \
+            -i "$HOME/.ssh/hpc_automation" \
+            "$HPC_USER@sydata.hpc.sjtu.edu.cn"
+
+          echo "SSH and SFTP connection tests passed."
