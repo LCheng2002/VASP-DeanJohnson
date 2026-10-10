@@ -19,7 +19,7 @@ jobs:
       - name: Test SSH certificate authentication
         shell: bash
         env:
-          HPC_USER: ${{ vars.HPC_USER }}
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
           HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
           HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
           HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
