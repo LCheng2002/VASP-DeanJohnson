@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "source_archive": "01_Mg_Mg17La2.zip",
+  "source_archive_sha256": "ae80fefac5447e987ea829865838b5871a37dbabb1bd84b282d87cb6e4f3a195",
+  "source_files": [
+    {
+      "path": "structures/surfaces/Mg_cleavage_reference/POSCAR",
+      "source_archive_path": "01_Mg_Mg17La2/Mg/POSCAR",
+      "size_bytes": 3712,
+      "sha256": "f72c1d941d99711e00894a55002a936ebc4e19f77b400f7df8bd417ea9ea88f6"
+    },
+    {
+      "path": "structures/surfaces/Mg_cleavage_reference/KPOINTS",
+      "source_archive_path": "01_Mg_Mg17La2/Mg/KPOINTS",
+      "size_bytes": 89,
+      "sha256": "9b4b7dca30a6662db17aca29ffb1e83ea8d42ad480af64cb603e2897f91e6436"
+    },
+    {
+      "path": "structures/surfaces/Mg17La2_cleavage_reference/POSCAR",
+      "source_archive_path": "01_Mg_Mg17La2/Mg17La2/POSCAR",
+      "size_bytes": 5132,
+      "sha256": "84640a7574acdc25c1fe775b68c16b4138f949c851c14933bb27a79ec16e4852"
+    },
+    {
+      "path": "structures/surfaces/Mg17La2_cleavage_reference/KPOINTS",
+      "source_archive_path": "01_Mg_Mg17La2/Mg17La2/KPOINTS",
+      "size_bytes": 94,
+      "sha256": "e510cd27e77aff7e78801e2403adb57a7a34ffd555cca18fb1a0ac76e4b06508"
+    },
+    {
+      "path": "structures/interfaces/Mg_Mg17La2/POSCAR",
+      "source_archive_path": "01_Mg_Mg17La2/interface/POSCAR",
+      "size_bytes": 8599,
+      "sha256": "02162ae098489dedd5eebb06870a52ddbf34d96722b7a2d808cbe61e89c1c151"
+    },
+    {
+      "path": "structures/interfaces/Mg_Mg17La2/KPOINTS",
+      "source_archive_path": "01_Mg_Mg17La2/interface/KPOINTS",
+      "size_bytes": 77,
+      "sha256": "2c3a842781a35a34d86e02d21c6173cd5325928036440816c2cfece0ce91474c"
+    },
+    {
+      "path": "structures/interfaces/Mg_Mg17La2/region_by_atom.json",
+      "source_archive_path": "01_Mg_Mg17La2/interface/region_by_atom.json",
+      "size_bytes": 1423,
+      "sha256": "44b62a776a0b5f193e62198d61088eac928b68ab3eaf80e2e8616fe8beb1a771"
+    }
+  ],
+  "models": {
+    "Mg": {
+      "path": "structures/surfaces/Mg_cleavage_reference",
+      "elements": {
+        "Mg": 54
+      },
+      "total_atoms": 54,
+      "periodic_cell_lengths_A": [
+        9.97088,
+        9.97088,
+        31.0326
+      ],
+      "z_extent_A": [
+        9.0,
+        22.0326
+      ],
+      "estimated_empty_z_A": 18.0,
+      "coordinate_mode": "cartesian",
+      "selective_dynamics": false,
+      "nearest_atom_distance_A": 3.23668
+    },
+    "Mg17La2": {
+      "path": "structures/surfaces/Mg17La2_cleavage_reference",
+      "elements": {
+        "Mg": 68,
+        "La": 8
+      },
+      "total_atoms": 76,
+      "periodic_cell_lengths_A": [
+        9.97088,
+        9.97088,
+        38.08542
+      ],
+      "z_extent_A": [
+        9.0,
+        29.08542
+      ],
+      "estimated_empty_z_A": 18.0,
+      "coordinate_mode": "cartesian",
+      "selective_dynamics": false,
+      "nearest_atom_distance_A": 2.84101
+    },
+    "interface": {
+      "path": "structures/interfaces/Mg_Mg17La2",
+      "elements": {
+        "Mg": 122,
+        "La": 8
+      },
+      "total_atoms": 130,
+      "periodic_cell_lengths_A": [
+        9.97088,
+        9.97088,
+        50.31802
+      ],
+      "z_extent_A": [
+        0.0,
+        35.31802
+      ],
+      "estimated_empty_z_A": 15.0,
+      "coordinate_mode": "cartesian",
+      "selective_dynamics": false,
+      "nearest_atom_distance_A": 2.63984
+    }
+  },
+  "interface_region_file": "structures/interfaces/Mg_Mg17La2/region_by_atom.json",
+  "interface_region_counts": {
+    "Mg": 54,
+    "Mg17La2": 76
+  },
+  "exclude": {
+    "licensed_potcar_count": 3,
+    "macos_metadata": "__MACOSX and ._* excluded"
+  },
+  "calculation_status": "Input/reference geometries only. No OUTCAR, CONTCAR or relaxation evidence in this archive.",
+  "notes": [
+    "Mg17La2 cleavage reference is a slab with an approximately 18 Å vacuum; not a 3D bulk structure.",
+    "Mg cleavage reference is a slab with an approximately 18 Å vacuum; not a bulk Mg replacement.",
+    "Mg/Mg17La2 is a one-junction slab interface with approximately 15 Å of empty space.",
+    "KPOINTS 3x3x1 Gamma are source settings, not an endorsed convergence-tested mesh.",
+    "Keep licensed POTCAR on the HPC cluster and construct it to match POSCAR species order before calculation."
+  ]
+}

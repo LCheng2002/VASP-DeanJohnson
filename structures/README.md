@@ -1,6 +1,6 @@
 # VASP 原子结构库
 
-该目录由用户提供的 `归档.zip` 归档整理而来，包含 **8 个体相结构** 和 **5 个界面模型**。
+该结构库最初由用户提供的 `归档.zip` 整理而来，包含 **8 个体相结构** 和 **5 个界面模型**；现另补充 **1 组 Mg/Mg17La2 界面**及 **2 组匹配的参考薄片**。
 源压缩包 SHA-256：`4a0598c7734b8799da4ddbf4743569501320c1fcc5bf5072e3c7d3de43ac25f3`。
 
 ## 体相结构
@@ -43,3 +43,20 @@
 - 体相文件名 `CaMg2` 沿用源 CIF 命名，在化学式上与 `Mg2Ca` 等价。
 
 上传此结构库本身**不会触发思源一号的 Slurm 提交**。
+
+## 补充：Mg/Mg17La2 界面与参考薄片（`01_Mg_Mg17La2.zip`）
+
+在此前的 8 个体相、5 组界面基础上，另加入以下三个 **原始参考/待计算模型**：
+
+| 模型 | 组成 | 原子数 | 文件 | 结构类型 |
+|---|---|---:|---|---|
+| [Mg 参考薄片](surfaces/Mg_cleavage_reference/) | Mg54 | 54 | POSCAR, KPOINTS | 带约 18 Å 真空层的 cleavage slab |
+| [Mg17La2 参考薄片](surfaces/Mg17La2_cleavage_reference/) | Mg68La8 | 76 | POSCAR, KPOINTS | 带约 18 Å 真空层的 cleavage slab，**非体相** |
+| [Mg/Mg17La2 界面](interfaces/Mg_Mg17La2/) | Mg122La8 | 130 | POSCAR, KPOINTS, region_by_atom.json, metadata.json | 单个界面与约 15 Å 真空层 |
+
+- [新增源文件清单、SHA-256 和结构自检信息](sources/01_Mg_Mg17La2/manifest.json)。
+- `region_by_atom.json` 共含 130 个逐原子标签：54 个 Mg 区域，76 个 Mg17La2 区域；标签顺序与所提供的 POSCAR 原子列表对应。
+- 三组模型源文件均采用 Cartesian 坐标和 Gamma 3×3×1 KPOINTS；K 点仅为归档原有设置，**未验证收敛性**，不是新的默认计算配置。
+- 本压缩包没有 CONTCAR 或 OUTCAR，因此不声称完成了结构优化或计算收敛。
+- 原归档包含的三个 POTCAR 文件因 VASP 许可限制未上传；没有任何计算任务被触发。
+- **目前仍缺 Mg17La2 的真实三维体相结构**；这里保留的是 Mg17La2 切割薄片以及 Mg/Mg17La2 界面，不能用薄片直接代替体相进行计算。

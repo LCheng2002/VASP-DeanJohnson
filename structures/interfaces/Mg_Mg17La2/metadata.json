@@ -1,0 +1,29 @@
+{
+  "model_id": "Mg_Mg17La2",
+  "description": "coherent Mg/Mg17La2 interface, one junction plus vacuum",
+  "source_archive": "01_Mg_Mg17La2.zip",
+  "region_by_atom_values": [
+    "Mg",
+    "Mg17La2"
+  ],
+  "region_by_atom_length": 130,
+  "region_counts": {
+    "Mg": 54,
+    "Mg17La2": 76
+  },
+  "chemical_species": {
+    "Mg": 122,
+    "La": 8
+  },
+  "coordinates": "Cartesian",
+  "source_POSCAR": "01_Mg_Mg17La2/interface/POSCAR",
+  "state": "supplied initial/reference structure; not shown to be relaxed",
+  "reference_models": [
+    "structures/surfaces/Mg_cleavage_reference/POSCAR",
+    "structures/surfaces/Mg17La2_cleavage_reference/POSCAR"
+  ],
+  "warnings": [
+    "No OUTCAR/CONTCAR supplied; convergence cannot be verified.",
+    "Contains z-axis vacuum; do not treat as a fully periodic bulk interface."
+  ]
+}
