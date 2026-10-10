@@ -66,7 +66,7 @@ jobs:
 
           echo "Testing sylogin..."
           ssh "${ssh_opts[@]}" "$HPC_USER@sylogin.hpc.sjtu.edu.cn" \
-            'whoami; hostname; command -v sbatch'
+            'whoami; hostname; command -v sbatch; printf "CHECKED_AT|%s\n" "$(date +%F_%T_%Z)"; echo ACTIVE_JOBS_BEGIN; squeue -u "$USER" -h -o "%i|%j|%T|%M|%l|%D|%P|%R"; echo ACTIVE_JOBS_END; echo RECENT_JOBS_BEGIN; sacct -X -u "$USER" -S "$(date -d "7 days ago" +%F)" -n -P -o JobIDRaw,JobName%35,Partition,State,ExitCode,Elapsed,Start,End | tail -n 80; echo RECENT_JOBS_END; echo PARTITION_INFO_BEGIN; sinfo -h -o "%P|%a|%l|%D|%t"; echo PARTITION_INFO_END'
 
           echo "Testing sydata (SFTP)..."
           printf 'pwd\n' | sftp -F /dev/null -b - \
