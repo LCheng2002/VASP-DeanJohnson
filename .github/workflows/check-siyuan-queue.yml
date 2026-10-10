@@ -1,0 +1,87 @@
+name: Check Siyuan Slurm Queue
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/check-siyuan-queue.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  read-only-queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Query Slurm queue and recent jobs
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for v in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            if [[ -z "${!v:-}" ]]; then
+              echo "::error::Missing GitHub secret or variable: $v"
+              exit 1
+            fi
+          done
+
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_automation"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_automation-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_automation" "$HOME/.ssh/known_hosts"
+          chmod 644 "$HOME/.ssh/hpc_automation-cert.pub"
+
+          cat > "$RUNNER_TEMP/hpc-askpass.sh" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/hpc-askpass.sh"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/hpc-askpass.sh" SSH_ASKPASS_REQUIRE=force \
+            ssh-add "$HOME/.ssh/hpc_automation" </dev/null
+
+          ssh \
+            -F /dev/null \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=15 \
+            -i "$HOME/.ssh/hpc_automation" \
+            -o CertificateFile="$HOME/.ssh/hpc_automation-cert.pub" \
+            "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          printf 'CHECKED_AT|%s\n' "$(date '+%Y-%m-%d %H:%M:%S %Z')"
+          printf 'HOST|%s\n' "$(hostname)"
+          printf 'USER|%s\n' "$(whoami)"
+          echo '=== ACTIVE_JOBS_BEGIN ==='
+          echo 'JobID|JobName|State|Elapsed|TimeLimit|Nodes|Partition|ReasonOrNode'
+          squeue -u "$USER" -h -o '%i|%j|%T|%M|%l|%D|%P|%R'
+          echo '=== ACTIVE_JOBS_END ==='
+          echo '=== RECENT_JOBS_BEGIN ==='
+          echo 'JobIDRaw|JobName|Partition|State|ExitCode|Elapsed|Start|End'
+          if command -v sacct >/dev/null 2>&1; then
+            if ! sacct -X -u "$USER" -S "$(date -d '7 days ago' +%F)" \
+              -n -P --format=JobIDRaw,JobName%36,Partition,State,ExitCode,Elapsed,Start,End \
+              | tail -n 100; then
+              echo 'SACCT_QUERY_FAILED'
+            fi
+          else
+            echo 'SACCT_UNAVAILABLE'
+          fi
+          echo '=== RECENT_JOBS_END ==='
+          echo '=== PARTITIONS_BEGIN ==='
+          echo 'Partition|Availability|TimeLimit|Nodes|State'
+          sinfo -h -o '%P|%a|%l|%D|%t'
+          echo '=== PARTITIONS_END ==='
+          REMOTE
