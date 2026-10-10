@@ -1,0 +1,20 @@
+name: GitHub Runner Diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/runner-diagnostic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  runner-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check runner
+        shell: bash
+        run: echo "GitHub hosted runner started successfully."
