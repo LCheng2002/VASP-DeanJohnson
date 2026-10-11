@@ -1,0 +1,57 @@
+name: Submit fourth H preference trials
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/submit-h4-preference.yml']
+permissions:
+  contents: read
+concurrency:
+  group: Mg17La2-H4-preference-20261011
+  cancel-in-progress: false
+jobs:
+  submit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate driver
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo 'be205b47c3e5fabc81dd0d7d96a6f67fdd42f000d85203264b8e52545612bbd0  scripts/prepare_submit_H4.py' | sha256sum -c -
+          python3 -m py_compile scripts/prepare_submit_H4.py
+      - name: Upload driver and construct only specified H4 models on cluster
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          for key in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            test -n "${!key:-}" || { echo "Missing credential configuration: $key"; exit 1; }
+          done
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_h4"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_h4-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_h4" "$HOME/.ssh/known_hosts"
+          cat > "$RUNNER_TEMP/askpass" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/askpass"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/askpass" SSH_ASKPASS_REQUIRE=force ssh-add "$HOME/.ssh/hpc_h4" </dev/null
+          opts=(-F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20 -i "$HOME/.ssh/hpc_h4" -o CertificateFile="$HOME/.ssh/hpc_h4-cert.pub")
+          ssh "${opts[@]}" "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'mkdir -p "$HOME/VASP/github_jobs/H4_driver_20261011"'
+          printf 'put scripts/prepare_submit_H4.py VASP/github_jobs/H4_driver_20261011/prepare_submit_H4.py\n' | sftp "${opts[@]}" -b - "$HPC_USER@sydata.hpc.sjtu.edu.cn"
+          ssh "${opts[@]}" "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'python3 "$HOME/VASP/github_jobs/H4_driver_20261011/prepare_submit_H4.py" --submit'
