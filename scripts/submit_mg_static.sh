@@ -77,7 +77,7 @@ if ! mkdir .submit_lock 2>/dev/null; then
 fi
 submitted=0
 cleanup_lock() {
-  if [[ "$submitted" -eq 0 ]]; then
+  if [[ "$submitted" -eq 0 && ! -e .sbatch_attempted ]]; then
     rmdir .submit_lock 2>/dev/null || true
   fi
 }
@@ -89,6 +89,18 @@ done
 if test -s "$HOME/VASP/potcar_profiles/Mg/POTCAR"; then
   cp "$HOME/VASP/potcar_profiles/Mg/POTCAR" POTCAR
   echo "POTCAR_SOURCE|authorized user-local profile"
+elif test -s "$HOME/10_bulk_references_unified/01_Mg/02_static/POTCAR"; then
+  reference="$HOME/10_bulk_references_unified/01_Mg/02_static/POTCAR"
+  if [[ "$(grep -c 'TITEL' "$reference")" -ne 1 ]] ||
+     ! grep -Eq 'TITEL[[:space:]]*=[[:space:]]*PAW_PBE[[:space:]]+Mg[[:space:]]' "$reference"; then
+    echo "POTCAR_REFERENCE_INVALID|Mg bulk reference is not a single PAW_PBE Mg potential"
+    exit 32
+  fi
+  mkdir -p "$HOME/VASP/potcar_profiles/Mg"
+  cp "$reference" "$HOME/VASP/potcar_profiles/Mg/POTCAR"
+  chmod 600 "$HOME/VASP/potcar_profiles/Mg/POTCAR"
+  cp "$HOME/VASP/potcar_profiles/Mg/POTCAR" POTCAR
+  echo "POTCAR_SOURCE|reused licensed Mg potential from existing HPC Mg bulk static reference"
 elif command -v vaspkit >/dev/null 2>&1; then
   echo "POTCAR_SOURCE|vaspkit -task 103"
   if ! timeout 120 vaspkit -task 103 </dev/null > vaspkit_potcar.log 2>&1; then
@@ -108,6 +120,9 @@ grep -Eq 'TITEL[[:space:]]*=[[:space:]]*PAW_PBE[[:space:]]+Mg[[:space:]]' POTCAR
 }
 grep 'TITEL' POTCAR | sed 's/^/POTCAR_TITLE|/'
 
+# Marker and lock remain if the SSH session fails while sbatch is running.
+# Never submit twice when the first submission result is uncertain.
+touch .sbatch_attempted
 jid=$(sbatch --parsable job.slurm)
 submitted=1
 printf '%s\n' "$jid" > .slurm_jobid.tmp
