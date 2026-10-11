@@ -1,0 +1,82 @@
+name: Inspect Oct 10 Siyuan Completed Jobs
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/inspect-oct10-completed-jobs.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  read-only-queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Query Slurm queue and recent jobs
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for v in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            if [[ -z "${!v:-}" ]]; then
+              echo "::error::Missing GitHub secret or variable: $v"
+              exit 1
+            fi
+          done
+
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_automation"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_automation-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_automation" "$HOME/.ssh/known_hosts"
+          chmod 644 "$HOME/.ssh/hpc_automation-cert.pub"
+
+          cat > "$RUNNER_TEMP/hpc-askpass.sh" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/hpc-askpass.sh"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/hpc-askpass.sh" SSH_ASKPASS_REQUIRE=force \
+            ssh-add "$HOME/.ssh/hpc_automation" </dev/null
+
+          ssh \
+            -F /dev/null \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=15 \
+            -i "$HOME/.ssh/hpc_automation" \
+            -o CertificateFile="$HOME/.ssh/hpc_automation-cert.pub" \
+            "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          echo "REPORT_DATE|2026-10-10"
+          printf 'CHECKED_AT|%s\n' "$(date '+%Y-%m-%d %H:%M:%S %Z')"
+          echo '=== COMPLETED_OCT10_BEGIN ==='
+          echo 'JobID|JobName|State|ExitCode|Elapsed|Start|End|WorkDir'
+          sacct -X -u "$USER" \
+            -S 2026-10-09T00:00:00 -E 2026-10-11T00:00:00 \
+            -n -P --format=JobIDRaw,JobName%60,State,ExitCode,Elapsed,Start,End,WorkDir%240 \
+            | awk -F'|' -v home="$HOME" '
+              $7 ~ /^2026-10-10/ && $3 ~ /^COMPLETED/ {
+                if (length($8)>0 && index($8,home)==1) $8="~" substr($8,length(home)+1);
+                print $1"|"$2"|"$3"|"$4"|"$5"|"$6"|"$7"|"$8; n++
+              }
+              END { print "COMPLETED_COUNT|" (n+0) }
+            '
+          echo '=== COMPLETED_OCT10_END ==='
+          echo '=== CURRENT_QUEUE_BEGIN ==='
+          squeue -u "$USER" -h -o '%i|%j|%T|%M|%P' | head -n 40 || true
+          echo '=== CURRENT_QUEUE_END ==='
+          REMOTE
