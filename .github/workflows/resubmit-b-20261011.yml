@@ -1,0 +1,50 @@
+name: Continue two MgNi B relaxations
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/resubmit-b-20261011.yml']
+permissions:
+  contents: read
+concurrency:
+  group: mgni-b-continuation-20261011
+  cancel-in-progress: false
+jobs:
+  submit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Submit only two approved continuation jobs
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_review"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_review-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          cat > "$RUNNER_TEMP/askpass" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/askpass"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/askpass" SSH_ASKPASS_REQUIRE=force ssh-add "$HOME/.ssh/hpc_review" </dev/null
+          python3 -m py_compile scripts/resubmit_B_20261011.py
+          ssh -F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -i "$HOME/.ssh/hpc_review" -o CertificateFile="$HOME/.ssh/hpc_review-cert.pub" "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'python3 -' < scripts/resubmit_B_20261011.py | tee B_continuation_submission.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: B-continuation-submission-20261011
+          path: B_continuation_submission.txt
+          retention-days: 14
