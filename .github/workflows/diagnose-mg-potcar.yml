@@ -1,0 +1,85 @@
+name: Diagnose Mg POTCAR on Siyuan
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose-mg-potcar.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Inspect remote VASPKIT diagnostics (read-only)
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for v in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            [[ -n "${!v:-}" ]] || { echo "::error::Missing $v"; exit 1; }
+          done
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_automation"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_automation-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_automation" "$HOME/.ssh/known_hosts"
+          chmod 644 "$HOME/.ssh/hpc_automation-cert.pub"
+          cat > "$RUNNER_TEMP/askpass.sh" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/askpass.sh"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/askpass.sh" SSH_ASKPASS_REQUIRE=force ssh-add "$HOME/.ssh/hpc_automation" </dev/null
+
+          ssh -F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes -o ConnectTimeout=15 \
+            -i "$HOME/.ssh/hpc_automation" \
+            -o CertificateFile="$HOME/.ssh/hpc_automation-cert.pub" \
+            "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          d="$HOME/VASP/github_jobs/Mg_bulk_static_20261010"
+          echo '=== WORKDIR ==='
+          if [[ ! -d "$d" ]]; then echo 'WORKDIR_NOT_FOUND'; exit 0; fi
+          cd "$d"
+          for f in POSCAR INCAR KPOINTS job.slurm POTCAR vaspkit_potcar.log .slurm_jobid .submit_lock; do
+            if [[ -s "$f" ]]; then echo "FILE_OK|$f"; elif [[ -e "$f" ]]; then echo "FILE_EMPTY|$f"; else echo "FILE_MISSING|$f"; fi
+          done
+          echo '=== VASPKIT LOG (sanitized selected lines) ==='
+          if [[ -s vaspkit_potcar.log ]]; then
+            grep -Ei 'potcar|pseudo|error|fail|missing|not found|path|setting|warn|recommend|press|select|pbe' vaspkit_potcar.log \
+              | sed -E 's@/dssg/[^ /]+@/HPC_USER_PATH@gi; s@/home/[^ /]+@/HOME_PATH@gi' \
+              | tail -n 50 || true
+            echo '=== VASPKIT LOG END ==='
+          else
+            echo 'VASPKIT_LOG_EMPTY_OR_MISSING'
+          fi
+          echo '=== LOCAL CONFIG PRESENCE ==='
+          if [[ -s "$HOME/.vaspkit" ]]; then
+            echo 'USER_VASPKIT_CONFIG|present'
+            awk '$1=="PBE_PATH" {
+                 p=$NF; gsub(/["\047]/, "", p);
+                 if (p ~ /^\//) { if (system("test -d " p)==0) print "PBE_PATH_DIR|exists"; else print "PBE_PATH_DIR|missing"; }
+                 else print "PBE_PATH|not_absolute";
+               }' "$HOME/.vaspkit"
+            grep -E '^[[:space:]]*(POTCAR_TYPE|RECOMMENDED_POTCAR)[[:space:]]' "$HOME/.vaspkit" | head -n 10 || true
+          else
+            echo 'USER_VASPKIT_CONFIG|missing'
+          fi
+          if command -v vaspkit >/dev/null 2>&1; then echo 'VASPKIT_BIN|found'; else echo 'VASPKIT_BIN|missing'; fi
+          if [[ -s "$HOME/VASP/potcar_profiles/Mg/POTCAR" ]]; then echo 'MG_POTCAR_PROFILE|exists'; else echo 'MG_POTCAR_PROFILE|missing'; fi
+          echo '=== DIAGNOSIS DONE; NO SLURM SUBMIT EXECUTED ==='
+          REMOTE
