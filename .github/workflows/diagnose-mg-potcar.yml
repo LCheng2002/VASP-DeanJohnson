@@ -81,5 +81,21 @@ jobs:
           fi
           if command -v vaspkit >/dev/null 2>&1; then echo 'VASPKIT_BIN|found'; else echo 'VASPKIT_BIN|missing'; fi
           if [[ -s "$HOME/VASP/potcar_profiles/Mg/POTCAR" ]]; then echo 'MG_POTCAR_PROFILE|exists'; else echo 'MG_POTCAR_PROFILE|missing'; fi
+          echo '=== MG POTCAR CANDIDATES (USER HOME ONLY) ==='
+          count=0
+          while IFS= read -r -d '' candidate; do
+            if [[ "$(grep -c 'TITEL' "$candidate" 2>/dev/null || true)" == "1" ]] &&
+              grep -Eq 'TITEL[[:space:]]*=[[:space:]]*PAW_PBE[[:space:]]+Mg[[:space:]]' "$candidate"; then
+              count=$((count + 1))
+              printf 'MATCH_%s|%s\n' "$count" "${candidate#"$HOME"/}"
+            fi
+          done < <(timeout 35 find "$HOME" -maxdepth 7 -type f -name POTCAR -print0 2>/dev/null || true)
+          echo "MG_POTCAR_CANDIDATES_TOTAL|$count"
+          echo '=== EXPECTED MG PSEUDO PATHS ==='
+          for folder in "$HOME/psudopotential/PBE/potpaw_PBE.52/Mg" "$HOME/pseudopotential/PBE/potpaw_PBE.52/Mg" "$HOME/VASP/potcar_profiles/Mg"; do
+            if [[ -d "$folder" ]]; then
+              printf 'DIR_FOUND|%s\n' "${folder#"$HOME"/}"
+            fi
+          done
           echo '=== DIAGNOSIS DONE; NO SLURM SUBMIT EXECUTED ==='
           REMOTE
