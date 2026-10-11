@@ -1,0 +1,72 @@
+name: Check Mg Static Job 63553131
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/check-mg-static-status.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read exact Mg Slurm job status
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for v in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            [[ -n "${!v:-}" ]] || { echo "::error::Missing $v"; exit 1; }
+          done
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_automation"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_automation-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_automation" "$HOME/.ssh/known_hosts"
+          chmod 644 "$HOME/.ssh/hpc_automation-cert.pub"
+          cat > "$RUNNER_TEMP/askpass.sh" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/askpass.sh"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/askpass.sh" SSH_ASKPASS_REQUIRE=force \
+            ssh-add "$HOME/.ssh/hpc_automation" </dev/null
+
+          ssh -F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes -o ConnectTimeout=15 \
+            -i "$HOME/.ssh/hpc_automation" \
+            -o CertificateFile="$HOME/.ssh/hpc_automation-cert.pub" \
+            "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          d="$HOME/VASP/github_jobs/Mg_bulk_static_20261010"
+          expected="63553131"
+          if [[ ! -s "$d/.slurm_jobid" ]]; then echo "JOB_RECORD|missing"; exit 1; fi
+          actual="$(cat "$d/.slurm_jobid")"
+          echo "JOB_RECORD|$actual"
+          [[ "$actual" == "$expected" ]] || { echo "JOB_ID_MISMATCH"; exit 2; }
+          echo "=== SQUEUE ==="
+          squeue -j "$expected" -h -o '%i|%j|%T|%M|%l|%D|%P|%R' || true
+          echo "=== SACCT ==="
+          sacct -X -j "$expected" -n -P \
+            --format=JobIDRaw,JobName%20,Partition,State,ExitCode,Elapsed,Start,End || true
+          echo "=== VASP OUTPUT PRESENCE ==="
+          cd "$d"
+          for f in OUTCAR OSZICAR CONTCAR "slurm-$expected.out" "slurm-$expected.err"; do
+            if [[ -s "$f" ]]; then echo "OUTPUT_PRESENT|$f"; else echo "OUTPUT_MISSING_OR_EMPTY|$f"; fi
+          done
+          echo '=== CHECK COMPLETE ==='
+          REMOTE
