@@ -24,6 +24,16 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Validate local scripts and job inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n scripts/submit_mg_static.sh
+          bash -n calculations/Mg_bulk_static_20261010/job.slurm
+          for f in POSCAR INCAR KPOINTS job.slurm; do
+            test -s "calculations/Mg_bulk_static_20261010/$f"
+          done
+
       - name: Transfer and submit one static Mg job
         shell: bash
         env:
