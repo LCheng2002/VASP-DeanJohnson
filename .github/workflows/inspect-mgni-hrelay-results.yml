@@ -1,0 +1,122 @@
+name: Inspect MgNi and Hrelay VASP Jobs
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/inspect-mgni-hrelay-results.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  read-only-queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Query Slurm queue and recent jobs
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for v in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            if [[ -z "${!v:-}" ]]; then
+              echo "::error::Missing GitHub secret or variable: $v"
+              exit 1
+            fi
+          done
+
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_automation"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_automation-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_automation" "$HOME/.ssh/known_hosts"
+          chmod 644 "$HOME/.ssh/hpc_automation-cert.pub"
+
+          cat > "$RUNNER_TEMP/hpc-askpass.sh" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/hpc-askpass.sh"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/hpc-askpass.sh" SSH_ASKPASS_REQUIRE=force \
+            ssh-add "$HOME/.ssh/hpc_automation" </dev/null
+
+          ssh \
+            -F /dev/null \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=15 \
+            -i "$HOME/.ssh/hpc_automation" \
+            -o CertificateFile="$HOME/.ssh/hpc_automation-cert.pub" \
+            "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          echo 'TARGET|October 11 screenshot jobs: 63535230, 63535593-63535605, 63540247, 63549647'
+          python3 - <<'PYTHON'
+          import os, subprocess, datetime, re
+          ids = ["63535230"] + [str(i) for i in range(63535593, 63535606)] + ["63540247","63549647"]
+          cmd = ["sacct","-X","-n","-P","-j",",".join(ids),"-o","JobIDRaw,JobName%55,State,ExitCode,Elapsed,Start,End,WorkDir%230"]
+          s = subprocess.run(cmd,capture_output=True,text=True,timeout=35)
+          print("SACCT_RETURN_CODE|"+str(s.returncode))
+          if s.returncode: print("SACCT_ERROR|"+s.stderr.strip()[:300])
+          print("=== JOB_DATA_BEGIN ===")
+          roots={}
+          for line in s.stdout.splitlines():
+              if not line.strip():continue
+              fields=line.split("|")
+              if len(fields)<8:continue
+              jobid,name,state,exitcode,elapsed,start,end,workdir=fields[:8]
+              shown=workdir.replace(os.path.expanduser("~"),"~",1)
+              print("JOB|"+jobid+"|"+name+"|"+state+"|"+exitcode+"|"+elapsed+"|"+start+"|"+end+"|"+shown)
+              if workdir.startswith(os.path.expanduser("~")+"/") and os.path.isdir(workdir):roots[workdir]=True
+          print("=== JOB_DATA_END ===")
+          q=subprocess.run(["squeue","-u",os.environ.get("USER",""),"-h","-o","%i|%j|%T|%M|%R"],capture_output=True,text=True,timeout=20)
+          print("CURRENT_QUEUE|"+q.stdout.strip().replace("\n"," || "))
+          for root in roots:
+              name=root.replace(os.path.expanduser("~"),"~",1)
+              print("=== PROJECT_ROOT|"+name+" ===")
+              found=[]; inspected=0
+              try:
+                  for base,dirs,files in os.walk(root, followlinks=False):
+                      depth=os.path.relpath(base,root).count(os.sep)
+                      if base==root:depth=0
+                      inspected+=1
+                      if inspected>250 or depth>=5:dirs[:]=[]
+                      else:dirs[:]=[x for x in dirs if not x.startswith(".") and x not in ("__pycache__",".git")]
+                      if "OUTCAR" in files:
+                          p=os.path.join(base,"OUTCAR")
+                          try:
+                              st=os.stat(p)
+                              if st.st_size>0 and st.st_mtime >= datetime.datetime(2026,10,10).timestamp():
+                                  found.append((st.st_mtime,p))
+                          except OSError:pass
+                  found.sort(reverse=True)
+                  print("OUTCAR_COUNT_RECENT|"+str(len(found))+"|DIRS_VISITED|"+str(inspected))
+                  for mtime,p in found[:65]:
+                      rel=os.path.relpath(p,root)
+                      energy=None;ediff=False;relax=False;footer=False;calc_steps=0
+                      with open(p,encoding="utf-8",errors="replace") as inp:
+                          for line in inp:
+                              if "free  energy   TOTEN" in line:
+                                  k=re.search(r"TOTEN\s*=\s*([-+0-9.eE]+)",line)
+                                  if k:
+                                      energy=k.group(1);calc_steps+=1
+                              if "aborting loop because EDIFF is reached" in line:ediff=True
+                              if "reached required accuracy" in line:relax=True
+                              if "General timing and accounting informations for this job" in line:footer=True
+                      print("VASP_OUTCAR|"+rel+"|TOTEN="+str(energy)+"|EDIFF="+str(ediff)+"|IONIC="+str(relax)+"|FOOTER="+str(footer)+"|IONIC_STEPS="+str(calc_steps)+"|MTIME="+datetime.datetime.fromtimestamp(mtime).strftime("%Y-%m-%d %H:%M"))
+                  if len(found)>65:print("OUTCAR_TRUNCATED|"+str(len(found)-65))
+              except Exception as e:print("PROJECT_SCAN_ERROR|"+type(e).__name__)
+          print("INSPECTION_FINISHED")
+          PYTHON
+          REMOTE
