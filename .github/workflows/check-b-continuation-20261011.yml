@@ -1,0 +1,49 @@
+name: Check B continuation jobs 63554410 63554411
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/check-b-continuation-20261011.yml']
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Read continuation queue and current progress
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_review"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_review-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          cat > "$RUNNER_TEMP/askpass" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/askpass"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/askpass" SSH_ASKPASS_REQUIRE=force ssh-add "$HOME/.ssh/hpc_review" </dev/null
+          ssh -F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20 -i "$HOME/.ssh/hpc_review" -o CertificateFile="$HOME/.ssh/hpc_review-cert.pub" "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          date '+CHECKED_AT|%Y-%m-%d %H:%M:%S %Z'
+          squeue -j 63554410,63554411 -h -o '%i|%j|%T|%M|%R' || true
+          sacct -X -n -P -j 63554410,63554411 -o JobIDRaw,JobName%30,State,ExitCode,Elapsed,Start,End
+          base="$HOME/Mg2Ni_Mg_H_thermo_validation_20261010/retry_20261011_B_v1"
+          for model in B-H-Mg_Mg_Mg2NiH4 B-H-Ni_Mg_Mg2NiH4; do
+            echo "MODEL|$model"
+            test -s "$base/$model/.slurm_jobid" && cat "$base/$model/.slurm_jobid"
+            if test -s "$base/$model/01_relax/OSZICAR"; then tail -n 3 "$base/$model/01_relax/OSZICAR"; fi
+            if test -s "$base/$model/02_static/validation.json"; then cat "$base/$model/02_static/validation.json"; fi
+          done
+          REMOTE
