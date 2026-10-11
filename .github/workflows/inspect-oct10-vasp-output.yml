@@ -1,0 +1,140 @@
+name: Inspect Oct 10 VASP Output Summaries
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/inspect-oct10-vasp-output.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  read-only-queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Query Slurm queue and recent jobs
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for v in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            if [[ -z "${!v:-}" ]]; then
+              echo "::error::Missing GitHub secret or variable: $v"
+              exit 1
+            fi
+          done
+
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_automation"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_automation-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_automation" "$HOME/.ssh/known_hosts"
+          chmod 644 "$HOME/.ssh/hpc_automation-cert.pub"
+
+          cat > "$RUNNER_TEMP/hpc-askpass.sh" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/hpc-askpass.sh"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/hpc-askpass.sh" SSH_ASKPASS_REQUIRE=force \
+            ssh-add "$HOME/.ssh/hpc_automation" </dev/null
+
+          ssh \
+            -F /dev/null \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=15 \
+            -i "$HOME/.ssh/hpc_automation" \
+            -o CertificateFile="$HOME/.ssh/hpc_automation-cert.pub" \
+            "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          echo 'RESULT_SCOPE|2026-10-10 completed Slurm jobs 63526551 63515102 63515816'
+          command -v python3
+          python3 - <<'PYTHON'
+          import os, re, subprocess, datetime, math
+          homes = [
+              ("H_induced_vac", os.path.expanduser("~/16_H_LaVac_interface_20261009")),
+              ("Mg2Ni_H_transfer_bulk", os.path.expanduser("~/Mg2Ni_H_transfer_bulk_screen_20261009_supplement_v2/supplement_20261009")),
+          ]
+          for jid in ("63526551","63515102","63515816"):
+              s = subprocess.run(["sacct","-n","-P","-X","-j",jid,"-o","JobIDRaw,JobName%40,State,ExitCode,Elapsed,Start,End,WorkDir%200"],
+                                 capture_output=True, text=True, timeout=20)
+              print("JOB|" + jid + "|" + (s.stdout.strip().replace(os.path.expanduser("~"),"~") if s.returncode == 0 else "SACCT_FAILED"), flush=True)
+          def read_outcar(p):
+              toten=None; sigma0=None; ediff=False; ionic=False; vasp_end=False; max_force=None
+              parse_force=False; current_force=None
+              try:
+                  with open(p,"r",encoding="utf-8",errors="replace") as f:
+                      for line in f:
+                          if "free  energy   TOTEN" in line:
+                              m=re.search(r"TOTEN\s*=\s*([-+\d.Ee]+)",line)
+                              if m: toten=float(m.group(1))
+                          if "energy(sigma->0)" in line:
+                              m=re.search(r"energy\(sigma->0\)\s*=\s*([-+\d.Ee]+)",line)
+                              if m: sigma0=float(m.group(1))
+                          if "aborting loop because EDIFF is reached" in line: ediff=True
+                          if "reached required accuracy" in line: ionic=True
+                          if "General timing and accounting informations for this job" in line: vasp_end=True
+                          if "TOTAL-FORCE (eV/Angst)" in line:
+                              parse_force=True; current_force=None; continue
+                          if parse_force:
+                              val=line.split()
+                              if len(val)==6:
+                                  try:
+                                      vec=[float(x) for x in val[-3:]]
+                                      cur=math.sqrt(sum(x*x for x in vec))
+                                      current_force=max(cur,current_force or 0.0)
+                                      continue
+                                  except ValueError: pass
+                              if current_force is not None:
+                                  max_force=current_force
+                                  parse_force=False
+              except Exception as exc:
+                  return "ERR:"+type(exc).__name__
+              if parse_force and current_force is not None: max_force=current_force
+              def f(x): return "NA" if x is None else "%.8f"%x
+              other=os.path.dirname(p)
+              has_c=os.path.getsize(os.path.join(other,"CONTCAR"))>0 if os.path.isfile(os.path.join(other,"CONTCAR")) else False
+              return "TOTEN="+f(toten)+",E0="+f(sigma0)+",SCF_EDIFF_SEEN="+str(ediff)+",IONIC_CONVERGED="+str(ionic)+",VASP_FOOTER="+str(vasp_end)+",CONTCAR="+str(has_c)+",MAX_FORCE="+f(max_force)
+          for label,root in homes:
+              print("GROUP|"+label,flush=True)
+              if not os.path.isdir(root):
+                  print("GROUP_DIR_MISSING",flush=True);continue
+              found=[]; subdirs=0; stdouts=[]
+              for base,dirs,files in os.walk(root,followlinks=False):
+                  depth=os.path.relpath(base,root).count(os.sep)
+                  if os.path.relpath(base,root)==".": depth=0
+                  if depth>=6: dirs[:]=[]
+                  else: dirs[:]=[x for x in dirs if not x.startswith(".") and x not in ("__pycache__",".git")]
+                  subdirs+=1
+                  if "OUTCAR" in files:
+                      full=os.path.join(base,"OUTCAR")
+                      found.append((os.path.getmtime(full), full))
+                  if any(jid in x for jid in ("63526551","63515102","63515816") for x in files):
+                      for fname in files:
+                          if any(jid in fname for jid in ("63526551","63515102","63515816")):
+                              if len(stdouts)<15: stdouts.append(os.path.relpath(os.path.join(base,fname),root))
+              found.sort(key=lambda a:a[0],reverse=True)
+              print("GROUP_SCAN|OUTCARS="+str(len(found))+"|VISITED_DIRS="+str(subdirs)+"|JOB_LOGS="+",".join(stdouts),flush=True)
+              limit=100
+              for mtime,path in found[:limit]:
+                  rel=os.path.relpath(path,root)
+                  when=datetime.datetime.fromtimestamp(mtime).strftime("%Y-%m-%d_%H:%M:%S")
+                  print("OUTCAR|"+label+"|"+rel+"|mtime="+when+"|"+read_outcar(path),flush=True)
+              if len(found)>limit:print("TRUNCATED|"+str(len(found)-limit),flush=True)
+          print("DONE",flush=True)
+          PYTHON
+          REMOTE
