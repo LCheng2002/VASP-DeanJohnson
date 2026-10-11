@@ -68,5 +68,16 @@ jobs:
           for f in OUTCAR OSZICAR CONTCAR "slurm-$expected.out" "slurm-$expected.err"; do
             if [[ -s "$f" ]]; then echo "OUTPUT_PRESENT|$f"; else echo "OUTPUT_MISSING_OR_EMPTY|$f"; fi
           done
+          echo '=== STATIC ENERGY / ELECTRONIC CONVERGENCE ==='
+          if [[ -s OUTCAR ]]; then
+            grep 'free  energy   TOTEN' OUTCAR | tail -n 1 || true
+            grep -F 'aborting loop because EDIFF is reached' OUTCAR | tail -n 1 || true
+            grep -F 'energy  without entropy' OUTCAR | tail -n 1 || true
+            grep -F 'General timing and accounting informations for this job' OUTCAR | tail -n 1 || true
+          fi
+          if [[ -s OSZICAR ]]; then
+            echo 'OSZICAR_LAST_LINES'
+            tail -n 8 OSZICAR
+          fi
           echo '=== CHECK COMPLETE ==='
           REMOTE
