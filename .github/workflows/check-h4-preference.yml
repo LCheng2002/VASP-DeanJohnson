@@ -1,0 +1,38 @@
+name: Check fourth H array 63554980
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/check-h4-preference.yml']
+permissions:
+  contents: read
+jobs:
+  status:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Read H4 array status
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_h4"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_h4-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          cat > "$RUNNER_TEMP/askpass" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/askpass"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/askpass" SSH_ASKPASS_REQUIRE=force ssh-add "$HOME/.ssh/hpc_h4" </dev/null
+          ssh -F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20 -i "$HOME/.ssh/hpc_h4" -o CertificateFile="$HOME/.ssh/hpc_h4-cert.pub" "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'date "+CHECKED_AT|%Y-%m-%d %H:%M:%S %Z"; python3 "$HOME/TaskA_Mg17La2_H4_preference_20261011/prepare_submit_H4.py" --status'
