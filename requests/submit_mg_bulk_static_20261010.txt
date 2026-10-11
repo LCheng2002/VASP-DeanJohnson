@@ -1,1 +1,3 @@
 Submit exactly one VASP 6.3.2 Mg hcp bulk static job using calculations/Mg_bulk_static_20261010/ through GitHub Actions. Remote path VASP/github_jobs/Mg_bulk_static_20261010. Preserve one-shot lock, do not submit if POTCAR unavailable or invalid.
+
+Retry after VASPKIT missing Mg POTCAR: use the already licensed Mg PBE POTCAR from ~/10_bulk_references_unified/01_Mg/02_static/POTCAR, copy only inside Siyuan HPC, validate POTCAR, submit once with idempotency guard. No POTCAR data is stored on GitHub.
