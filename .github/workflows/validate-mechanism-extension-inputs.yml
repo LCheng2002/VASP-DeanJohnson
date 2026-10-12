@@ -1,0 +1,40 @@
+name: Validate mechanism extension inputs only
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/validate-mechanism-extension-inputs.yml']
+permissions:
+  contents: read
+jobs:
+  geometry-validation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Compile and generate unrelaxed preview only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile calculations/Mechanism_extensions_20261012/runner.py
+          python3 calculations/Mechanism_extensions_20261012/runner.py --preview --root "$RUNNER_TEMP/mechanism-input-preview"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'mechanism-input-preview'
+          d=json.loads((p/'manifest.json').read_text())
+          assert d['preview'] is True
+          assert len(d['initial_models']) == 6
+          assert not list(p.rglob('POTCAR'))
+          for n in d['initial_models']:
+              s=(p/n/'01_relax/POSCAR').read_text().splitlines()
+              print('INPUT_ONLY',n,s[5],s[6])
+          print('NO_HPC_CONNECTION; NO_VASP_RUN; NO_SLURM_SUBMISSION')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mechanism-extension-input-preview
+          path: ${{ runner.temp }}/mechanism-input-preview
+          retention-days: 7
