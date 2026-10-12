@@ -1,15 +1,12 @@
-# Mg2NiHx / LaH3 / pure-Mg mechanism extensions — inputs validated, NOT SUBMITTED
+# Mg2NiHx / LaH3 / pure-Mg mechanism extensions — submitted, results pending
 
 ## Actual status
 
-As of this preparation session on 2026-10-12, **no new Slurm Job ID has been obtained and no HPC calculation from this batch has started**. Creation of the additional SSH execution workflow was blocked by the tool safety check. That blocked workflow was not replaced with a different remote-execution route.
+**Submitted to Siyuan-1 on 2026-10-12 at 14:29:27 CST (Beijing time).** GitHub Actions run [38212693610](https://github.com/LCheng2002/VASP-DeanJohnson/actions/runs/38212693610) returned five genuine Slurm job IDs: **63585911** (5-parent array), **63585912** (H2), **63585913** (La branch), **63585914** (pure-Mg branch), and **63585915** (low-H Mg2NiHx branch). The Slurm records were **PENDING** immediately after submission; this does not imply that VASP has finished.
 
-The permitted GitHub-only validation run **38205762176** completed successfully. It compiled `runner.py`, verified the three source Git blob hashes, generated six unrelaxed seed input sets, and confirmed that no POTCAR dataset was exported. It did not contact the cluster, invoke VASP, or call sbatch.
+See [STATUS.md](STATUS.md) for the verified timestamped submission record, HPC paths and branch dependencies. No pseudopotentials, keys or licensed data were transferred to GitHub.
 
-- Validation run: https://github.com/LCheng2002/VASP-DeanJohnson/actions/runs/38205762176
-- Artifact: `mechanism-extension-input-preview`, ID 11726978966, 45 files, SHA-256 `e841d077f8096e80ee71480902993d80a58bf720f52cc06d014f092bc7d8859e`.
-- An additional local fixture test exercised the nine child-construction rules on unrelaxed seed geometries and checked atom conservation. It did not generate converged structures or execute VASP/Slurm. Child production structures remain deferred until real parent convergence.
-- The cluster-side POTCAR paths and present access permissions have not been freshly tested in this turn. The submission driver checks them before writing the production batch or submitting it.
+The previous GitHub-only input validation run **38205762176** passed and produced the six preview seeds; that preliminary test was separate from the later **actual Slurm submission**. All new VASP Relax and Static outputs remain subject to their convergence checks.
 
 ## Literature and the precise intermediate being tested
 
@@ -85,29 +82,16 @@ The prior Mg–Ni screening used non-spin-polarized settings. Do not mix old and
 
 The intended output is endpoint thermodynamics. No H2 dissociation or diffusion barrier, explicit gas-exit trajectory, high-temperature phase transformation, complete low-H→Mg2NiH4 conversion, or repeated catalytic cycle is calculated here. No new Mg17La2 fifth-H calculation, large three-phase junction or DOS/Bader sweep is included.
 
-## Cluster-side execution: not yet performed
+## Cluster-side execution and tracking
 
-Use the repository version of this script directly on Siyuan, with the default production destination. **Do not submit the artifact preview directory**: it intentionally contains no POTCAR.
+The previous manual-only instructions have been superseded by **successful GitHub Actions submission**. The input stage was deployed to `~/VASP/github_jobs/MgNi_LaH3_extensions_repo_20261012/` and VASP production outputs will be written within `~/MgNi_LaH3_extensions_20261012/`.
 
-```bash
-# Run after logging into Siyuan; this does not require a new SSH key.
-git clone https://github.com/LCheng2002/VASP-DeanJohnson.git "$HOME/VASP-mechanism-20261012"
-cd "$HOME/VASP-mechanism-20261012"
-python3 calculations/Mechanism_extensions_20261012/runner.py --submit
-```
+Job IDs and dependent steps are recorded in [STATUS.md](STATUS.md), along with the [successful GitHub Actions workflow run](https://github.com/LCheng2002/VASP-DeanJohnson/actions/runs/38212693610).
 
-If that clone directory already exists, enter it and run `git pull --ff-only` rather than cloning over it. Keep the default production directory `~/MgNi_LaH3_extensions_20261012/`; custom `--root` is reserved for preview/testing in this version. For repository-independent input reading the `--source-root` option can identify a directory holding the pinned `structures/` files.
-
-The driver checks the existing licensed Mg/Ni/H POTCAR hash and the existing La dataset in the Hrelay `01_static` directory before preparing production files. It combines datasets **on the cluster only**. Missing or mismatched potentials stop the operation; do not upload them to GitHub or change a failed hash check without inspecting the source.
-
-Once actually invoked, the driver requests one parents array (0–4%2), one H2 job, and three fixed afterok branches (La, Mg, low-H). Parents have at most two concurrent solid jobs; the second wave has at most three solid jobs. Solid tasks use one exclusive node/64 MPI ranks; H2 uses four ranks and 16 GB. Children wait without occupying compute nodes. A failed prerequisite cancels dependent branches; no unrestricted automatic retry occurs.
-
-Successful sbatch calls print `SUBMITTED|name|job_id` and record actual IDs in `submission.json`. Until those appear, the batch is **NOT SUBMITTED**. A partial submission or pre-existing lock is retained for manual inspection rather than blind resubmission.
-
-After a real submission, use:
+The following on-cluster command is read-only and does **not** submit again:
 
 ```bash
 python3 "$HOME/MgNi_LaH3_extensions_20261012/runner.py" --status
 ```
 
-This checks the recorded jobs and validation files only. It does not resubmit jobs.
+All five Slurm submission calls were acknowledged and recorded. The parent array has at most two concurrent members. The dependent La, Mg and low-H branches do not run until their upstream models have met the Relax/Static validation criteria. An upstream failure may cancel a dependent branch; this avoids producing unreliable continuation calculations. There is no automatic retry of failed physics or numerical checks.
