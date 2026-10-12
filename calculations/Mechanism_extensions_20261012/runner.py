@@ -124,7 +124,7 @@ def prepare(preview=False):
  shutil.copy2(HERE/'plan.json',ROOT/'plan.json');shutil.copy2(Path(__file__),ROOT/'runner.py')
  # Child construction reuses these six archived seeds; no repository access is needed on compute nodes.
  save(ROOT/'seed_structures.json',{n:s for n,(s,_,_) in models.items()})
- for fn,mode,wall,arr,gas in [('parents.slurm','--run-parent "$SLURM_ARRAY_TASK_ID"','24:00:00','0-4%2',False),('H2.slurm','--run-H2','00:30:00',None,True),('La.slurm','--run-La','24:00:00',None,False),('Mg.slurm','--run-Mg','12:00:00',None,False),('Hx.slurm','--run-Hx','24:00:00',None,False)]:
+ for fn,mode,wall,arr,gas in [('parents.slurm','--run-parent "$SLURM_ARRAY_TASK_ID"','24:00:00','0-4',False),('H2.slurm','--run-H2','00:30:00',None,True),('La.slurm','--run-La','24:00:00',None,False),('Mg.slurm','--run-Mg','12:00:00',None,False),('Hx.slurm','--run-Hx','24:00:00',None,False)]:
   p=ROOT/fn;p.write_text(jobfile(mode,wall,arr,gas));subprocess.run(['bash','-n',str(p)],check=True)
  save(ROOT/'manifest.json',{'status':'PREVIEW_ONLY_NO_POTCAR' if preview else 'PREPARED_NOT_SUBMITTED','initial_models':list(models),'maximum_models':15,'preview':preview,'input_hashes':{str(p.relative_to(ROOT)):sha(p) for p in ROOT.rglob('*') if p.is_file()}})
  print('PREPARED|'+str(ROOT)+'|6 seeds;9 dependent models not yet constructed',flush=True)
