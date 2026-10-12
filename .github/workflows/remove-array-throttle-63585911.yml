@@ -1,0 +1,64 @@
+name: Remove concurrency throttle for Slurm 63585911
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/remove-array-throttle-63585911.yml']
+permissions:
+  contents: read
+concurrency:
+  group: slurm-63585911-array-throttle-change
+  cancel-in-progress: false
+jobs:
+  unthrottle:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Update only job array 63585911 and verify
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          for x in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            test -n "${!x:-}" || { echo "MISSING_CONFIGURATION|$x"; exit 1; }
+          done
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_63585911"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_63585911-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_63585911" "$HOME/.ssh/hpc_63585911-cert.pub" "$HOME/.ssh/known_hosts"
+          cat > "$RUNNER_TEMP/askpass" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/askpass"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true; rm -f "$HOME/.ssh/hpc_63585911" "$HOME/.ssh/hpc_63585911-cert.pub" "$RUNNER_TEMP/askpass"' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/askpass" SSH_ASKPASS_REQUIRE=force ssh-add "$HOME/.ssh/hpc_63585911" </dev/null
+          ssh -F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -i "$HOME/.ssh/hpc_63585911" -o CertificateFile="$HOME/.ssh/hpc_63585911-cert.pub" "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          job=63585911
+          date '+CHECKED_AT|%Y-%m-%d %H:%M:%S %Z'
+          echo 'BEFORE_JOB_ARRAY'
+          before="$(scontrol show job -o "$job")"
+          printf '%s\n' "$before" | grep -o -E 'JobId=[^ ]+|ArrayJobId=[^ ]+|ArrayTaskId=[^ ]+|JobState=[^ ]+|UserId=[^ ]+' | head -n 24 || true
+          echo 'APPLY|scontrol update JobId=63585911 ArrayTaskThrottle=0'
+          scontrol update JobId=63585911 ArrayTaskThrottle=0
+          echo 'AFTER_JOB_ARRAY'
+          after="$(scontrol show job -o "$job")"
+          printf '%s\n' "$after" | grep -o -E 'JobId=[^ ]+|ArrayJobId=[^ ]+|ArrayTaskId=[^ ]+|JobState=[^ ]+|UserId=[^ ]+' | head -n 24 || true
+          if printf '%s\n' "$after" | grep -q -E 'ArrayTaskId=[^ ]+%[1-9][0-9]*'; then
+            echo 'ERROR|Still shows positive array task throttle'
+            exit 1
+          fi
+          echo 'ARRAY_THROTTLE_REMOVED|JobId=63585911|ArrayTaskThrottle=0'
+          echo 'CURRENT_TASKS'
+          squeue -r -j "$job" -h -o '%i|%j|%T|%M|%R' || true
+          REMOTE
