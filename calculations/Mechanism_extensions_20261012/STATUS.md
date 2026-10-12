@@ -21,6 +21,18 @@ Verified through the **read-only** [status workflow run 38213015746](https://git
 
 The original table above records the immediately-after-submission state, not this later queue state.
 
+## Parent array concurrency cap removed — 2026-10-12 19:01:37 CST
+
+The existing job array **63585911** was updated in place; its index roster remains **0–4** with five parent models.
+
+- Before: `ArrayTaskId=0-4%2` (maximum two concurrent).
+- Applied: `scontrol update JobId=63585911 ArrayTaskThrottle=0`.
+- After: `ArrayTaskId=0-4` (no job-array-level concurrency throttle).
+- Immediately afterward, tasks `63585911_0` through `63585911_4` were still **PENDING (None)**; available scheduler resources and system policy still determine start times.
+- **No cancellation, resubmission, model-count change, dependency rewrite or relaxation of numerical convergence criteria.** The repository future-submission template also now specifies `0-4`.
+
+Evidence: [successful GitHub Actions live Slurm update 38239984463](https://github.com/LCheng2002/VASP-DeanJohnson/actions/runs/38239984463).
+
 The calculation directory is:
 `~/MgNi_LaH3_extensions_20261012/`
 
