@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "batch": "MgNi_LaH3_extensions_20261012",
+  "status": "MODEL_DESIGN_ONLY_NOT_SUBMITTED",
+  "maximum_models_including_H2": 15,
+  "no_NEB": true,
+  "sources": {
+    "L": {"path": "structures/interfaces/MgH2_LaH3/CONTCAR", "git_blob_sha1": "e616c52c769be1a4fe1678e223804d98b204e26e"},
+    "C": {"path": "structures/interfaces/MgH2_Mg2Ni/POSCAR", "git_blob_sha1": "daab4be49dd1c68c42967c6d3bb6a006b5cbf66f"},
+    "A": {"path": "structures/interfaces/Mg_Mg2Ni_Mg10-10_Mg2Ni_100/POSCAR", "git_blob_sha1": "728f9b4da262b7980baf330aa79504e3ee13fcee"}
+  },
+  "parents": ["L_parent", "L_MgH2_reference", "Mg_parent", "X025_A", "X025_B"],
+  "separate_reference": "H2_reference",
+  "La_children": ["L_vMg_near", "L_vMg_far", "L_vLa", "L_MgH2_vMg", "L_transfer"],
+  "Mg_children": ["Mg_H2", "Mg_2H"],
+  "Hx_children": ["X_transfer_one", "X_transfer_two"],
+  "La_sites_original_1based": {"Mg_near": 39, "Mg_far": 31, "La_derived": 55},
+  "low_H_proxy": {
+    "literature_name": "Mg2NiH0.3 low-hydrogen solid solution",
+    "implemented_initial_x": 0.25,
+    "reason": "A 1x2 in-plane C supercell has 12 Mg2Ni units. Three background H atoms give x=3/12=0.25. This is a nearby low-H proxy, not exact Mg2NiH0.3 and not a diffraction-refined H occupancy.",
+    "interface_total_composition": {"Mg": 60, "Ni": 12, "H": 75},
+    "host_partition": {"MgH2_units": 36, "Mg2Ni_units": 12, "MgH2_H_atoms": 72, "background_H_in_Mg2Ni": 3},
+    "origin": "Add interstitial H to the Mg2Ni framework of C, never strip nearly all H from the Mg2NiH4 framework.",
+    "arrangement_A_pool_indices": [0, 2, 1],
+    "arrangement_B_pool_indices": [1, 13, 14],
+    "pool_format": ["anchor_parent_id_in_duplicated_C", "Cartesian_dx_A", "Cartesian_dy_A", "Cartesian_dz_A"],
+    "candidate_pool": [[36,-1.3884455734,0.3951188297,-0.69],[108,-1.3884455734,0.3951188297,-0.69],[35,-1.3576592988,-0.8451397685,0.05],[107,-1.3576592988,-0.8451397685,0.05],[36,1.3742656203,-0.814428637,-0.09],[108,1.3742656203,-0.814428637,-0.09],[36,-0.7650957772,1.3659167074,-0.33],[108,-0.7650957772,1.3659167074,-0.33],[34,-0.6990277327,-0.2885484864,1.41],[106,-0.6990277327,-0.2885484864,1.41],[103,-0.7430245269,0.430597901,1.35],[31,-0.7430245269,0.430597901,1.35],[32,0.6881828166,1.0702823978,0.97],[104,0.6881828166,1.0702823978,0.97],[35,-0.8716591164,-1.0040470032,-0.89],[107,-0.8716591164,-1.0040470032,-0.89],[107,-1.3250880029,0.8611862659,0.25],[35,-1.3250880029,0.8611862659,0.25],[103,0.6741552854,-0.246200429,1.43],[31,0.6741552854,-0.246200429,1.43],[106,0.868692571,0.1909796249,1.33],[34,0.868692571,0.1909796249,1.33],[107,1.2614870332,-0.6129848816,-0.77],[35,1.2614870332,-0.6129848816,-0.77],[33,-0.9029202017,-0.976030281,0.89],[105,-0.9029202017,-0.976030281,0.89],[36,1.300326404,0.886031175,-0.29],[108,1.300326404,0.886031175,-0.29],[36,0.7092485479,1.1835820619,-0.81],[108,0.7092485479,1.1835820619,-0.81],[107,0.5092189743,-1.4603410684,-0.41],[35,0.5092189743,-1.4603410684,-0.41]],
+    "transfer_rule": "Move existing H from the MgH2 domain; preserve total Mg60Ni12H75. Nominal Ni-side occupancies become 4/12 and 5/12 only if the relaxed structures confirm the transfer. These are uptake endpoints, not claims of stable homogeneous alpha phases above x=0.3."
+  },
+  "common_parameters": {"ENCUT":520,"ISPIN":2,"ISMEAR":0,"SIGMA":0.05,"LDAU":false,"LREAL":false,"EDIFF":1e-7,"EDIFFG":-0.015,"IBRION":2,"POTIM":0.10,"NSW":400},
+  "spin_note": "All NEW references and defects are spin-polarized PBE without U. Do not combine their bare energies with older non-spin calculations. Ni starts at 1.0 muB; this is not an exhaustive magnetic-order search.",
+  "kpoints": {"L":[3,5,1],"Mg":[2,5,1],"X":[3,3,1],"H2":[1,1,1]},
+  "provenance": [
+    {"authors":"J. Cermak; L. Kral","year":2012,"title":"Ageing of Mg-Ni-H hydrogen storage alloys","doi":"10.1016/j.ijhydene.2012.07.049"},
+    {"authors":"G. A. Buzanov et al.","year":2018,"title":"Preparation and Characterization of MgH2 Mechanocomposites with Mg2NiH0.3 + Mg2NiH4-delta Two-Phase Mixture","doi":"10.1134/S0036023618120057"}
+  ],
+  "limitations": ["Six seeds are built first; nine children require converged parents.","The supplied La interface CONTCAR is a seed, not proof of convergence under new settings.","The pure Mg and MgH2 controls are finite cleavage slabs, not bulk limits or thickness-converged surfaces.","The La vacancy samples one La-derived H site; it is not an exhaustive inequivalent-site survey.","This batch gives endpoint thermodynamics only, not migration/dissociation barriers or a full catalytic cycle.","No new triple interface, fifth H on Mg17La2, DOS/Bader sweep, AIMD or NEB is authorized by this manifest."]
+}
