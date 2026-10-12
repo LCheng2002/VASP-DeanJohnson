@@ -10,6 +10,17 @@
 | 63585914 | Mg | Two pure-Mg H2/2H endpoints; starts after parents and H2 succeed | PENDING (dependency) |
 | 63585915 | Hx | Two sequential Mg2NiHx hydrogen-transfer endpoints; starts only after parents succeed | PENDING (dependency) |
 
+## Follow-up queue check — 2026-10-12 14:32:34 CST
+
+Verified through the **read-only** [status workflow run 38213015746](https://github.com/LCheng2002/VASP-DeanJohnson/actions/runs/38213015746):
+
+- **63585912 (H2): RUNNING** on `node014`; elapsed 00:02:42 at check.
+- **63585911_0–_4 (all five parents): PENDING (Priority)**, not yet started.
+- **63585913, 63585914, 63585915: PENDING (Dependency)**, expected until the five parent tasks (and H2 for Mg) satisfy their dependencies.
+- All 15 model entries still reported `NO_FINAL_VALIDATION` at this snapshot. **No VASP final result is claimed.**
+
+The original table above records the immediately-after-submission state, not this later queue state.
+
 The calculation directory is:
 `~/MgNi_LaH3_extensions_20261012/`
 
