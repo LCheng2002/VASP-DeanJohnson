@@ -1,4 +1,5 @@
 name: Recover LaH3 and pure Mg branches only
+# 2026-10-13: use corrected sacct JobID parsing; only La and pure Mg, Hx remains paused.
 on:
   workflow_dispatch:
   push:
