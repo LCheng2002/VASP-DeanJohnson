@@ -35,7 +35,7 @@ def ledger_save(d):
     temp.write_text(json.dumps(d,indent=2,ensure_ascii=False))
     temp.replace(LEDGER)
 def sacct(ids):
-    p=subprocess.run(['sacct','-X','-n','-P','-j',','.join(ids),'-o','JobIDRaw,JobName%25,State,ExitCode,Elapsed,Start,End'],capture_output=True,text=True,timeout=30)
+    p=subprocess.run(['sacct','-X','-n','-P','-j',','.join(ids),'-o','JobID,JobName%25,State,ExitCode,Elapsed,Start,End'],capture_output=True,text=True,timeout=30)
     require(p.returncode==0,'sacct failed: '+p.stderr[:250])
     return p.stdout
 def records(raw):
@@ -69,8 +69,9 @@ def check():
         raw=(ROOT/fn).read_text()
         require('runner.py --run-'+fn.split('.')[0] in raw,fn+' runs unexpected branch')
         require('Hx' not in raw and '--dependency' not in raw,fn+' unexpected Hx/dependency contents')
-    snapshot=sacct(['63585911','63585912','63585913','63585914','63585915','63585911_0','63585911_1','63585911_2','63585911_3','63585911_4'])
+    snapshot=sacct(['63585911','63585912','63585913','63585914','63585915'])
     state=records(snapshot)
+    print('ORIGINAL_SACCT_CHECK|'+snapshot.replace('\n',' || '),flush=True)
     for ident in ('63585911_0','63585911_1','63585911_2','63585912'):
         v=state.get(ident)
         require(v and v[2]=='COMPLETED' and v[3]=='0:0','Required parent Slurm not successful: '+ident+' '+str(v))
