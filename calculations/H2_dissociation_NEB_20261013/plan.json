@@ -1,0 +1,23 @@
+{
+  "batch": "H2_dissociation_compare_20261013",
+  "sources": {
+    "Mg_clean": {"path": "MgNi_LaH3_extensions_20261012/Mg_parent/02_static/CONTCAR", "sha256": "5d099bcd44e30893c3668a42336f1ab82c5d6b770fea22450c5c56ce607d0d0f"},
+    "Ni_clean": {"path": "Mg2Ni_Mg_H_thermo_validation_20261010/A0_Mg_Mg2Ni_clean/02_static/CONTCAR", "sha256": "c245f3ed2f6ef41ce41caa6c55262d6b3b04bd86e4ea69f406b321a46a6497fe"},
+    "Ni_molecule": {"path": "MgNi_abs_des_cycle_20261011/A_H2_Ni_vertical/02_static/CONTCAR", "sha256": "380d6b414f74eeb9606925d11980f41dd33715380a0e01e4eb3337a4e752f054"},
+    "Ni_product": {"path": "MgNi_abs_des_cycle_20261011/A_H2_Ni_parallel/02_static/CONTCAR", "sha256": "a99ada7371d31fbefcbbec508af2a365cf25d1977f151734f9cb4957eaf1a93d"}
+  },
+  "potcar": {"path": "MgNi_abs_des_cycle_20261011/A_H2_Ni_vertical/02_static/POTCAR", "sha256": "72b607bd5434dcb71996bb13fd478af3592115762200d3c53e0f47c68b0a84ae"},
+  "systems": {
+    "Mg": "Pure Mg(10-10), 24 substrate atoms",
+    "Mg2Ni_region": "Exposed Mg2Ni(100) region in the existing Mg/Mg2Ni interface, Mg36Ni6; not a free-standing single-phase Mg2Ni slab or pure Ni"
+  },
+  "protocol": {"ENCUT":520,"ISPIN":2,"LDAU":false,"KPOINTS":[3,6,1],"SIGMA":0.05,"ISMEAR":0,"LDIPOL":true,"IDIPOL":3,"fixed_substrate_atoms":8,"EDIFF":1e-7,"endpoint_force_eV_A":0.01,"images":5,"NEB_pre_force_eV_A":0.05,"CI_force_eV_A":0.03,"NEB_mpi_ranks":60,"ranks_per_image":12,"NCORE":4,"VTST_IOPT":7},
+  "limitations": [
+    "One local dissociation path per selected surface; not a global orientation/transition-state search.",
+    "Mg2Ni-containing side uses an exposed alloy region supported on Mg; no free-standing Mg2Ni comparison is claimed.",
+    "No slab-thickness, k-mesh or dispersion convergence study is included; weak molecular physisorption may be sensitive.",
+    "Fixed bottom eight Mg atoms and dipole correction are new to both paths; all energies must use these new references, never old energy values.",
+    "No barrier is claimed before endpoints retain identity and CI-NEB passes image-force/electronic/normal-termination gates.",
+    "Finite-temperature, zero-point and transmission corrections, TS frequencies and downhill connectivity are not yet calculated."
+  ]
+}
