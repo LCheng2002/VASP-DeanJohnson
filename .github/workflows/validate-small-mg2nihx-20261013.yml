@@ -1,0 +1,43 @@
+name: Validate Mg2Ni 36-39 atom low-H screening models
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/validate-small-mg2nihx-20261013.yml']
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Generate all 5 input model structures and verify stoichiometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile calculations/Mg2Ni_lowH_bulk_20261013/screen.py
+          python3 calculations/Mg2Ni_lowH_bulk_20261013/screen.py \
+            --preview --root "$RUNNER_TEMP/lowH_bulk_preview" \
+            --source-poscar structures/bulk/Mg2Ni/POSCAR
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'lowH_bulk_preview'
+          m=json.loads((root/'manifest.json').read_text())
+          assert m['number_of_models']==5 and m['preview_without_pseudopotentials']
+          assert not list(root.rglob('POTCAR'))
+          compositions=[(0,36),(2,38),(2,38),(3,39),(3,39)]
+          for name,(nh,count) in zip(m['names'],compositions):
+              q=json.loads((root/name/'model.json').read_text())
+              assert q['composition'].get('H',0)==nh and sum(q['composition'].values())==count,(name,q)
+              print('VALID_MODEL',name,q['composition'],'initial_HH_A',q['initial']['min_initial_HH_A'])
+          print('PASS|5 unique intended compositions; no secret, pseudopotential, VASP or sbatch')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: Mg2Ni_lowH_36_39atom_input_preview
+          path: ${{ runner.temp }}/lowH_bulk_preview
+          retention-days: 7
