@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "status": "NEW_SMALL_BULK_LOW_H_SCREEN_NOT_SUBMITTED_YET",
+  "batch": "Mg2Ni_lowH_bulk_20261013",
+  "source": {
+    "path_on_HPC": "Mg2Ni_H_transfer_bulk_screen_20261009_supplement_v2/supplement_20261009/02_Mg2Ni/02_static/POSCAR",
+    "sha256": "8fc1354eadf5590cd5ce6a84a9ba4eb321779eadc4b7e6c29e28433ba1220be1",
+    "source_primitive_formula": "Mg12Ni6",
+    "primitive_formula_units": 6,
+    "replication": [
+      1,
+      1,
+      2
+    ],
+    "supercell_formula_units": 12
+  },
+  "preview_source": "structures/bulk/Mg2Ni/POSCAR",
+  "potential": {
+    "source_on_HPC": "Mg2Ni_Mg_H_thermo_validation_20261010/A-H-Ni_Mg_Mg2Ni/01_relax/POTCAR",
+    "sha256": "72b607bd5434dcb71996bb13fd478af3592115762200d3c53e0f47c68b0a84ae",
+    "dataset_labels": [
+      "Mg",
+      "Ni",
+      "H"
+    ],
+    "raw_potcar_not_exported": true
+  },
+  "h2_reference": {
+    "root_on_HPC": "MgNi_LaH3_extensions_20261012/H2_reference",
+    "expected_spin_polarized_PBE": true,
+    "expected_F_eV": -6.77240668,
+    "reference_reuse_no_new_H2_job": true
+  },
+  "literature": {
+    "title": "The investigation of hydrogen sublattice in Mg2NiHx (x = 0.3) hydride by first-principle calculations",
+    "doi": "10.1016/j.mtcomm.2021.102174",
+    "associated_data": "10.17632/dn7nng9b45.1",
+    "local_coordination_motifs": {
+      "X3_like": "H@Mg3Ni tetrahedron",
+      "X7_like": "H@Mg2Ni2 tetrahedron"
+    },
+    "disclaimer": "The fractional site vectors below were derived as tetrahedral-void circumsphere centers of this user's converged Mg2Ni parent geometry, with local four-metal coordination checked. They are X3-like and X7-like geometrical proxies, NOT copied/refined exact crystallographic X3/X7 site coordinates."
+  },
+  "fractional_sites_primitive_parent": {
+    "T31": {
+      "f": [
+        0.35559239,
+        0.09684603,
+        0.22835073
+      ],
+      "expected_four_nn": [
+        "Mg",
+        "Mg",
+        "Mg",
+        "Ni"
+      ],
+      "expected_typical_MgNi_distance_A": 1.84
+    },
+    "T22a": {
+      "f": [
+        0.13884407,
+        0.36115676,
+        0.87151493
+      ],
+      "expected_four_nn": [
+        "Mg",
+        "Mg",
+        "Ni",
+        "Ni"
+      ],
+      "expected_typical_MgNi_distance_A": 1.72
+    },
+    "T22b": {
+      "f": [
+        0.63883742,
+        0.77767422,
+        0.53817985
+      ],
+      "expected_four_nn": [
+        "Mg",
+        "Mg",
+        "Ni",
+        "Ni"
+      ],
+      "expected_typical_MgNi_distance_A": 1.72
+    }
+  },
+  "models": [
+    {
+      "name": "M0_Mg2Ni",
+      "h_sites": [],
+      "atom_count": 36,
+      "nominal_x": 0
+    },
+    {
+      "name": "M2_T31_T31",
+      "h_sites": [
+        [
+          "T31",
+          0
+        ],
+        [
+          "T31",
+          1
+        ]
+      ],
+      "atom_count": 38,
+      "nominal_x": 0.16666666666666666
+    },
+    {
+      "name": "M2_T31_T22",
+      "h_sites": [
+        [
+          "T31",
+          0
+        ],
+        [
+          "T22a",
+          1
+        ]
+      ],
+      "atom_count": 38,
+      "nominal_x": 0.16666666666666666
+    },
+    {
+      "name": "M3_T31_T31_T22",
+      "h_sites": [
+        [
+          "T31",
+          0
+        ],
+        [
+          "T31",
+          1
+        ],
+        [
+          "T22b",
+          0
+        ]
+      ],
+      "atom_count": 39,
+      "nominal_x": 0.25
+    },
+    {
+      "name": "M3_T31_T22_T22",
+      "h_sites": [
+        [
+          "T31",
+          0
+        ],
+        [
+          "T22a",
+          1
+        ],
+        [
+          "T22b",
+          0
+        ]
+      ],
+      "atom_count": 39,
+      "nominal_x": 0.25
+    }
+  ],
+  "numerical_settings": {
+    "code": "VASP6.3.2",
+    "functional": "PBE",
+    "ENCUT": 520,
+    "ISPIN": 2,
+    "LDAU": false,
+    "ISMEAR": 0,
+    "SIGMA": 0.05,
+    "LREAL": false,
+    "EDIFF": 1e-7,
+    "EDIFFG": -0.015,
+    "IBRION": 2,
+    "POTIM": 0.12,
+    "NSW": 240,
+    "ISIF": 3,
+    "ISYM": 0,
+    "active_metal_magmom_Ni": 1,
+    "kpoints_Gamma": [
+      5,
+      5,
+      2
+    ],
+    "NCORE": 4
+  },
+  "resource": {
+    "partition": "64c512g",
+    "nodes": 1,
+    "ntasks": 32,
+    "mem_gb": 128,
+    "wall_hours": 12,
+    "array_indices": "0-4",
+    "array_throttle": "none"
+  },
+  "quality_gate": {
+    "relax_free_force_lt": 0.015,
+    "static_free_force_lt": 0.02,
+    "scf_EDIFF_required": true,
+    "ionic_converged_required": true,
+    "composition_conserved": true,
+    "no_diffusion_NEB_or_interface_submissions": true
+  },
+  "scope": [
+    "Only 36-39 atom bulk Mg2NiHx endpoints",
+    "No 147-atom interface continuation or retry",
+    "No Mg2NiH2 database phase; no Mg2NiH4 phase or phase transition",
+    "No NEB; no Ca, La hydride tasks",
+    "Five fixed models, no automatic configuration enumeration"
+  ],
+  "notes": [
+    "M2 and M3 structures with identical composition can be compared directly after convergence.",
+    "Across hydrogen counts compare E(Mg24Ni12Hn) - E(Mg24Ni12) - n/2*E(H2) from matching PBE+PAW.",
+    "The four types of sites used here approximate paper-reported X3/X7 coordination but not authors' exact Wyckoff coordinates.",
+    "No claim of a globally stable Mg2NiH0.25 phase from 2-3 H candidates."
+  ]
+}
