@@ -18,8 +18,8 @@ from pathlib import Path
 ROOT = Path.home() / "Ca_corrosion_fresh_20261014"
 EXPECTED = {
     "Mg_bulk": "63681995",
-    "H2_ref": "63681996",
-    "H2O_ref": "63681997",
+    "H2": "63681996",
+    "H2O": "63681997",
     "M0_clean": "63682000",
     "M0_water": "63682002",
     "M0_OH": "63682003",
