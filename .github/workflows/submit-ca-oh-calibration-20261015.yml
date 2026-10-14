@@ -1,4 +1,5 @@
 name: Submit four Ca OH dipole calibrations only
+# Exact-original PAW lookup is required; first attempt stopped before any sbatch.
 on:
   workflow_dispatch:
   push:
@@ -21,7 +22,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile calculations/Ca_OH_dipole_calibration_20261015/calibrate.py
+          python3 -m py_compile calculations/Ca_OH_dipole_calibration_20261015/calibrate.py calculations/Ca_OH_dipole_calibration_20261015/prepare_exact_paw.py
           python3 calculations/Ca_OH_dipole_calibration_20261015/calibrate.py --preview --preview-root "$RUNNER_TEMP/Ca_OH_P0_preview"
           python3 - <<'PY'
           import json, os
@@ -39,7 +40,8 @@ jobs:
               print('VERIFIED_INPUT',name,d['composition'],d['dipole']['DIPOL_direct'])
           base='calculations/Ca_corrosion_20261014/verified_parents_20261014'
           paths=['calculations/Ca_OH_dipole_calibration_20261015/plan.json',
-                 'calculations/Ca_OH_dipole_calibration_20261015/calibrate.py',base+'/AUDIT.json']
+                 'calculations/Ca_OH_dipole_calibration_20261015/calibrate.py',
+                 'calculations/Ca_OH_dipole_calibration_20261015/prepare_exact_paw.py',base+'/AUDIT.json']
           for name in names:
               for rel in ['calculation_inputs/INCAR.static','calculation_inputs/KPOINTS','results/01_relax/CONTCAR']:
                   paths.append(base+'/models/'+name+'/'+rel)
@@ -82,7 +84,7 @@ jobs:
           stage='VASP/github_jobs/Ca_OH_dipole_calibration_20261015'
           ssh "${opts[@]}" "$remote" "mkdir -p \"\$HOME/$stage\""
           tar -cf - -T calibration_deployment_paths.txt | ssh "${opts[@]}" "$remote" "cd \"\$HOME/$stage\" && tar -xf -"
-          ssh "${opts[@]}" "$remote" "cd \"\$HOME/$stage\" && python3 calculations/Ca_OH_dipole_calibration_20261015/calibrate.py --submit" | tee calibration_submission.txt
+          ssh "${opts[@]}" "$remote" "cd \"\$HOME/$stage\" && python3 calculations/Ca_OH_dipole_calibration_20261015/prepare_exact_paw.py" | tee calibration_submission.txt
           ssh "${opts[@]}" "$remote" 'python3 "$HOME/Ca_OH_dipole_calibration_20261015/calibrate.py" --status' | tee calibration_status.txt
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
