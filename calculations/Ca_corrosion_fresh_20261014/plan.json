@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "batch": "Ca_corrosion_fresh_20261014",
+  "source_policy": "Fresh ideal hcp lattice and analytical molecular geometry; no previous POSCAR, CONTCAR or computed energies are imported.",
+  "initial_hcp_a_A": 3.21,
+  "initial_hcp_c_A": 5.21,
+  "lattice_status": "Initial guesses only; optimize new bulk Mg before constructing production slabs.",
+  "slab": {"repeat": [4,4], "layers": 6, "fixed_bottom_layers": 2, "vacuum_gap_A": 20.0, "top_anchor_ij": [1,1], "surface_metal_sites": 16},
+  "chemistry": {"M0":"Mg96", "M1":"Mg95Ca1; surface substitution only", "potential_labels":{"Mg":"Mg","Ca":"Ca_sv","O":"O","H":"H"}},
+  "numerics": {"ENCUT_eV":520, "ISPIN":2, "LDAU":false, "ISMEAR":0, "SIGMA_eV":0.05, "LREAL":false, "EDIFF":1e-7, "relax_force_eV_A":0.015, "static_force_eV_A":0.02, "slab_kmesh":[3,3,1], "bulk_kmesh":[15,15,11], "molecule_kmesh":[1,1,1], "slab_dipole":"LDIPOL=True IDIPOL=3, DIPOL=(0.5,0.5,0.5)", "gas_dipole":"LDIPOL=True IDIPOL=4", "NSW":300, "POTIM":0.10},
+  "maximum_models": 23,
+  "reference_models": ["Mg_bulk", "H2", "H2O"],
+  "per_surface_models": ["clean", "water", "OH", "OH_H", "OH_water", "2OH_H", "2OH_near", "2OH_far", "4OH_near", "4OH_far"],
+  "coverage_patterns": {"2OH_near":[[1,1],[1,2]], "2OH_far":[[1,1],[3,3]], "4OH_near":[[1,1],[2,1],[1,2],[2,2]], "4OH_far":[[1,1],[1,3],[3,1],[3,3]]},
+  "resources": {"bulk":{"mpi":16,"memory_GB":32,"walltime":"02:00:00"},"gas":{"mpi":4,"memory_GB":16,"walltime":"01:00:00"},"slab":{"mpi":64,"memory_GB":128,"walltime":"24:00:00"},"partition":"64c512g"},
+  "workflow_policy":"Only submit the fixed DAG once, each child depends on its own required new parent; no old job IDs or whole-parent-array dependencies; no automatic VASP retries.",
+  "stage_counts": {"fresh_references_and_clean_slabs":5,"fresh_single_water_OH_OHplusH_and_OHwater_baselines":8,"second_water_dissociation":2,"two_four_OH_patterns":8},
+  "limitations": ["One selected initial molecular adsorption geometry and one OH bridge motif per surface; not a global adsorption minimum search.","Vacuum neutral-slab endpoint thermodynamics, not a liquid-water electrode potential model.","0.0625, 0.125 and 0.25 nominal OH coverage are local hydroxylation, not a proven continuous protective film.","No NEB, AIMD, DOS/Bader sweep, MgH2 slab, Mg2Ca intermetallic or corrosion-rate prediction.","Surface Ca=1/16 top metal sites is not experimental mass fraction.","Reoptimize references under a single PBE setup; do not combine with old Ca energies.","Slab thickness, K mesh, dispersion and explicit-solvent effects remain future sensitivity checks."]
+}
