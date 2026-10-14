@@ -1,0 +1,19 @@
+{
+  "name": "M1_OH",
+  "source": "oh_coverage_63131486_20261002/remote/10_Mg0001/M1_Ca_surface/H2O_diss/01_ca_top_near_mg",
+  "deleted_atom_original_1based": 99,
+  "species": [
+    "Mg",
+    "Ca",
+    "O",
+    "H"
+  ],
+  "counts": [
+    95,
+    1,
+    1,
+    1
+  ],
+  "added_water": false,
+  "source_path_note": "User home prefix removed for public archive; original metadata SHA256 recorded."
+}

@@ -1,0 +1,1924 @@
+{
+  "archive_sha256": "827cebd6ae2a68f77c481fb236c021c008027537fc3319856189e84343bd8ab6",
+  "source_hash_validation": [
+    {
+      "file": "OH_Relax_Static_4models/M0_OH/calculation_inputs/POSCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH/calculation_inputs/INCAR.relax",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH/calculation_inputs/INCAR.static",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH/calculation_inputs/KPOINTS",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH/calculation_inputs/POTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH/calculation_inputs/metadata.json",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH/results/01_relax/OUTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH/results/01_relax/CONTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH/results/02_static/OUTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH/calculation_inputs/POSCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH/calculation_inputs/INCAR.relax",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH/calculation_inputs/INCAR.static",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH/calculation_inputs/KPOINTS",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH/calculation_inputs/POTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH/calculation_inputs/metadata.json",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH/results/01_relax/OUTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH/results/01_relax/CONTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH/results/02_static/OUTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH_H2O/calculation_inputs/POSCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH_H2O/calculation_inputs/INCAR.relax",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH_H2O/calculation_inputs/INCAR.static",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH_H2O/calculation_inputs/KPOINTS",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH_H2O/calculation_inputs/POTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH_H2O/calculation_inputs/metadata.json",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH_H2O/results/01_relax/OUTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH_H2O/results/01_relax/CONTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M0_OH_H2O/results/02_static/OUTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH_H2O/calculation_inputs/POSCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH_H2O/calculation_inputs/INCAR.relax",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH_H2O/calculation_inputs/INCAR.static",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH_H2O/calculation_inputs/KPOINTS",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH_H2O/calculation_inputs/POTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH_H2O/calculation_inputs/metadata.json",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH_H2O/results/01_relax/OUTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH_H2O/results/01_relax/CONTCAR",
+      "match": true
+    },
+    {
+      "file": "OH_Relax_Static_4models/M1_OH_H2O/results/02_static/OUTCAR",
+      "match": true
+    }
+  ],
+  "models": {
+    "M0_OH": {
+      "input_INCAR_relax": {
+        "SYSTEM": "M0_OH",
+        "GGA": "PE",
+        "ENCUT": "520",
+        "PREC": "Accurate",
+        "EDIFF": "1E-6",
+        "EDIFFG": "-0.015",
+        "IBRION": "2",
+        "NSW": "200",
+        "ISIF": "2",
+        "ISMEAR": "1",
+        "SIGMA": "0.2",
+        "LASPH": ".TRUE.",
+        "LREAL": "Auto",
+        "ALGO": "Normal",
+        "NELM": "240",
+        "NCORE": "8",
+        "KPAR": "1",
+        "ADDGRID": ".TRUE.",
+        "ISYM": "0",
+        "LWAVE": ".FALSE.",
+        "LCHARG": ".FALSE."
+      },
+      "input_INCAR_static": {
+        "SYSTEM": "M0_OH",
+        "GGA": "PE",
+        "ENCUT": "520",
+        "PREC": "Accurate",
+        "EDIFF": "1E-7",
+        "EDIFFG": "-0.02",
+        "IBRION": "-1",
+        "NSW": "0",
+        "ISIF": "2",
+        "ISMEAR": "1",
+        "SIGMA": "0.2",
+        "LASPH": ".TRUE.",
+        "LREAL": ".FALSE.",
+        "ALGO": "Normal",
+        "NELM": "240",
+        "NCORE": "8",
+        "KPAR": "1",
+        "ADDGRID": ".TRUE.",
+        "ISYM": "0",
+        "LWAVE": ".FALSE.",
+        "LCHARG": ".FALSE."
+      },
+      "KPOINTS": "Automatic mesh\n0\nGamma\n3 3 1\n0 0 0\n",
+      "original_metadata": {
+        "name": "M0_OH",
+        "source": "oh_coverage_63131486_20261002/remote/10_Mg0001/M0_pristine/H2O_diss/02_bridge_neighbor",
+        "deleted_atom_original_1based": 99,
+        "species": [
+          "Mg",
+          "O",
+          "H"
+        ],
+        "counts": [
+          96,
+          1,
+          1
+        ],
+        "added_water": false,
+        "source_path_note": "User home prefix removed for public archive; original metadata SHA256 recorded."
+      },
+      "structure": {
+        "composition": {
+          "Mg": 96,
+          "O": 1,
+          "H": 1
+        },
+        "cell": [
+          [
+            12.833479998102,
+            0.0,
+            0.0
+          ],
+          [
+            -6.416739999051,
+            11.114119697317,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            32.816096282864
+          ]
+        ],
+        "free_atom_count": 66,
+        "fixed_atom_count": 32,
+        "Ca": [],
+        "adsorbate_neighbours": [
+          {
+            "id": 97,
+            "element": "O",
+            "nearest8": [
+              [
+                0.9771861672675874,
+                "H",
+                98
+              ],
+              [
+                2.1018359006712055,
+                "Mg",
+                87
+              ],
+              [
+                2.1021374359825464,
+                "Mg",
+                90
+              ],
+              [
+                2.1027351158652796,
+                "Mg",
+                85
+              ],
+              [
+                3.919779288610366,
+                "Mg",
+                88
+              ],
+              [
+                3.922082205770064,
+                "Mg",
+                91
+              ],
+              [
+                3.928417057009643,
+                "Mg",
+                83
+              ],
+              [
+                4.057343010908314,
+                "Mg",
+                76
+              ]
+            ]
+          },
+          {
+            "id": 98,
+            "element": "H",
+            "nearest8": [
+              [
+                0.9771861672675874,
+                "O",
+                97
+              ],
+              [
+                2.695061020548497,
+                "Mg",
+                90
+              ],
+              [
+                2.6956686388874256,
+                "Mg",
+                87
+              ],
+              [
+                2.6962471091648164,
+                "Mg",
+                85
+              ],
+              [
+                4.2861759769134204,
+                "Mg",
+                88
+              ],
+              [
+                4.291269948488312,
+                "Mg",
+                91
+              ],
+              [
+                4.300491234589663,
+                "Mg",
+                83
+              ],
+              [
+                4.946522760023389,
+                "Mg",
+                76
+              ]
+            ]
+          }
+        ],
+        "min_HH": null,
+        "metal_mean_z": 6.426375256623068
+      },
+      "input_hashes": {
+        "POSCAR": "88484baddb025194421c96f6a734a3a9fee06e3652d2d4df4ce0f7190d209d0b",
+        "INCAR.relax": "b96cd803d6f27c15d03fa5bf9b2c797a2de282df8cd9a72ee0f5023400f615eb",
+        "INCAR.static": "7a285388c8e916745bccb294058de4453735e31848dbb79256ae07147c541bdf",
+        "KPOINTS": "a002d42f88135bba35c58784d8134c5979f55db063b470597555af8e690d61e9",
+        "POTCAR": "2a17b55d2e2b2800810e537bcd03086bba46a07f6cb6f7d4f487fdc571396573",
+        "metadata.json": "4bbc52463afc99cb3ccb3f579176c9f587f517ccc3a9b15e718e9dcb52b51efb"
+      },
+      "relax_CONTCAR_sha256": "9a4566d302c95a1f4250a51917a8823120418442353353f310a4099331cc8d3c",
+      "01_relax": {
+        "F_eV": -146.7714636,
+        "E0_eV": -146.72934296,
+        "energy_without_entropy_eV": -146.64510167,
+        "electronic_ediff_last": true,
+        "normal_end": true,
+        "ionic_convergence_marker": true,
+        "ionic_steps_in_this_output": 24,
+        "last_ionic_iteration_label": "24",
+        "max_free_force_eV_A": 0.009992607767745115,
+        "max_all_force_eV_A": 0.08176821418497533,
+        "force_history_last5": [
+          0.025976070584289686,
+          0.02421399787313115,
+          0.02177835067216983,
+          0.017728248954705032,
+          0.009992607767745115
+        ],
+        "energy_history_last5": [
+          -146.77102366,
+          -146.77107586,
+          -146.77117057,
+          -146.77132068,
+          -146.7714636
+        ],
+        "parameters_and_dipole": [
+          {
+            "line": 22,
+            "text": "ISMEAR = 1"
+          },
+          {
+            "line": 23,
+            "text": "SIGMA = 0.2"
+          },
+          {
+            "line": 25,
+            "text": "LREAL = Auto"
+          },
+          {
+            "line": 741,
+            "text": "ISPIN  =      1    spin polarized calculation?"
+          },
+          {
+            "line": 752,
+            "text": "LREAL  =      T    real-space projection"
+          },
+          {
+            "line": 794,
+            "text": "ISMEAR =     1;   SIGMA  =   0.20  broadening in eV -4-tet -1-fermi 0-gaus"
+          },
+          {
+            "line": 834,
+            "text": "LDIPOL =      F    correct potential (dipole corrections)"
+          },
+          {
+            "line": 835,
+            "text": "IDIPOL =      0    1-x, 2-y, 3-z, 4-all directions"
+          },
+          {
+            "line": 892,
+            "text": "Methfessel and Paxton  Order N= 1 SIGMA  =   0.20"
+          }
+        ],
+        "source_TOTEN_line": 36656,
+        "source_sha256": "9d5acc65e57494fcc9d4efe432c09df63de8f8d440021497b72ea8c1a2f93234",
+        "energy_ENTROPY_gap_E0_minus_F": 0.04212064000000737,
+        "max_final_position_difference_to_relax_CONTCAR_A": 8.270210858311752e-06
+      },
+      "02_static": {
+        "F_eV": -146.75880355,
+        "E0_eV": -146.71669462,
+        "energy_without_entropy_eV": -146.63247675,
+        "electronic_ediff_last": true,
+        "normal_end": true,
+        "ionic_convergence_marker": false,
+        "ionic_steps_in_this_output": 1,
+        "last_ionic_iteration_label": "1",
+        "max_free_force_eV_A": 0.01106850545466731,
+        "max_all_force_eV_A": 0.08155744129139904,
+        "force_history_last5": [
+          0.01106850545466731
+        ],
+        "energy_history_last5": [
+          -146.75880355
+        ],
+        "parameters_and_dipole": [
+          {
+            "line": 22,
+            "text": "ISMEAR = 1"
+          },
+          {
+            "line": 23,
+            "text": "SIGMA = 0.2"
+          },
+          {
+            "line": 25,
+            "text": "LREAL = .FALSE."
+          },
+          {
+            "line": 204,
+            "text": "|     Therefore, try LREAL= Auto in the INCAR file.                           |"
+          },
+          {
+            "line": 206,
+            "text": "|     reciprocal projection scheme (i.e. LREAL=.FALSE.).                      |"
+          },
+          {
+            "line": 722,
+            "text": "ISPIN  =      1    spin polarized calculation?"
+          },
+          {
+            "line": 733,
+            "text": "LREAL  =      F    real-space projection"
+          },
+          {
+            "line": 775,
+            "text": "ISMEAR =     1;   SIGMA  =   0.20  broadening in eV -4-tet -1-fermi 0-gaus"
+          },
+          {
+            "line": 815,
+            "text": "LDIPOL =      F    correct potential (dipole corrections)"
+          },
+          {
+            "line": 816,
+            "text": "IDIPOL =      0    1-x, 2-y, 3-z, 4-all directions"
+          },
+          {
+            "line": 872,
+            "text": "Methfessel and Paxton  Order N= 1 SIGMA  =   0.20"
+          }
+        ],
+        "source_TOTEN_line": 3639,
+        "source_sha256": "243888aeaee2cf492d55d07065beb182651a5db876b9c473e225887d685fc1dc",
+        "energy_ENTROPY_gap_E0_minus_F": 0.042108930000011924,
+        "max_final_position_difference_to_relax_CONTCAR_A": 8.270210858311752e-06
+      },
+      "potentials": [
+        {
+          "title": "PAW_PBE Mg 13Apr2007",
+          "sha256": "f76446a817d42099ee74e0da954cc76e9a08b75a9e1aacd2d683ccd92d4ef4d5"
+        },
+        {
+          "title": "PAW_PBE O 08Apr2002",
+          "sha256": "818f92134a0a090dccd8ba1447fa70422a3b330e708bb4f08108d8ae51209ddf"
+        },
+        {
+          "title": "PAW_PBE H 15Jun2001",
+          "sha256": "030f79b5d3ab3cf0e668861823c8fb652ff669f3e15e46930bd03bfd63a607b6"
+        }
+      ],
+      "numerical_checks_passed_under_original_settings": true
+    },
+    "M0_OH_H2O": {
+      "input_INCAR_relax": {
+        "GGA": "PE",
+        "ENCUT": "520",
+        "PREC": "Accurate",
+        "EDIFF": "1E-6",
+        "ISIF": "2",
+        "ISMEAR": "1",
+        "SIGMA": "0.2",
+        "LASPH": ".TRUE.",
+        "LREAL": "Auto",
+        "ALGO": "Normal",
+        "NELM": "240",
+        "NCORE": "8",
+        "KPAR": "1",
+        "ADDGRID": ".TRUE.",
+        "ISYM": "0",
+        "LWAVE": ".FALSE.",
+        "LCHARG": ".FALSE.",
+        "SYSTEM": "M0_OH_H2O_continuation",
+        "IBRION": "1",
+        "POTIM": "0.20",
+        "NSW": "200",
+        "EDIFFG": "-0.015"
+      },
+      "input_INCAR_static": {
+        "SYSTEM": "M0_OH_H2O_continuation",
+        "GGA": "PE",
+        "ENCUT": "520",
+        "PREC": "Accurate",
+        "EDIFF": "1E-7",
+        "EDIFFG": "-0.02",
+        "IBRION": "-1",
+        "NSW": "0",
+        "ISIF": "2",
+        "ISMEAR": "1",
+        "SIGMA": "0.2",
+        "LASPH": ".TRUE.",
+        "LREAL": ".FALSE.",
+        "ALGO": "Normal",
+        "NELM": "240",
+        "NCORE": "8",
+        "KPAR": "1",
+        "ADDGRID": ".TRUE.",
+        "ISYM": "0",
+        "LWAVE": ".FALSE.",
+        "LCHARG": ".FALSE."
+      },
+      "KPOINTS": "Automatic mesh\n0\nGamma\n3 3 1\n0 0 0\n",
+      "original_metadata": {
+        "parent": "M0_OH_H2O",
+        "purpose": "continuation from NSW=200 endpoint"
+      },
+      "structure": {
+        "composition": {
+          "Mg": 96,
+          "O": 2,
+          "H": 3
+        },
+        "cell": [
+          [
+            12.833479998102,
+            0.0,
+            0.0
+          ],
+          [
+            -6.416739999051,
+            11.114119697317,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            32.816096282864
+          ]
+        ],
+        "free_atom_count": 69,
+        "fixed_atom_count": 32,
+        "Ca": [],
+        "adsorbate_neighbours": [
+          {
+            "id": 97,
+            "element": "O",
+            "nearest8": [
+              [
+                0.977189245525043,
+                "H",
+                99
+              ],
+              [
+                2.0733981248626585,
+                "Mg",
+                87
+              ],
+              [
+                2.0792780232948367,
+                "Mg",
+                85
+              ],
+              [
+                2.0990656804973225,
+                "Mg",
+                90
+              ],
+              [
+                2.9238015103946213,
+                "O",
+                98
+              ],
+              [
+                3.420645625281284,
+                "H",
+                101
+              ],
+              [
+                3.707618373656129,
+                "H",
+                100
+              ],
+              [
+                3.811018665648003,
+                "Mg",
+                83
+              ]
+            ]
+          },
+          {
+            "id": 98,
+            "element": "O",
+            "nearest8": [
+              [
+                0.981786279504711,
+                "H",
+                100
+              ],
+              [
+                0.9855181087009361,
+                "H",
+                101
+              ],
+              [
+                2.2118583317164506,
+                "Mg",
+                90
+              ],
+              [
+                2.614805114397291,
+                "H",
+                99
+              ],
+              [
+                2.9238015103946213,
+                "O",
+                97
+              ],
+              [
+                3.638837052733976,
+                "Mg",
+                92
+              ],
+              [
+                3.8796268894584838,
+                "Mg",
+                94
+              ],
+              [
+                3.917832624541826,
+                "Mg",
+                88
+              ]
+            ]
+          },
+          {
+            "id": 99,
+            "element": "H",
+            "nearest8": [
+              [
+                0.977189245525043,
+                "O",
+                97
+              ],
+              [
+                2.608436127562328,
+                "Mg",
+                90
+              ],
+              [
+                2.614805114397291,
+                "O",
+                98
+              ],
+              [
+                2.6729952056368997,
+                "Mg",
+                87
+              ],
+              [
+                2.6794714468205316,
+                "Mg",
+                85
+              ],
+              [
+                3.1633709341252456,
+                "H",
+                101
+              ],
+              [
+                3.4280405549113833,
+                "H",
+                100
+              ],
+              [
+                4.1712042745581845,
+                "Mg",
+                83
+              ]
+            ]
+          },
+          {
+            "id": 100,
+            "element": "H",
+            "nearest8": [
+              [
+                0.981786279504711,
+                "O",
+                98
+              ],
+              [
+                1.5548766651612638,
+                "H",
+                101
+              ],
+              [
+                2.6634197163567004,
+                "Mg",
+                90
+              ],
+              [
+                3.3320527859346605,
+                "Mg",
+                94
+              ],
+              [
+                3.4280405549113833,
+                "H",
+                99
+              ],
+              [
+                3.5678116512854814,
+                "Mg",
+                92
+              ],
+              [
+                3.707618373656129,
+                "O",
+                97
+              ],
+              [
+                4.239768162112034,
+                "Mg",
+                91
+              ]
+            ]
+          },
+          {
+            "id": 101,
+            "element": "H",
+            "nearest8": [
+              [
+                0.9855181087009361,
+                "O",
+                98
+              ],
+              [
+                1.5548766651612638,
+                "H",
+                100
+              ],
+              [
+                2.611914642571789,
+                "Mg",
+                90
+              ],
+              [
+                3.1633709341252456,
+                "H",
+                99
+              ],
+              [
+                3.2129187426420374,
+                "Mg",
+                92
+              ],
+              [
+                3.328447435981572,
+                "Mg",
+                88
+              ],
+              [
+                3.420645625281284,
+                "O",
+                97
+              ],
+              [
+                4.273032957745593,
+                "Mg",
+                94
+              ]
+            ]
+          }
+        ],
+        "min_HH": 1.5548766651612638,
+        "metal_mean_z": 6.425243793023743
+      },
+      "input_hashes": {
+        "POSCAR": "4e809d8f3c49a299d9f1ff86887ce0e5a6c115ec7eb4e91a43f0178a8f78de69",
+        "INCAR.relax": "d8f8fdfefcc2a7bdddd92bc16f5f17bc2f1ebf7dbda4deb3a83ca6a9a1326982",
+        "INCAR.static": "f1d5e3a145dee7f3efe9212ab66c68fd05b06569304bd2d8b91a25312ebf6362",
+        "KPOINTS": "a002d42f88135bba35c58784d8134c5979f55db063b470597555af8e690d61e9",
+        "POTCAR": "2a17b55d2e2b2800810e537bcd03086bba46a07f6cb6f7d4f487fdc571396573",
+        "metadata.json": "981fbb036cf81e308d93c94453b016751651fadc58a3502dd5d0d101ce4f738e"
+      },
+      "relax_CONTCAR_sha256": "c861bb86336ae0a6372418fc7e2a52e6fa3c4927e8b4ae328715e1d8159ee7fc",
+      "01_relax": {
+        "F_eV": -161.44897919,
+        "E0_eV": -161.40710404,
+        "energy_without_entropy_eV": -161.32335375,
+        "electronic_ediff_last": true,
+        "normal_end": true,
+        "ionic_convergence_marker": true,
+        "ionic_steps_in_this_output": 3,
+        "last_ionic_iteration_label": "3",
+        "max_free_force_eV_A": 0.014684508980554985,
+        "max_all_force_eV_A": 0.08408523074833059,
+        "force_history_last5": [
+          0.021864237032194835,
+          0.016238594458880977,
+          0.014684508980554985
+        ],
+        "energy_history_last5": [
+          -161.44893449,
+          -161.4489623,
+          -161.44897919
+        ],
+        "parameters_and_dipole": [
+          {
+            "line": 18,
+            "text": "ISMEAR = 1"
+          },
+          {
+            "line": 19,
+            "text": "SIGMA = 0.2"
+          },
+          {
+            "line": 21,
+            "text": "LREAL = Auto"
+          },
+          {
+            "line": 751,
+            "text": "ISPIN  =      1    spin polarized calculation?"
+          },
+          {
+            "line": 762,
+            "text": "LREAL  =      T    real-space projection"
+          },
+          {
+            "line": 804,
+            "text": "ISMEAR =     1;   SIGMA  =   0.20  broadening in eV -4-tet -1-fermi 0-gaus"
+          },
+          {
+            "line": 844,
+            "text": "LDIPOL =      F    correct potential (dipole corrections)"
+          },
+          {
+            "line": 845,
+            "text": "IDIPOL =      0    1-x, 2-y, 3-z, 4-all directions"
+          },
+          {
+            "line": 902,
+            "text": "Methfessel and Paxton  Order N= 1 SIGMA  =   0.20"
+          }
+        ],
+        "source_TOTEN_line": 6360,
+        "source_sha256": "6e262d40c423ed32f06cf4d684490a0878efbfc87fa632c96e0775af7f4a8dde",
+        "energy_ENTROPY_gap_E0_minus_F": 0.04187514999998143,
+        "max_final_position_difference_to_relax_CONTCAR_A": 6.9166443887561426e-06
+      },
+      "02_static": {
+        "F_eV": -161.43577865,
+        "E0_eV": -161.39391351,
+        "energy_without_entropy_eV": -161.31018323,
+        "electronic_ediff_last": true,
+        "normal_end": true,
+        "ionic_convergence_marker": false,
+        "ionic_steps_in_this_output": 1,
+        "last_ionic_iteration_label": "1",
+        "max_free_force_eV_A": 0.015138801835019838,
+        "max_all_force_eV_A": 0.08369955468220844,
+        "force_history_last5": [
+          0.015138801835019838
+        ],
+        "energy_history_last5": [
+          -161.43577865
+        ],
+        "parameters_and_dipole": [
+          {
+            "line": 22,
+            "text": "ISMEAR = 1"
+          },
+          {
+            "line": 23,
+            "text": "SIGMA = 0.2"
+          },
+          {
+            "line": 25,
+            "text": "LREAL = .FALSE."
+          },
+          {
+            "line": 204,
+            "text": "|     Therefore, try LREAL= Auto in the INCAR file.                           |"
+          },
+          {
+            "line": 206,
+            "text": "|     reciprocal projection scheme (i.e. LREAL=.FALSE.).                      |"
+          },
+          {
+            "line": 731,
+            "text": "ISPIN  =      1    spin polarized calculation?"
+          },
+          {
+            "line": 742,
+            "text": "LREAL  =      F    real-space projection"
+          },
+          {
+            "line": 784,
+            "text": "ISMEAR =     1;   SIGMA  =   0.20  broadening in eV -4-tet -1-fermi 0-gaus"
+          },
+          {
+            "line": 824,
+            "text": "LDIPOL =      F    correct potential (dipole corrections)"
+          },
+          {
+            "line": 825,
+            "text": "IDIPOL =      0    1-x, 2-y, 3-z, 4-all directions"
+          },
+          {
+            "line": 881,
+            "text": "Methfessel and Paxton  Order N= 1 SIGMA  =   0.20"
+          }
+        ],
+        "source_TOTEN_line": 3755,
+        "source_sha256": "315182b9e7133bccb52ab291194852b980c0438b93a308916c0fb53e7f7d8ad5",
+        "energy_ENTROPY_gap_E0_minus_F": 0.041865139999998746,
+        "max_final_position_difference_to_relax_CONTCAR_A": 6.9166443887561426e-06
+      },
+      "potentials": [
+        {
+          "title": "PAW_PBE Mg 13Apr2007",
+          "sha256": "f76446a817d42099ee74e0da954cc76e9a08b75a9e1aacd2d683ccd92d4ef4d5"
+        },
+        {
+          "title": "PAW_PBE O 08Apr2002",
+          "sha256": "818f92134a0a090dccd8ba1447fa70422a3b330e708bb4f08108d8ae51209ddf"
+        },
+        {
+          "title": "PAW_PBE H 15Jun2001",
+          "sha256": "030f79b5d3ab3cf0e668861823c8fb652ff669f3e15e46930bd03bfd63a607b6"
+        }
+      ],
+      "numerical_checks_passed_under_original_settings": true
+    },
+    "M1_OH": {
+      "input_INCAR_relax": {
+        "SYSTEM": "M1_OH",
+        "GGA": "PE",
+        "ENCUT": "520",
+        "PREC": "Accurate",
+        "EDIFF": "1E-6",
+        "EDIFFG": "-0.015",
+        "IBRION": "2",
+        "NSW": "200",
+        "ISIF": "2",
+        "ISMEAR": "1",
+        "SIGMA": "0.2",
+        "LASPH": ".TRUE.",
+        "LREAL": "Auto",
+        "ALGO": "Normal",
+        "NELM": "240",
+        "NCORE": "8",
+        "KPAR": "1",
+        "ADDGRID": ".TRUE.",
+        "ISYM": "0",
+        "LWAVE": ".FALSE.",
+        "LCHARG": ".FALSE.",
+        "LDIPOL": ".TRUE.",
+        "IDIPOL": "3",
+        "DIPOL": "3.20837000 5.55705985 6.40804814"
+      },
+      "input_INCAR_static": {
+        "SYSTEM": "M1_OH",
+        "GGA": "PE",
+        "ENCUT": "520",
+        "PREC": "Accurate",
+        "EDIFF": "1E-7",
+        "EDIFFG": "-0.02",
+        "IBRION": "-1",
+        "NSW": "0",
+        "ISIF": "2",
+        "ISMEAR": "1",
+        "SIGMA": "0.2",
+        "LASPH": ".TRUE.",
+        "LREAL": ".FALSE.",
+        "ALGO": "Normal",
+        "NELM": "240",
+        "NCORE": "8",
+        "KPAR": "1",
+        "ADDGRID": ".TRUE.",
+        "ISYM": "0",
+        "LWAVE": ".FALSE.",
+        "LCHARG": ".FALSE.",
+        "LDIPOL": ".TRUE.",
+        "IDIPOL": "3",
+        "DIPOL": "3.20837000 5.55705985 6.40804814"
+      },
+      "KPOINTS": "Automatic mesh\n0\nGamma\n3 3 1\n0 0 0\n",
+      "original_metadata": {
+        "name": "M1_OH",
+        "source": "oh_coverage_63131486_20261002/remote/10_Mg0001/M1_Ca_surface/H2O_diss/01_ca_top_near_mg",
+        "deleted_atom_original_1based": 99,
+        "species": [
+          "Mg",
+          "Ca",
+          "O",
+          "H"
+        ],
+        "counts": [
+          95,
+          1,
+          1,
+          1
+        ],
+        "added_water": false,
+        "source_path_note": "User home prefix removed for public archive; original metadata SHA256 recorded."
+      },
+      "structure": {
+        "composition": {
+          "Mg": 95,
+          "Ca": 1,
+          "O": 1,
+          "H": 1
+        },
+        "cell": [
+          [
+            12.833479998102,
+            0.0,
+            0.0
+          ],
+          [
+            -6.416739999051,
+            11.114119697317,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            32.816096282864
+          ]
+        ],
+        "free_atom_count": 66,
+        "fixed_atom_count": 32,
+        "Ca": [
+          {
+            "id": 96,
+            "xyz": [
+              1.6096872006737206,
+              0.9043638191214676,
+              13.357580416472139
+            ]
+          }
+        ],
+        "adsorbate_neighbours": [
+          {
+            "id": 97,
+            "element": "O",
+            "nearest8": [
+              [
+                0.9767705006348857,
+                "H",
+                98
+              ],
+              [
+                2.1100975239025295,
+                "Mg",
+                81
+              ],
+              [
+                2.1110200891743847,
+                "Mg",
+                91
+              ],
+              [
+                2.2901906560422884,
+                "Ca",
+                96
+              ],
+              [
+                3.6426209213208156,
+                "Mg",
+                93
+              ],
+              [
+                3.766762238062587,
+                "Mg",
+                65
+              ],
+              [
+                4.186791251375349,
+                "Mg",
+                88
+              ],
+              [
+                4.188727066427148,
+                "Mg",
+                95
+              ]
+            ]
+          },
+          {
+            "id": 98,
+            "element": "H",
+            "nearest8": [
+              [
+                0.9767705006348857,
+                "O",
+                97
+              ],
+              [
+                2.6486699267737825,
+                "Mg",
+                81
+              ],
+              [
+                2.650418423243321,
+                "Mg",
+                91
+              ],
+              [
+                2.9625777284953307,
+                "Ca",
+                96
+              ],
+              [
+                3.766170429484273,
+                "Mg",
+                93
+              ],
+              [
+                4.6949902251002325,
+                "Mg",
+                88
+              ],
+              [
+                4.6980646240648225,
+                "Mg",
+                95
+              ],
+              [
+                4.7222901654140275,
+                "Mg",
+                65
+              ]
+            ]
+          }
+        ],
+        "min_HH": null,
+        "metal_mean_z": 6.421416563287683
+      },
+      "input_hashes": {
+        "POSCAR": "e53c40caf65fc931141f09f1aff70442759c6ed6b6cfa73728645dfa8a79f3e7",
+        "INCAR.relax": "3f282f2fdce21847e1500af7da9fb78c425848680bdefaab9b77300ab49fd086",
+        "INCAR.static": "001fd11e3a10254721a602ba29ae7a1b0c4f1cb94ea60b6d386085c11c9cc6aa",
+        "KPOINTS": "a002d42f88135bba35c58784d8134c5979f55db063b470597555af8e690d61e9",
+        "POTCAR": "2f62cba23027f134e5e5c49961c085dd38eededc9046d7bebf475fbded911d01",
+        "metadata.json": "bb294667b3c0ae04b7390d7da78da461dfe17492f1a7320061cbb5ed13a389e2"
+      },
+      "relax_CONTCAR_sha256": "4f46bf384e9804669a70afcc98ea8596b68646d7ee48b5463fe224b9307c4f94",
+      "01_relax": {
+        "F_eV": -147.6846713,
+        "E0_eV": -147.64953738,
+        "energy_without_entropy_eV": -147.57926953,
+        "electronic_ediff_last": true,
+        "normal_end": true,
+        "ionic_convergence_marker": true,
+        "ionic_steps_in_this_output": 23,
+        "last_ionic_iteration_label": "23",
+        "max_free_force_eV_A": 0.014983511203986867,
+        "max_all_force_eV_A": 0.07475769435984499,
+        "force_history_last5": [
+          0.04338358672355249,
+          0.04052317086556777,
+          0.03489166482127214,
+          0.02406409458093115,
+          0.014983511203986867
+        ],
+        "energy_history_last5": [
+          -147.68382949,
+          -147.68392303,
+          -147.68409525,
+          -147.68437665,
+          -147.6846713
+        ],
+        "parameters_and_dipole": [
+          {
+            "line": 22,
+            "text": "ISMEAR = 1"
+          },
+          {
+            "line": 23,
+            "text": "SIGMA = 0.2"
+          },
+          {
+            "line": 25,
+            "text": "LREAL = Auto"
+          },
+          {
+            "line": 34,
+            "text": "LDIPOL = .TRUE."
+          },
+          {
+            "line": 35,
+            "text": "IDIPOL = 3"
+          },
+          {
+            "line": 36,
+            "text": "DIPOL = 3.20837000 5.55705985 6.40804814"
+          },
+          {
+            "line": 821,
+            "text": "ISPIN  =      1    spin polarized calculation?"
+          },
+          {
+            "line": 832,
+            "text": "LREAL  =      T    real-space projection"
+          },
+          {
+            "line": 874,
+            "text": "ISMEAR =     1;   SIGMA  =   0.20  broadening in eV -4-tet -1-fermi 0-gaus"
+          },
+          {
+            "line": 914,
+            "text": "LDIPOL =      T    correct potential (dipole corrections)"
+          },
+          {
+            "line": 915,
+            "text": "IDIPOL =      3    1-x, 2-y, 3-z, 4-all directions"
+          },
+          {
+            "line": 972,
+            "text": "Methfessel and Paxton  Order N= 1 SIGMA  =   0.20"
+          },
+          {
+            "line": 36832,
+            "text": "dipol+quadrupol energy correction           -0.016967 eV"
+          }
+        ],
+        "source_TOTEN_line": 38000,
+        "source_sha256": "09275604a2470efd67aa3c69090ae99a45d0032b45851966747d0c46960c6fc0",
+        "energy_ENTROPY_gap_E0_minus_F": 0.03513391999999271,
+        "max_final_position_difference_to_relax_CONTCAR_A": 7.685851445547672e-06
+      },
+      "02_static": {
+        "F_eV": -147.67235616,
+        "E0_eV": -147.63723064,
+        "energy_without_entropy_eV": -147.56697962,
+        "electronic_ediff_last": true,
+        "normal_end": true,
+        "ionic_convergence_marker": false,
+        "ionic_steps_in_this_output": 1,
+        "last_ionic_iteration_label": "1",
+        "max_free_force_eV_A": 0.014735541863128076,
+        "max_all_force_eV_A": 0.07435592453866739,
+        "force_history_last5": [
+          0.014735541863128076
+        ],
+        "energy_history_last5": [
+          -147.67235616
+        ],
+        "parameters_and_dipole": [
+          {
+            "line": 22,
+            "text": "ISMEAR = 1"
+          },
+          {
+            "line": 23,
+            "text": "SIGMA = 0.2"
+          },
+          {
+            "line": 25,
+            "text": "LREAL = .FALSE."
+          },
+          {
+            "line": 34,
+            "text": "LDIPOL = .TRUE."
+          },
+          {
+            "line": 35,
+            "text": "IDIPOL = 3"
+          },
+          {
+            "line": 36,
+            "text": "DIPOL = 3.20837000 5.55705985 6.40804814"
+          },
+          {
+            "line": 269,
+            "text": "|     Therefore, try LREAL= Auto in the INCAR file.                           |"
+          },
+          {
+            "line": 271,
+            "text": "|     reciprocal projection scheme (i.e. LREAL=.FALSE.).                      |"
+          },
+          {
+            "line": 789,
+            "text": "ISPIN  =      1    spin polarized calculation?"
+          },
+          {
+            "line": 800,
+            "text": "LREAL  =      F    real-space projection"
+          },
+          {
+            "line": 842,
+            "text": "ISMEAR =     1;   SIGMA  =   0.20  broadening in eV -4-tet -1-fermi 0-gaus"
+          },
+          {
+            "line": 882,
+            "text": "LDIPOL =      T    correct potential (dipole corrections)"
+          },
+          {
+            "line": 883,
+            "text": "IDIPOL =      3    1-x, 2-y, 3-z, 4-all directions"
+          },
+          {
+            "line": 939,
+            "text": "Methfessel and Paxton  Order N= 1 SIGMA  =   0.20"
+          },
+          {
+            "line": 3173,
+            "text": "dipol+quadrupol energy correction           -0.016962 eV"
+          }
+        ],
+        "source_TOTEN_line": 4341,
+        "source_sha256": "3b343dd77821664c21fe955bf0a7f5480fbe9bdc5f293dd7e801e5fd179423eb",
+        "energy_ENTROPY_gap_E0_minus_F": 0.035125519999979815,
+        "max_final_position_difference_to_relax_CONTCAR_A": 7.685851445547672e-06
+      },
+      "potentials": [
+        {
+          "title": "PAW_PBE Mg 13Apr2007",
+          "sha256": "f76446a817d42099ee74e0da954cc76e9a08b75a9e1aacd2d683ccd92d4ef4d5"
+        },
+        {
+          "title": "PAW_PBE Ca_sv 06Sep2000",
+          "sha256": "a47365830e737f14e0e6c5cf1ed81b94e081eecf0a33df105380881bc9da05d5"
+        },
+        {
+          "title": "PAW_PBE O 08Apr2002",
+          "sha256": "818f92134a0a090dccd8ba1447fa70422a3b330e708bb4f08108d8ae51209ddf"
+        },
+        {
+          "title": "PAW_PBE H 15Jun2001",
+          "sha256": "030f79b5d3ab3cf0e668861823c8fb652ff669f3e15e46930bd03bfd63a607b6"
+        }
+      ],
+      "numerical_checks_passed_under_original_settings": true
+    },
+    "M1_OH_H2O": {
+      "input_INCAR_relax": {
+        "GGA": "PE",
+        "ENCUT": "520",
+        "PREC": "Accurate",
+        "EDIFF": "1E-6",
+        "ISIF": "2",
+        "ISMEAR": "1",
+        "SIGMA": "0.2",
+        "LASPH": ".TRUE.",
+        "LREAL": "Auto",
+        "ALGO": "Normal",
+        "NELM": "240",
+        "NCORE": "8",
+        "KPAR": "1",
+        "ADDGRID": ".TRUE.",
+        "ISYM": "0",
+        "LWAVE": ".FALSE.",
+        "LCHARG": ".FALSE.",
+        "LDIPOL": ".TRUE.",
+        "IDIPOL": "3",
+        "DIPOL": "3.20837000 5.55705985 6.40804814",
+        "SYSTEM": "M1_OH_H2O_continuation",
+        "IBRION": "1",
+        "POTIM": "0.20",
+        "NSW": "200",
+        "EDIFFG": "-0.015"
+      },
+      "input_INCAR_static": {
+        "SYSTEM": "M1_OH_H2O_continuation",
+        "GGA": "PE",
+        "ENCUT": "520",
+        "PREC": "Accurate",
+        "EDIFF": "1E-7",
+        "EDIFFG": "-0.02",
+        "IBRION": "-1",
+        "NSW": "0",
+        "ISIF": "2",
+        "ISMEAR": "1",
+        "SIGMA": "0.2",
+        "LASPH": ".TRUE.",
+        "LREAL": ".FALSE.",
+        "ALGO": "Normal",
+        "NELM": "240",
+        "NCORE": "8",
+        "KPAR": "1",
+        "ADDGRID": ".TRUE.",
+        "ISYM": "0",
+        "LWAVE": ".FALSE.",
+        "LCHARG": ".FALSE.",
+        "LDIPOL": ".TRUE.",
+        "IDIPOL": "3",
+        "DIPOL": "3.20837000 5.55705985 6.40804814"
+      },
+      "KPOINTS": "Automatic mesh\n0\nGamma\n3 3 1\n0 0 0\n",
+      "original_metadata": {
+        "parent": "M1_OH_H2O",
+        "purpose": "continuation from NSW=200 endpoint"
+      },
+      "structure": {
+        "composition": {
+          "Mg": 95,
+          "Ca": 1,
+          "O": 2,
+          "H": 3
+        },
+        "cell": [
+          [
+            12.833479998102,
+            0.0,
+            0.0
+          ],
+          [
+            -6.416739999051,
+            11.114119697317,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            32.816096282864
+          ]
+        ],
+        "free_atom_count": 69,
+        "fixed_atom_count": 32,
+        "Ca": [
+          {
+            "id": 96,
+            "xyz": [
+              1.6427530890475666,
+              0.8771450904523628,
+              13.634205686843504
+            ]
+          }
+        ],
+        "adsorbate_neighbours": [
+          {
+            "id": 97,
+            "element": "O",
+            "nearest8": [
+              [
+                0.9774755564795571,
+                "H",
+                99
+              ],
+              [
+                2.0825895726552304,
+                "Mg",
+                91
+              ],
+              [
+                2.0948101812155198,
+                "Mg",
+                81
+              ],
+              [
+                2.310943847235395,
+                "Ca",
+                96
+              ],
+              [
+                3.125603765741547,
+                "O",
+                98
+              ],
+              [
+                3.2009846662485173,
+                "H",
+                100
+              ],
+              [
+                3.5742917934735527,
+                "Mg",
+                93
+              ],
+              [
+                3.7349717070734023,
+                "Mg",
+                65
+              ]
+            ]
+          },
+          {
+            "id": 98,
+            "element": "O",
+            "nearest8": [
+              [
+                0.9761145622853771,
+                "H",
+                101
+              ],
+              [
+                0.9853875572446633,
+                "H",
+                100
+              ],
+              [
+                2.432922319052792,
+                "Ca",
+                96
+              ],
+              [
+                2.9595280868696516,
+                "H",
+                99
+              ],
+              [
+                3.125603765741547,
+                "O",
+                97
+              ],
+              [
+                3.754113034403936,
+                "Mg",
+                88
+              ],
+              [
+                4.137025352012578,
+                "Mg",
+                81
+              ],
+              [
+                4.213429719471017,
+                "Mg",
+                86
+              ]
+            ]
+          },
+          {
+            "id": 99,
+            "element": "H",
+            "nearest8": [
+              [
+                0.9774755564795571,
+                "O",
+                97
+              ],
+              [
+                2.632707802282193,
+                "Mg",
+                91
+              ],
+              [
+                2.641549518686037,
+                "Mg",
+                81
+              ],
+              [
+                2.894364456209966,
+                "Ca",
+                96
+              ],
+              [
+                2.9595280868696516,
+                "O",
+                98
+              ],
+              [
+                3.0703117600977,
+                "H",
+                100
+              ],
+              [
+                3.693470389907653,
+                "Mg",
+                93
+              ],
+              [
+                3.9124935962380323,
+                "H",
+                101
+              ]
+            ]
+          },
+          {
+            "id": 100,
+            "element": "H",
+            "nearest8": [
+              [
+                0.9853875572446633,
+                "O",
+                98
+              ],
+              [
+                1.5532229035832406,
+                "H",
+                101
+              ],
+              [
+                2.7966011326076985,
+                "Ca",
+                96
+              ],
+              [
+                3.0703117600977,
+                "H",
+                99
+              ],
+              [
+                3.1234068840220948,
+                "Mg",
+                88
+              ],
+              [
+                3.2009846662485173,
+                "O",
+                97
+              ],
+              [
+                3.6971189334485093,
+                "Mg",
+                81
+              ],
+              [
+                4.298532334712501,
+                "Mg",
+                86
+              ]
+            ]
+          },
+          {
+            "id": 101,
+            "element": "H",
+            "nearest8": [
+              [
+                0.9761145622853771,
+                "O",
+                98
+              ],
+              [
+                1.5532229035832406,
+                "H",
+                100
+              ],
+              [
+                3.043748851636891,
+                "Ca",
+                96
+              ],
+              [
+                3.9124935962380323,
+                "H",
+                99
+              ],
+              [
+                4.055181480422228,
+                "Mg",
+                86
+              ],
+              [
+                4.079791566014145,
+                "O",
+                97
+              ],
+              [
+                4.117029460804735,
+                "Mg",
+                88
+              ],
+              [
+                4.961138023977224,
+                "Mg",
+                83
+              ]
+            ]
+          }
+        ],
+        "min_HH": 1.5532229035832406,
+        "metal_mean_z": 6.4250749730714105
+      },
+      "input_hashes": {
+        "POSCAR": "d6043df030e623315db0330801c226105133399939ffe1ba31eed1ca8a131a19",
+        "INCAR.relax": "44f85269da975d41b223ebae7dcd07aed4358a1c8acf4ae6b227771c563ea9da",
+        "INCAR.static": "a12696752c3be5ec84b077100892e07209fb520c9279dd1be8f7c83826c05ebc",
+        "KPOINTS": "a002d42f88135bba35c58784d8134c5979f55db063b470597555af8e690d61e9",
+        "POTCAR": "2f62cba23027f134e5e5c49961c085dd38eededc9046d7bebf475fbded911d01",
+        "metadata.json": "7b04122b18787f0bb362cd287d47ac5b9715428c1495b00506d8d1ddcd40fc99"
+      },
+      "relax_CONTCAR_sha256": "34c8ce5b67686d75fd898162b8a746e7826a4b7a0c4a4a31baf26ddbc25ef83d",
+      "01_relax": {
+        "F_eV": -162.5805662,
+        "E0_eV": -162.54492288,
+        "energy_without_entropy_eV": -162.47363622,
+        "electronic_ediff_last": true,
+        "normal_end": true,
+        "ionic_convergence_marker": true,
+        "ionic_steps_in_this_output": 71,
+        "last_ionic_iteration_label": "71",
+        "max_free_force_eV_A": 0.01492687391921028,
+        "max_all_force_eV_A": 0.07792379157227913,
+        "force_history_last5": [
+          0.016179503669766882,
+          0.015907164989400216,
+          0.01686299703492828,
+          0.01657173801989399,
+          0.01492687391921028
+        ],
+        "energy_history_last5": [
+          -162.58044833,
+          -162.58043043,
+          -162.58032386,
+          -162.58042563,
+          -162.5805662
+        ],
+        "parameters_and_dipole": [
+          {
+            "line": 18,
+            "text": "ISMEAR = 1"
+          },
+          {
+            "line": 19,
+            "text": "SIGMA = 0.2"
+          },
+          {
+            "line": 21,
+            "text": "LREAL = Auto"
+          },
+          {
+            "line": 30,
+            "text": "LDIPOL = .TRUE."
+          },
+          {
+            "line": 31,
+            "text": "IDIPOL = 3"
+          },
+          {
+            "line": 32,
+            "text": "DIPOL = 3.20837000 5.55705985 6.40804814"
+          },
+          {
+            "line": 831,
+            "text": "ISPIN  =      1    spin polarized calculation?"
+          },
+          {
+            "line": 842,
+            "text": "LREAL  =      T    real-space projection"
+          },
+          {
+            "line": 884,
+            "text": "ISMEAR =     1;   SIGMA  =   0.20  broadening in eV -4-tet -1-fermi 0-gaus"
+          },
+          {
+            "line": 924,
+            "text": "LDIPOL =      T    correct potential (dipole corrections)"
+          },
+          {
+            "line": 925,
+            "text": "IDIPOL =      3    1-x, 2-y, 3-z, 4-all directions"
+          },
+          {
+            "line": 982,
+            "text": "Methfessel and Paxton  Order N= 1 SIGMA  =   0.20"
+          },
+          {
+            "line": 107042,
+            "text": "dipol+quadrupol energy correction           -0.011318 eV"
+          }
+        ],
+        "source_TOTEN_line": 108217,
+        "source_sha256": "3ddb085c43dc1057a342150c346d9fac8ea263f5f6269aaece31d3d895a37c00",
+        "energy_ENTROPY_gap_E0_minus_F": 0.03564331999999126,
+        "max_final_position_difference_to_relax_CONTCAR_A": 7.522219847870525e-06
+      },
+      "02_static": {
+        "F_eV": -162.56747758,
+        "E0_eV": -162.53184536,
+        "energy_without_entropy_eV": -162.46058093,
+        "electronic_ediff_last": true,
+        "normal_end": true,
+        "ionic_convergence_marker": false,
+        "ionic_steps_in_this_output": 1,
+        "last_ionic_iteration_label": "1",
+        "max_free_force_eV_A": 0.01976570216309049,
+        "max_all_force_eV_A": 0.0774031632493143,
+        "force_history_last5": [
+          0.01976570216309049
+        ],
+        "energy_history_last5": [
+          -162.56747758
+        ],
+        "parameters_and_dipole": [
+          {
+            "line": 22,
+            "text": "ISMEAR = 1"
+          },
+          {
+            "line": 23,
+            "text": "SIGMA = 0.2"
+          },
+          {
+            "line": 25,
+            "text": "LREAL = .FALSE."
+          },
+          {
+            "line": 34,
+            "text": "LDIPOL = .TRUE."
+          },
+          {
+            "line": 35,
+            "text": "IDIPOL = 3"
+          },
+          {
+            "line": 36,
+            "text": "DIPOL = 3.20837000 5.55705985 6.40804814"
+          },
+          {
+            "line": 269,
+            "text": "|     Therefore, try LREAL= Auto in the INCAR file.                           |"
+          },
+          {
+            "line": 271,
+            "text": "|     reciprocal projection scheme (i.e. LREAL=.FALSE.).                      |"
+          },
+          {
+            "line": 798,
+            "text": "ISPIN  =      1    spin polarized calculation?"
+          },
+          {
+            "line": 809,
+            "text": "LREAL  =      F    real-space projection"
+          },
+          {
+            "line": 851,
+            "text": "ISMEAR =     1;   SIGMA  =   0.20  broadening in eV -4-tet -1-fermi 0-gaus"
+          },
+          {
+            "line": 891,
+            "text": "LDIPOL =      T    correct potential (dipole corrections)"
+          },
+          {
+            "line": 892,
+            "text": "IDIPOL =      3    1-x, 2-y, 3-z, 4-all directions"
+          },
+          {
+            "line": 948,
+            "text": "Methfessel and Paxton  Order N= 1 SIGMA  =   0.20"
+          },
+          {
+            "line": 3190,
+            "text": "dipol+quadrupol energy correction           -0.011320 eV"
+          }
+        ],
+        "source_TOTEN_line": 4365,
+        "source_sha256": "e02f843335d794aeed579499e7d62604693485bb5b7925819d6414bd69c9d2d9",
+        "energy_ENTROPY_gap_E0_minus_F": 0.03563221999999655,
+        "max_final_position_difference_to_relax_CONTCAR_A": 7.522219847870525e-06
+      },
+      "potentials": [
+        {
+          "title": "PAW_PBE Mg 13Apr2007",
+          "sha256": "f76446a817d42099ee74e0da954cc76e9a08b75a9e1aacd2d683ccd92d4ef4d5"
+        },
+        {
+          "title": "PAW_PBE Ca_sv 06Sep2000",
+          "sha256": "a47365830e737f14e0e6c5cf1ed81b94e081eecf0a33df105380881bc9da05d5"
+        },
+        {
+          "title": "PAW_PBE O 08Apr2002",
+          "sha256": "818f92134a0a090dccd8ba1447fa70422a3b330e708bb4f08108d8ae51209ddf"
+        },
+        {
+          "title": "PAW_PBE H 15Jun2001",
+          "sha256": "030f79b5d3ab3cf0e668861823c8fb652ff669f3e15e46930bd03bfd63a607b6"
+        }
+      ],
+      "numerical_checks_passed_under_original_settings": true
+    }
+  },
+  "missing_references": [
+    "clean M0/M1 outputs",
+    "isolated H2 and H2O outputs"
+  ],
+  "derived_water_addition": {
+    "F_eV": {
+      "M0_without_gas_reference_eV": -14.676975099999993,
+      "M1_without_gas_reference_eV": -14.89512142000001,
+      "M1_minus_M0_eV": -0.21814632000001666
+    },
+    "E0_eV": {
+      "M0_without_gas_reference_eV": -14.677218890000006,
+      "M1_without_gas_reference_eV": -14.894614719999993,
+      "M1_minus_M0_eV": -0.21739582999998674
+    }
+  },
+  "status": "ARCHIVED_AND_AUDITED; no new VASP calculation; physical-setting comparability needs dipole audit",
+  "missing_static_CONTCAR": "Not supplied; relax CONTCAR is consistent with static OUTCAR positions within 8.3e-6 A; no fabricated static output.",
+  "public_exclusions": [
+    "4 licensed POTCAR files",
+    "8 full OUTCAR files replaced by explicitly labeled source-line excerpts",
+    "2 local user path prefixes in metadata removed"
+  ]
+}

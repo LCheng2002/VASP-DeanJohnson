@@ -1,0 +1,17 @@
+{
+  "name": "M0_OH",
+  "source": "oh_coverage_63131486_20261002/remote/10_Mg0001/M0_pristine/H2O_diss/02_bridge_neighbor",
+  "deleted_atom_original_1based": 99,
+  "species": [
+    "Mg",
+    "O",
+    "H"
+  ],
+  "counts": [
+    96,
+    1,
+    1
+  ],
+  "added_water": false,
+  "source_path_note": "User home prefix removed for public archive; original metadata SHA256 recorded."
+}
