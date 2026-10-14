@@ -1,0 +1,43 @@
+name: Validate freshly rebuilt Ca corrosion inputs
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/validate-ca-fresh-20261014.yml']
+permissions:
+  contents: read
+jobs:
+  geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Generate and validate analytical hcp Mg and water OH candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile calculations/Ca_corrosion_fresh_20261014/fresh.py
+          python3 calculations/Ca_corrosion_fresh_20261014/fresh.py --preview --root "$RUNNER_TEMP/Ca_fresh_preview"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'Ca_fresh_preview'
+          d=json.loads((p/'manifest.json').read_text())
+          assert d['preview'] is True and d['maximum_models']==23
+          assert len(d['generated_initial_models'])==23
+          assert not list(p.rglob('POTCAR'))
+          for name in d['DAG']:
+              m=json.loads((p/name/'model.json').read_text())
+              n=sum(m['composition'].values())
+              if name.startswith(('M0_','M1_')):
+                  assert m['composition'].get('Mg',0)+m['composition'].get('Ca',0)==96
+              print('INITIAL_MODEL',name,m['composition'],n)
+          print('INPUT_VALIDATION_OK|23 initial geometries; no old structure, no SSH, no VASP, no Slurm')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: Ca-fresh-23-initial-models
+          path: ${{ runner.temp }}/Ca_fresh_preview
+          retention-days: 7
