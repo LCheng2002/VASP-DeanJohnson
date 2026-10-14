@@ -21,7 +21,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile calculations/Ca_corrosion_fresh_20261014/fresh.py
+          python3 -m py_compile calculations/Ca_corrosion_fresh_20261014/fresh.py calculations/Ca_corrosion_fresh_20261014/prepare_potentials.py
           python3 - <<'PY'
           import json
           from pathlib import Path
@@ -59,9 +59,9 @@ jobs:
           remote="$HPC_USER@sylogin.hpc.sjtu.edu.cn"
           stage='VASP/github_jobs/Ca_corrosion_fresh_generator_20261014'
           ssh "${opts[@]}" "$remote" "mkdir -p \"\$HOME/$stage\""
-          tar -cf - calculations/Ca_corrosion_fresh_20261014/plan.json calculations/Ca_corrosion_fresh_20261014/fresh.py \
+          tar -cf - calculations/Ca_corrosion_fresh_20261014/plan.json calculations/Ca_corrosion_fresh_20261014/fresh.py calculations/Ca_corrosion_fresh_20261014/prepare_potentials.py \
             | ssh "${opts[@]}" "$remote" "cd \"\$HOME/$stage\" && tar -xf -"
-          ssh "${opts[@]}" "$remote" "cd \"\$HOME/$stage\" && python3 calculations/Ca_corrosion_fresh_20261014/fresh.py --submit" | tee fresh_ca_submission.txt
+          ssh "${opts[@]}" "$remote" "cd \"\$HOME/$stage\" && python3 calculations/Ca_corrosion_fresh_20261014/prepare_potentials.py calculations/Ca_corrosion_fresh_20261014/fresh.py" | tee fresh_ca_submission.txt
           ssh "${opts[@]}" "$remote" 'python3 "$HOME/Ca_corrosion_fresh_20261014/fresh.py" --status' | tee fresh_ca_status.txt
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
