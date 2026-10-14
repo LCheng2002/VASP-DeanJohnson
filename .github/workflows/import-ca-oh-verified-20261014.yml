@@ -1,0 +1,79 @@
+name: Import verified Ca OH archive only
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/import-ca-oh-verified-20261014.yml']
+permissions:
+  contents: write
+concurrency:
+  group: import-ca-oh-verified-20261014
+  cancel-in-progress: false
+jobs:
+  archive-import:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+      - name: Validate and unpack only the reviewed nonlicensed data
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64, hashlib, io, json, re, tarfile
+          from pathlib import Path, PurePosixPath
+          source=Path('imports/ca_oh_verified_20261014')
+          encoded=''.join((source/f'payload.{i}.b64').read_text().strip() for i in range(3))
+          data=base64.b64decode(encoded,validate=True)
+          expected='fc15a12c778a436c714a75694ffdb663f521365907f0dff3eb741e8d074afe5b'
+          assert hashlib.sha256(data).hexdigest()==expected,'Archive checksum mismatch; nothing imported'
+          dest=Path('calculations/Ca_corrosion_20261014/verified_parents_20261014')
+          top={'AUDIT.json','PUBLIC_SHA256SUMS.json','SOURCE_README.txt','SOURCE_SHA256SUMS.txt'}
+          models={'M0_OH','M1_OH','M0_OH_H2O','M1_OH_H2O'}
+          input_files={'POSCAR','INCAR.relax','INCAR.static','KPOINTS','metadata.json'}
+          files={}
+          with tarfile.open(fileobj=io.BytesIO(data),mode='r:xz') as archive:
+              members=archive.getmembers()
+              assert len(members)==36 and sum(m.size for m in members)<1000000
+              for member in members:
+                  path=PurePosixPath(member.name)
+                  assert member.isfile() and not path.is_absolute() and '..' not in path.parts
+                  assert member.name not in files
+                  parts=path.parts
+                  valid=member.name in top
+                  if len(parts)>=4 and parts[0]=='models' and parts[1] in models:
+                      valid=(len(parts)==4 and parts[2]=='calculation_inputs' and parts[3] in input_files) or (len(parts)==5 and parts[2]=='results' and parts[3] in {'01_relax','02_static'} and parts[4] in {'CONTCAR','OUTCAR.excerpt.txt'})
+                  assert valid,'Unexpected archive file: '+member.name
+                  content=archive.extractfile(member).read()
+                  text=content.decode('utf-8')
+                  assert 'End of Dataset' not in text,'Pseudopotential dataset found'
+                  assert not re.search(r'-----BEGIN (?:OPENSSH |RSA |EC )?PRIVATE KEY-----|\bgithub_pat_[A-Za-z0-9_]{20,}|\bgh[pousr]_[A-Za-z0-9_]{20,}',text),'Credential-like content found'
+                  files[member.name]=content
+          hashes=json.loads(files['PUBLIC_SHA256SUMS.json'])
+          assert set(hashes)==set(files)-{'PUBLIC_SHA256SUMS.json'}
+          for name,expected_hash in hashes.items():
+              assert hashlib.sha256(files[name]).hexdigest()==expected_hash,'File checksum mismatch: '+name
+          for name,content in files.items():
+              path=dest/name
+              assert not path.exists() or path.read_bytes()==content,'Refusing to replace different existing data: '+name
+          for name,content in files.items():
+              path=dest/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(content)
+          print('ARCHIVE_IMPORT_VERIFIED|files=36|sha256='+expected)
+          print('NO_POTCAR; NO_SSH; NO_VASP; NO_SLURM; NO_ARCHIVE_CODE_EXECUTED')
+          PY
+      - name: Commit only the imported data directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- calculations/Ca_corrosion_20261014/verified_parents_20261014
+          if git diff --cached --quiet; then
+            echo 'IMPORT_ALREADY_PRESENT_IDENTICALLY'
+          else
+            git commit -m 'Archive four user-provided Ca OH Relax/Static structures and verified output excerpts'
+            git push origin HEAD:main
+          fi
+          echo "IMPORT_COMMIT|$(git rev-parse HEAD)"
