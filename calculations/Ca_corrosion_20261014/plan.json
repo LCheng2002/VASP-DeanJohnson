@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "batch": "Ca_corrosion_OH_coverage_20261014",
+  "status": "AWAITING_VERIFIED_PARENT_OUTPUTS_NOT_SUBMITTED",
+  "actual_job_ids": [],
+  "scope": "Metallic Mg(0001) and surface-Ca substituted Mg(0001) in the user's water/OH corrosion study. No MgH2 surface, Mg2Ca, full protective film, NEB, AIMD, DOS or Bader sweep.",
+  "source_policy": "The uploaded Ca-related archive contains initial metal slabs and templates only. Its structures are not substituted for the previously converged OH/water parents. No arbitrary OH geometry is claimed as a recovered source.",
+  "required_parent_models": ["M0_OH", "M1_OH", "M0_OH_H2O", "M1_OH_H2O"],
+  "required_parent_files": ["POSCAR", "CONTCAR", "INCAR", "KPOINTS", "OUTCAR", "OSZICAR"],
+  "required_reaction_references": ["M0 clean Mg96", "M1 surface Ca Mg95Ca", "H2O", "H2"],
+  "input_archive_base_metadata": {
+    "surface": "Mg(0001)",
+    "lateral_supercell": [4, 4],
+    "metal_layers": 6,
+    "fixed_bottom_layers": 2,
+    "fixed_metal_atoms": 32,
+    "surface_metal_sites": 16,
+    "M0_composition": {"Mg": 96},
+    "M1_composition": {"Mg": 95, "Ca": 1},
+    "status": "INITIAL_TEMPLATE_ONLY_NOT_A_NEW_DFT_RESULT"
+  },
+  "proposed_models": [
+    {"name":"M0_OH_second_water_diss","parent":"M0_OH_H2O","composition":{"Mg":96,"O":2,"H":3},"operation":"Move one H of the newly adsorbed intact water to a checked nearby adsorption site; do not delete or add atoms."},
+    {"name":"M1_OH_second_water_diss","parent":"M1_OH_H2O","composition":{"Mg":95,"Ca":1,"O":2,"H":3},"operation":"Matched site and atomic mapping to M0; preserve all atoms."},
+    {"name":"M0_2OH_cluster","parent":"M0_OH","composition":{"Mg":96,"O":2,"H":2},"OH_per_surface_metal_site":0.125},
+    {"name":"M0_2OH_dispersed","parent":"M0_OH","composition":{"Mg":96,"O":2,"H":2},"OH_per_surface_metal_site":0.125},
+    {"name":"M1_2OH_cluster","parent":"M1_OH","composition":{"Mg":95,"Ca":1,"O":2,"H":2},"OH_per_surface_metal_site":0.125},
+    {"name":"M1_2OH_dispersed","parent":"M1_OH","composition":{"Mg":95,"Ca":1,"O":2,"H":2},"OH_per_surface_metal_site":0.125},
+    {"name":"M0_4OH_cluster","parent":"M0_OH","composition":{"Mg":96,"O":4,"H":4},"OH_per_surface_metal_site":0.25},
+    {"name":"M0_4OH_dispersed","parent":"M0_OH","composition":{"Mg":96,"O":4,"H":4},"OH_per_surface_metal_site":0.25},
+    {"name":"M1_4OH_cluster","parent":"M1_OH","composition":{"Mg":95,"Ca":1,"O":4,"H":4},"OH_per_surface_metal_site":0.25},
+    {"name":"M1_4OH_dispersed","parent":"M1_OH","composition":{"Mg":95,"Ca":1,"O":4,"H":4},"OH_per_surface_metal_site":0.25}
+  ],
+  "construction_gates": [
+    "Verify actual endpoint electronic/ionic convergence and forces; record geometry SHA-256.",
+    "Match M0/M1 cells, surface adsorption motifs and metal-site mapping despite Ca element reordering.",
+    "Identify which O/H atoms constitute the original OH and the newly adsorbed water before moving H.",
+    "Check H-H, O-O and metal-adsorbate separations under periodic boundaries; do not force H2 formation.",
+    "Preserve metal count, surface-Ca position and bottom-layer constraints; compare real final coordination after optimization.",
+    "Audit actual smearing, spin, dipole correction and K mesh in parents and references before fixing new INCARs.",
+    "Any new physical settings require consistent reference recomputation; do not mix old and new bare energies."
+  ],
+  "suggested_numerical_gates_not_yet_production_inputs": {
+    "ENCUT_eV":520,
+    "EDIFF_eV":1e-7,
+    "relax_EDIFFG_eV_A":-0.015,
+    "static_max_free_force_eV_A":0.02,
+    "fixed_cell":true,
+    "LREAL":false,
+    "other_physical_settings":"PENDING_AUDIT_OF_ACTUAL_PARENT_INPUTS"
+  },
+  "execution_policy": "Two second-water endpoints first; OH coverage candidates second. Separate branches; do not bind unrelated existing jobs. Retain originals and use new output directories. No remote job was submitted in this preparation attempt.",
+  "licensing": "Do not publish or export POTCAR files. Only use authorized potentials inside the HPC account when execution is available."
+}
