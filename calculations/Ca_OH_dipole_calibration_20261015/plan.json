@@ -10,8 +10,7 @@
   "no_new_atoms_or_relaxation": true,
   "models": [
     {
-      "name": "M0_OH",
-      "expected_atoms": 98,
+      "name": "M0_OH", "expected_atoms": 98,
       "composition": {"Mg": 96, "O": 1, "H": 1},
       "source_CONTCAR_sha256": "9a4566d302c95a1f4250a51917a8823120418442353353f310a4099331cc8d3c",
       "source_INCAR_sha256": "7a285388c8e916745bccb294058de4453735e31848dbb79256ae07147c541bdf",
@@ -22,8 +21,7 @@
       "old_static_force_eV_A": 0.01106850545466731
     },
     {
-      "name": "M1_OH",
-      "expected_atoms": 98,
+      "name": "M1_OH", "expected_atoms": 98,
       "composition": {"Mg": 95, "Ca": 1, "O": 1, "H": 1},
       "source_CONTCAR_sha256": "4f46bf384e9804669a70afcc98ea8596b68646d7ee48b5463fe224b9307c4f94",
       "source_INCAR_sha256": "001fd11e3a10254721a602ba29ae7a1b0c4f1cb94ea60b6d386085c11c9cc6aa",
@@ -34,8 +32,7 @@
       "old_static_force_eV_A": 0.014735541863128076
     },
     {
-      "name": "M0_OH_H2O",
-      "expected_atoms": 101,
+      "name": "M0_OH_H2O", "expected_atoms": 101,
       "composition": {"Mg": 96, "O": 2, "H": 3},
       "source_CONTCAR_sha256": "c861bb86336ae0a6372418fc7e2a52e6fa3c4927e8b4ae328715e1d8159ee7fc",
       "source_INCAR_sha256": "f1d5e3a145dee7f3efe9212ab66c68fd05b06569304bd2d8b91a25312ebf6362",
@@ -46,8 +43,7 @@
       "old_static_force_eV_A": 0.015138801835019838
     },
     {
-      "name": "M1_OH_H2O",
-      "expected_atoms": 101,
+      "name": "M1_OH_H2O", "expected_atoms": 101,
       "composition": {"Mg": 95, "Ca": 1, "O": 2, "H": 3},
       "source_CONTCAR_sha256": "34c8ce5b67686d75fd898162b8a746e7826a4b7a0c4a4a31baf26ddbc25ef83d",
       "source_INCAR_sha256": "a12696752c3be5ec84b077100892e07209fb520c9279dd1be8f7c83826c05ebc",
@@ -65,7 +61,7 @@
     "O": {"label": "O", "sha256": "818f92134a0a090dccd8ba1447fa70422a3b330e708bb4f08108d8ae51209ddf"},
     "H": {"label": "H", "sha256": "030f79b5d3ab3cf0e668861823c8fb652ff669f3e15e46930bd03bfd63a607b6"}
   },
-  "potcar_cache_relpath": "VASP/potential_sets/Ca_corrosion_fresh_20261014",
+  "potcar_cache_relpath": "VASP/potential_sets/Ca_OH_exact_20261015",
   "optional_historical_potcar_roots": ["next_stage_63131486_20261002", "oh_coverage_63131486_20261002"],
   "physical_settings_preserved": {
     "GGA": "PE", "ENCUT": 520, "ISPIN": 1, "LDAU": false,
