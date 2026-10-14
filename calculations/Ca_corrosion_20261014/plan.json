@@ -1,54 +1,71 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "batch": "Ca_corrosion_OH_coverage_20261014",
-  "status": "AWAITING_VERIFIED_PARENT_OUTPUTS_NOT_SUBMITTED",
-  "actual_job_ids": [],
-  "scope": "Metallic Mg(0001) and surface-Ca substituted Mg(0001) in the user's water/OH corrosion study. No MgH2 surface, Mg2Ca, full protective film, NEB, AIMD, DOS or Bader sweep.",
-  "source_policy": "The uploaded Ca-related archive contains initial metal slabs and templates only. Its structures are not substituted for the previously converged OH/water parents. No arbitrary OH geometry is claimed as a recovered source.",
-  "required_parent_models": ["M0_OH", "M1_OH", "M0_OH_H2O", "M1_OH_H2O"],
-  "required_parent_files": ["POSCAR", "CONTCAR", "INCAR", "KPOINTS", "OUTCAR", "OSZICAR"],
-  "required_reaction_references": ["M0 clean Mg96", "M1 surface Ca Mg95Ca", "H2O", "H2"],
-  "input_archive_base_metadata": {
-    "surface": "Mg(0001)",
-    "lateral_supercell": [4, 4],
-    "metal_layers": 6,
-    "fixed_bottom_layers": 2,
-    "fixed_metal_atoms": 32,
-    "surface_metal_sites": 16,
-    "M0_composition": {"Mg": 96},
-    "M1_composition": {"Mg": 95, "Ca": 1},
-    "status": "INITIAL_TEMPLATE_ONLY_NOT_A_NEW_DFT_RESULT"
+  "status": "VERIFIED_PARENT_ARCHIVE_IMPORTED_REVISED_PLAN_NOT_SUBMITTED",
+  "new_job_ids_in_this_revision": [],
+  "parent_archive": {
+    "source_filename": "OH_Relax_Static_4models_20261014.zip",
+    "source_sha256": "827cebd6ae2a68f77c481fb236c021c008027537fc3319856189e84343bd8ab6",
+    "repo_path": "calculations/Ca_corrosion_20261014/verified_parents_20261014",
+    "import_workflow_run": 38595830214,
+    "models": ["M0_OH", "M1_OH", "M0_OH_H2O", "M1_OH_H2O"],
+    "convergence": "All four Relax and Static pairs pass their original free-force and electronic/normal-end checks; this does not resolve M0/M1 numerical-comparability issues.",
+    "public_content": "Full supplied POSCAR, Relax CONTCAR, INCAR, KPOINTS; sanitized metadata; eight source-line OUTCAR excerpts and audits. No POTCAR. No fabricated OSZICAR/static CONTCAR.",
+    "missing": ["clean M0 and M1 outputs", "isolated H2 and H2O outputs", "OSZICAR", "static CONTCAR"]
   },
-  "proposed_models": [
-    {"name":"M0_OH_second_water_diss","parent":"M0_OH_H2O","composition":{"Mg":96,"O":2,"H":3},"operation":"Move one H of the newly adsorbed intact water to a checked nearby adsorption site; do not delete or add atoms."},
-    {"name":"M1_OH_second_water_diss","parent":"M1_OH_H2O","composition":{"Mg":95,"Ca":1,"O":2,"H":3},"operation":"Matched site and atomic mapping to M0; preserve all atoms."},
-    {"name":"M0_2OH_cluster","parent":"M0_OH","composition":{"Mg":96,"O":2,"H":2},"OH_per_surface_metal_site":0.125},
-    {"name":"M0_2OH_dispersed","parent":"M0_OH","composition":{"Mg":96,"O":2,"H":2},"OH_per_surface_metal_site":0.125},
-    {"name":"M1_2OH_cluster","parent":"M1_OH","composition":{"Mg":95,"Ca":1,"O":2,"H":2},"OH_per_surface_metal_site":0.125},
-    {"name":"M1_2OH_dispersed","parent":"M1_OH","composition":{"Mg":95,"Ca":1,"O":2,"H":2},"OH_per_surface_metal_site":0.125},
-    {"name":"M0_4OH_cluster","parent":"M0_OH","composition":{"Mg":96,"O":4,"H":4},"OH_per_surface_metal_site":0.25},
-    {"name":"M0_4OH_dispersed","parent":"M0_OH","composition":{"Mg":96,"O":4,"H":4},"OH_per_surface_metal_site":0.25},
-    {"name":"M1_4OH_cluster","parent":"M1_OH","composition":{"Mg":95,"Ca":1,"O":4,"H":4},"OH_per_surface_metal_site":0.25},
-    {"name":"M1_4OH_dispersed","parent":"M1_OH","composition":{"Mg":95,"Ca":1,"O":4,"H":4},"OH_per_surface_metal_site":0.25}
-  ],
-  "construction_gates": [
-    "Verify actual endpoint electronic/ionic convergence and forces; record geometry SHA-256.",
-    "Match M0/M1 cells, surface adsorption motifs and metal-site mapping despite Ca element reordering.",
-    "Identify which O/H atoms constitute the original OH and the newly adsorbed water before moving H.",
-    "Check H-H, O-O and metal-adsorbate separations under periodic boundaries; do not force H2 formation.",
-    "Preserve metal count, surface-Ca position and bottom-layer constraints; compare real final coordination after optimization.",
-    "Audit actual smearing, spin, dipole correction and K mesh in parents and references before fixing new INCARs.",
-    "Any new physical settings require consistent reference recomputation; do not mix old and new bare energies."
-  ],
-  "suggested_numerical_gates_not_yet_production_inputs": {
-    "ENCUT_eV":520,
-    "EDIFF_eV":1e-7,
-    "relax_EDIFFG_eV_A":-0.015,
-    "static_max_free_force_eV_A":0.02,
-    "fixed_cell":true,
-    "LREAL":false,
-    "other_physical_settings":"PENDING_AUDIT_OF_ACTUAL_PARENT_INPUTS"
+  "key_findings": {
+    "M1_minus_M0_second_water_adsorption_E0_difference_eV": -0.21739583,
+    "common_H2O_reference_cancels": true,
+    "second_water_molecular_identity": "Intact in both archived endpoints; O98 binds H100 and H101, original hydroxyl is O97-H99.",
+    "M0_effective_dipole": {"LDIPOL": false, "IDIPOL": 0},
+    "M1_effective_dipole": {"LDIPOL": true, "IDIPOL": 3, "DIPOL_as_supplied": [3.20837000, 5.55705985, 6.40804814]},
+    "dipole_issue": "DIPOL requires direct coordinates. Supplied M1 values resemble Cartesian positions; verify actual potential discontinuity/vacuum placement. Do not repair energy by manually subtracting printed correction.",
+    "original_common_settings": {"ENCUT": 520, "ISPIN_effective": 1, "ISMEAR": 1, "SIGMA": 0.2, "KPOINTS": [3,3,1]}
   },
-  "execution_policy": "Two second-water endpoints first; OH coverage candidates second. Separate branches; do not bind unrelated existing jobs. Retain originals and use new output directories. No remote job was submitted in this preparation attempt.",
-  "licensing": "Do not publish or export POTCAR files. Only use authorized potentials inside the HPC account when execution is available."
+  "existing_independent_fresh_batch": {
+    "repo_path": "calculations/Ca_corrosion_fresh_20261014",
+    "status_source": "STATUS.md; submission snapshot 2026-10-14 22:19:08 CST, not a new real-time queue check",
+    "recorded_job_count": 23,
+    "second_water_dissociation": {"M0": "63682006", "M1": "63682021"},
+    "two_OH_near_far": {"M0": ["63682008","63682009"], "M1": ["63682022","63682023"]},
+    "four_OH_near_far": {"M0": ["63682010","63682011"], "M1": ["63682024","63682026"]},
+    "policy": "Do not resubmit, cancel or change existing jobs in this archive revision. Use completed results only after inspecting output convergence and geometry. Keep their independent spin/smearing/lattice/reference series separate from uploaded old outputs."
+  },
+  "proposed_next_steps": [
+    {
+      "priority": 0,
+      "name": "Matched dipole calibration of four archived geometries",
+      "new_geometry_count": 0,
+      "single_point_count": 4,
+      "submitted": false,
+      "method": "Keep original composition, cell, constraints, ISPIN=1 and ISMEAR=1/SIGMA=0.2. Set both M0 and M1 to a consistently defined slab dipole correction with direct DIPOL derived from actual geometry. EDIFF=1e-7, LREAL=false. Inspect energy double differences and forces before deciding local re-relaxations.",
+      "conditional": "Add paired smearing/k-point tests only if precision is insufficient for the mechanism claim. Do not indiscriminately rebuild 23 models."
+    },
+    {
+      "priority": 1,
+      "name": "Interpret already-submitted second-water dissociation endpoints",
+      "new_primary_jobs": 0,
+      "reaction": "OH* + H2O* -> 2OH* + H*",
+      "optional_new_geometry_max": 2,
+      "condition": "Only if the existing valid endpoint leaves strong site uncertainty, add one alternative acceptor per material. Preserve atom number and distinguish mere proton exchange from net water dissociation."
+    },
+    {
+      "priority": 2,
+      "name": "Use already-submitted 2OH and 4OH near/far configurations",
+      "new_primary_jobs": 0,
+      "nominal_coverages": {"2OH": 0.125, "4OH": 0.25},
+      "observables": ["same-composition cluster/dispersed energy difference", "incremental OH formation differences", "actual Mg/Ca-OH coordination", "whether labels survive relaxation"],
+      "warning": "Sparse hydroxyl clusters are not a continuous protective film. Absolute formation energies require matching reference calculations."
+    },
+    {
+      "priority": 3,
+      "name": "Choose one physically relevant paired kinetic test after endpoint screening",
+      "submitted": false,
+      "candidates": ["second-water O-H dissociation", "OH*+H*+H2O -> 2OH*+H2"],
+      "warning": "Do not claim a corrosion barrier or catalytic rate from vacuum endpoint energies; define solvent/proton transfer environment."
+    }
+  ],
+  "experimental_cross_checks_proposed": ["matched deionized-water H2(t) curves and interval rates for no-Ca and best-Ca samples", "mass loss or Mg release to cross-check gas collection", "early/late Ca-O-Mg surface chemistry and morphology to distinguish film, interface and microstructure effects"],
+  "licensing": "POTCAR contents excluded from public data; use authorized cluster-local datasets for later computations.",
+  "current_execution": "Archive/import workflow only; no SSH, VASP, sbatch, scancel or background monitoring in this revision."
 }
