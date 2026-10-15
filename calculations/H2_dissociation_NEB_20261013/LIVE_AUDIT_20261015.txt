@@ -1,4 +1,4 @@
-AUDIT_AT 2026-10-15T12:10:30.178207+08:00 HOST sylogin4.pi.sjtu.edu.cn ROOT /dssg/home/acct-fph112sjtu/deanfilan/H2_dissociation_compare_20261013
+AUDIT_AT 2026-10-15T12:12:16.480687+08:00 HOST sylogin3.pi.sjtu.edu.cn ROOT /dssg/home/acct-fph112sjtu/deanfilan/H2_dissociation_compare_20261013
 ROOT_EXISTS True
 COMMAND sacct -X -P -n -j 63614945,63614946,63614947,63614948,63614949 -o JobID,JobName%30,State,ExitCode,Elapsed,Start,End
 EXIT 0
@@ -88,4 +88,289 @@ STAGE|Mg2Ni_region|Mg2Ni_region/clean|static|{"F_eV": -82.86570837, "E0_eV": -82
 LOG h2neb_refs-63614945_0.out SIZE 561 TAIL STAGE|Mg|Mg/clean|relax|{"F_eV": -31.1169424, "E0_eV": -31.10922787, "last_ediff": true, "normal_end": true, "ionic_converged": true, "ionic_steps": 12, "vtst_force_max": 0.006142, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.006142000081406708, "verified": true}
 STAGE|Mg|Mg/clean|static|{"F_eV": -31.11694251, "E0_eV": -31.1092281, "last_ediff": true, "normal_end": true, "ionic_converged": false, "ionic_steps": 1, "vtst_force_max": 0.006148, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.006148000081327261, "verified": true}
 
+BAND_DETAIL Mg EXISTS True
+BAND_FILE Mg INCAR SIZE 637 TAIL SYSTEM = Mg neb
+PREC = Accurate
+ENCUT = 520
+ISPIN = 2
+LDAU = .FALSE.
+ISMEAR = 0
+SIGMA = 0.05
+ALGO = Normal
+ISYM = 0
+ISIF = 2
+LREAL = .FALSE.
+LASPH = .TRUE.
+ADDGRID = .TRUE.
+EDIFF = 1E-7
+NELM = 200
+NELMIN = 4
+NCORE = 4
+KPAR = 1
+NBANDS = 48
+ISTART = 0
+ICHARG = 2
+LWAVE = .TRUE.
+LCHARG = .FALSE.
+LORBIT = 11
+IBRION = 3
+NSW = 250
+POTIM = 0
+EDIFFG = -0.05
+LDIPOL = .TRUE.
+IDIPOL = 3
+DIPOL = 0.5 0.5 0.5
+IOPT = 7
+ICHAIN = 0
+IMAGES = 5
+SPRING = -5
+LCLIMB = .FALSE.
+LTANGENTOLD = .FALSE.
+TIMESTEP = 0.1
+FTIMEMAX = 0.5
+MAXMOVE = 0.1
+MAGMOM = 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+
+BAND_FILE Mg vasp.stdout SIZE 170600 TAIL 42E-03    0.735E-04
+DAV:   2    -0.378866815478E+02   -0.28990E-09   -0.33554E-08  1515   0.480E-04    0.447E-04
+DAV:   3    -0.378866815567E+02   -0.88464E-08   -0.15227E-08  1335   0.479E-04    0.535E-05
+DAV:   4    -0.378866815539E+02    0.27906E-08   -0.55218E-09  1281   0.408E-04
+ 199 F= -.37886682E+02 E0= -.37878927E+02  d E =-.515759E-05  mag=     0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.378866889730E+02   -0.74163E-05   -0.13048E-05  1959   0.456E-03    0.104E-03
+DAV:   2    -0.378866889709E+02    0.20746E-08   -0.57616E-08  1653   0.500E-04    0.627E-04
+DAV:   3    -0.378866889757E+02   -0.47537E-08   -0.15866E-08  1554   0.219E-04    0.561E-05
+DAV:   4    -0.378866889761E+02   -0.48317E-09   -0.93061E-10  1248   0.155E-04
+ 200 F= -.37886689E+02 E0= -.37878934E+02  d E =-.742225E-05  mag=     0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.378866986677E+02   -0.96920E-05   -0.22424E-05  1962   0.598E-03    0.135E-03
+DAV:   2    -0.378866986600E+02    0.76452E-08   -0.94933E-08  1761   0.635E-04    0.813E-04
+DAV:   3    -0.378866986664E+02   -0.64053E-08   -0.25052E-08  1524   0.405E-04    0.131E-04
+DAV:   4    -0.378866986631E+02    0.33435E-08   -0.34925E-09  1230   0.366E-04
+ 201 F= -.37886699E+02 E0= -.37878944E+02  d E =-.968696E-05  mag=     0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.378867106754E+02   -0.12009E-04   -0.34560E-05  1956   0.742E-03    0.167E-03
+DAV:   2    -0.378867106599E+02    0.15560E-07   -0.14704E-07  1890   0.795E-04    0.101E-03
+DAV:   3    -0.378867106662E+02   -0.62896E-08   -0.36186E-08  1488   0.379E-04    0.114E-04
+DAV:   4    -0.378867106648E+02    0.13220E-08   -0.33913E-09  1140   0.349E-04
+ 202 F= -.37886711E+02 E0= -.37878956E+02  d E =-.120017E-04  mag=     0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.378867250724E+02   -0.14406E-04   -0.49703E-05  1950   0.890E-03    0.201E-03
+DAV:   2    -0.378867250479E+02    0.24509E-07   -0.21383E-07  2028   0.956E-04    0.121E-03
+DAV:   3    -0.378867250583E+02   -0.10459E-07   -0.51619E-08  1488   0.476E-04    0.151E-04
+DAV:   4    -0.378867250551E+02    0.32041E-08   -0.53303E-09  1242   0.449E-04
+ 203 F= -.37886725E+02 E0= -.37878970E+02  d E =-.143903E-04  mag=     0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.378867439139E+02   -0.18856E-04   -0.84928E-05  1950   0.116E-02    0.264E-03
+DAV:   2    -0.378867438728E+02    0.41161E-07   -0.37050E-07  2121   0.125E-03    0.160E-03
+DAV:   3    -0.378867438886E+02   -0.15846E-07   -0.93091E-08  1602   0.618E-04    0.204E-04
+DAV:   4    -0.378867438837E+02    0.49413E-08   -0.92574E-09  1470   0.595E-04
+ 204 F= -.37886744E+02 E0= -.37878989E+02  d E =-.188286E-04  mag=     0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.378867684043E+02   -0.24516E-04   -0.14323E-04  1944   0.151E-02    0.347E-03
+DAV:   2    -0.378867683309E+02    0.73417E-07   -0.64183E-07  2151   0.164E-03    0.210E-03
+DAV:   3    -0.378867683587E+02   -0.27849E-07   -0.17076E-07  1740   0.801E-04    0.278E-04
+DAV:   4    -0.378867683509E+02    0.78210E-08   -0.16242E-08  1596   0.791E-04
+
+BAND_FILE Mg vasp.stderr SIZE 119 TAIL [2026-10-15T11:19:51.012] error: *** STEP 63614948.0 ON node729 CANCELLED AT 2026-10-15T11:19:51 DUE TO TIME LIMIT ***
+
+NEB_IMAGE_DETAIL Mg 1 HH_A 0.75116 STATUS {"F_eV": -37.88674388, "E0_eV": -37.87901399, "ionic_steps": 204, "last_ediff": true, "normal_end": false, "ionic_converged": false, "vtst_force_max": 0.039536, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.037060557281293004} CONTCAR_MTIME 2026-10-15T11:17:24.548914+08:00
+NEB_IMAGE_DETAIL Mg 2 HH_A 0.75297 STATUS {"F_eV": -37.81444434, "E0_eV": -37.80700751, "ionic_steps": 204, "last_ediff": true, "normal_end": false, "ionic_converged": false, "vtst_force_max": 0.418607, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.12610859516305778} CONTCAR_MTIME 2026-10-15T11:17:24.548926+08:00
+NEB_IMAGE_DETAIL Mg 3 HH_A 0.75729 STATUS {"F_eV": -37.47184403, "E0_eV": -37.46541652, "ionic_steps": 204, "last_ediff": true, "normal_end": false, "ionic_converged": false, "vtst_force_max": 0.133973, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.2238114601131944} CONTCAR_MTIME 2026-10-15T11:17:24.548919+08:00
+NEB_IMAGE_DETAIL Mg 4 HH_A 1.86322 STATUS {"F_eV": -37.39855597, "E0_eV": -37.40899544, "ionic_steps": 204, "last_ediff": false, "normal_end": false, "ionic_converged": false, "vtst_force_max": 0.793001, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.35498969496169885} CONTCAR_MTIME 2026-10-15T11:17:24.548969+08:00
+NEB_IMAGE_DETAIL Mg 5 HH_A 2.73136 STATUS {"F_eV": -37.41043554, "E0_eV": -37.38185078, "ionic_steps": 204, "last_ediff": false, "normal_end": false, "ionic_converged": false, "vtst_force_max": 2.265478, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.5070035926391449} CONTCAR_MTIME 2026-10-15T11:17:24.548969+08:00
+BAND_DETAIL Mg2Ni_region EXISTS True
+BAND_FILE Mg2Ni_region INCAR SIZE 719 TAIL SYSTEM = Mg2Ni_region neb
+PREC = Accurate
+ENCUT = 520
+ISPIN = 2
+LDAU = .FALSE.
+ISMEAR = 0
+SIGMA = 0.05
+ALGO = Normal
+ISYM = 0
+ISIF = 2
+LREAL = .FALSE.
+LASPH = .TRUE.
+ADDGRID = .TRUE.
+EDIFF = 1E-7
+NELM = 200
+NELMIN = 4
+NCORE = 4
+KPAR = 1
+NBANDS = 96
+ISTART = 0
+ICHARG = 2
+LWAVE = .TRUE.
+LCHARG = .FALSE.
+LORBIT = 11
+IBRION = 3
+NSW = 250
+POTIM = 0
+EDIFFG = -0.05
+LDIPOL = .TRUE.
+IDIPOL = 3
+DIPOL = 0.5 0.5 0.5
+IOPT = 7
+ICHAIN = 0
+IMAGES = 5
+SPRING = -5
+LCLIMB = .FALSE.
+LTANGENTOLD = .FALSE.
+TIMESTEP = 0.1
+FTIMEMAX = 0.5
+MAXMOVE = 0.1
+MAGMOM = 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0 1.0 1.0 1.0 1.0 0.0 0.0
+
+BAND_FILE Mg2Ni_region vasp.stdout SIZE 80108 TAIL -0.896255413896E+02    0.18899E-08   -0.45763E-07  4332   0.728E-03
+  58 F= -.89625541E+02 E0= -.89611586E+02  d E =-.470578E-05  mag=    -0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.896255446158E+02   -0.32243E-05   -0.48375E-05  4554   0.155E-02    0.353E-03
+DAV:   2    -0.896255485320E+02   -0.39162E-05   -0.12768E-05  5664   0.260E-02    0.906E-03
+DAV:   3    -0.896255446045E+02    0.39274E-05   -0.11841E-05  5064   0.226E-02    0.506E-03
+DAV:   4    -0.896255444115E+02    0.19299E-06   -0.12497E-06  4710   0.132E-02    0.262E-03
+DAV:   5    -0.896255446902E+02   -0.27866E-06   -0.11328E-06  4548   0.986E-03    0.213E-03
+DAV:   6    -0.896255444033E+02    0.28689E-06   -0.59147E-07  3306   0.545E-03    0.764E-04
+DAV:   7    -0.896255444034E+02   -0.36380E-10   -0.57202E-08  2448   0.259E-03
+  59 F= -.89625544E+02 E0= -.89611588E+02  d E =-.301373E-05  mag=    -0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.896255445764E+02   -0.17305E-06   -0.71380E-05  3912   0.137E-02    0.320E-03
+DAV:   2    -0.896255444909E+02    0.85445E-07   -0.53146E-07  3174   0.313E-03    0.216E-03
+DAV:   3    -0.896255450110E+02   -0.52005E-06   -0.19014E-06  4890   0.124E-02    0.548E-03
+DAV:   4    -0.896255446743E+02    0.33663E-06   -0.28833E-06  4308   0.111E-02    0.232E-03
+DAV:   5    -0.896255444636E+02    0.21073E-06   -0.53533E-07  3012   0.671E-03    0.537E-04
+DAV:   6    -0.896255444746E+02   -0.11018E-07   -0.88697E-08  2622   0.198E-03
+  60 F= -.89625544E+02 E0= -.89611588E+02  d E =-.712789E-07  mag=    -0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.896255410721E+02    0.33915E-05   -0.92529E-05  3900   0.160E-02    0.347E-03
+DAV:   2    -0.896255409517E+02    0.12042E-06   -0.62922E-07  3276   0.263E-03    0.219E-03
+DAV:   3    -0.896255411635E+02   -0.21183E-06   -0.11191E-06  4800   0.121E-02    0.490E-03
+DAV:   4    -0.896255409579E+02    0.20558E-06   -0.96442E-07  4512   0.113E-02    0.958E-04
+DAV:   5    -0.896255409338E+02    0.24158E-07   -0.31699E-07  2856   0.368E-03
+  61 F= -.89625541E+02 E0= -.89611584E+02  d E =0.354085E-05  mag=    -0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.896255335052E+02    0.74527E-05   -0.13955E-04  3900   0.206E-02    0.400E-03
+DAV:   2    -0.896255334546E+02    0.50577E-07   -0.11636E-06  3816   0.486E-03    0.285E-03
+DAV:   3    -0.896255350482E+02   -0.15936E-05   -0.58409E-06  4620   0.168E-02    0.688E-03
+DAV:   4    -0.896255334516E+02    0.15966E-05   -0.40119E-06  4872   0.143E-02    0.381E-03
+DAV:   5    -0.896255333262E+02    0.12540E-06   -0.50168E-07  4302   0.974E-03    0.823E-04
+DAV:   6    -0.896255333291E+02   -0.29013E-08   -0.17587E-07  2952   0.355E-03
+  62 F= -.89625533E+02 E0= -.89611577E+02  d E =0.760473E-05  mag=    -0.0000
+quench:  g(F)=  0.000E+00 g(S)=  0.000E+00 dE (1.order)= 0.000E+00
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.896255226833E+02    0.10643E-04   -0.20470E-04  3864   0.255E-02    0.453E-03
+DAV:   2    -0.896255225120E+02    0.17135E-06   -0.13587E-06  3780   0.385E-03    0.295E-03
+DAV:   3    -0.896255228598E+02   -0.34782E-06   -0.19432E-06  5376   0.174E-02    0.671E-03
+DAV:   4    -0.896255224772E+02    0.38263E-06   -0.14165E-06  5628   0.168E-02    0.145E-03
+DAV:   5    -0.896255225134E+02   -0.36258E-07   -0.41596E-07  2988   0.470E-03
+
+BAND_FILE Mg2Ni_region vasp.stderr SIZE 11569 TAIL led (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+*** stack smashing detected ***: <unknown> terminated
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+
+Stack trace terminated abnormally.
+forrtl: error (78): process killed (SIGTERM)
+Image              PC                Routine            Line        Source             
+vasp_std           0000000001E1233B  Unknown               Unknown  Unknown
+libpthread-2.28.s  0000147EDB2C4990  Unknown               Unknown  Unknown
+libmkl_avx512.so.  0000147C9CE6D332  mkl_blas_avx512_d     Unknown  Unknown
+libmkl_avx512.so.  0000147C9CCE6DE6  mkl_blas_avx512_x     Unknown  Unknown
+libmkl_intel_thre  0000147EE2ACF026  mkl_blas_dgemv        Unknown  Unknown
+libmkl_intel_lp64  0000147EE5FD799A  dgemv_                Unknown  Unknown
+vasp_std           00000000008579A4  Unknown               Unknown  Unknown
+vasp_std           00000000008D4FBE  Unknown               Unknown  Unknown
+vasp_std           00000000011F8E1E  Unknown               Unknown  Unknown
+vasp_std           00000000012932A6  Unknown               Unknown  Unknown
+vasp_std           0000000001DDCABC  Unknown               Unknown  Unknown
+vasp_std           0000000001DB5524  Unknown               Unknown  Unknown
+vasp_std           00000000004093A2  Unknown               Unknown  Unknown
+libc-2.28.so       0000147EDAB937E5  __libc_start_main     Unknown  Unknown
+vasp_std           00000000004092AE  Unknown               Unknown  Unknown
+
+NEB_IMAGE_DETAIL Mg2Ni_region 1 HH_A 0.75398 STATUS {"F_eV": -89.62553333, "E0_eV": -89.61156512, "ionic_steps": 62, "last_ediff": true, "normal_end": false, "ionic_converged": false, "vtst_force_max": 0.055646, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.06627966924329058} CONTCAR_MTIME 2026-10-15T11:10:21.125827+08:00
+NEB_IMAGE_DETAIL Mg2Ni_region 2 HH_A 0.76064 STATUS {"F_eV": -89.53438618, "E0_eV": -89.5207064, "ionic_steps": 62, "last_ediff": true, "normal_end": false, "ionic_converged": false, "vtst_force_max": 0.107937, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.14956937275391644} CONTCAR_MTIME 2026-10-15T11:10:21.125822+08:00
+NEB_IMAGE_DETAIL Mg2Ni_region 3 HH_A 0.77353 STATUS {"F_eV": -89.3742469, "E0_eV": -89.36443211, "ionic_steps": 62, "last_ediff": false, "normal_end": false, "ionic_converged": false, "vtst_force_max": 0.331378, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.2659683660137047} CONTCAR_MTIME 2026-10-15T11:10:21.125862+08:00
+NEB_IMAGE_DETAIL Mg2Ni_region 4 HH_A 0.85995 STATUS {"F_eV": -89.70583415, "E0_eV": -89.69725294, "ionic_steps": 62, "last_ediff": false, "normal_end": false, "ionic_converged": false, "vtst_force_max": 0.109203, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.7875756183059504} CONTCAR_MTIME 2026-10-15T11:10:21.125895+08:00
+NEB_IMAGE_DETAIL Mg2Ni_region 5 HH_A 1.71557 STATUS {"F_eV": -90.27282275, "E0_eV": -90.26094839, "ionic_steps": 62, "last_ediff": false, "normal_end": false, "ionic_converged": false, "vtst_force_max": 0.100153, "lclimb": false, "neb_marker": true, "max_free_DFT_force": 0.6110703521985009} CONTCAR_MTIME 2026-10-15T11:10:21.125930+08:00
 AUDIT_DONE
