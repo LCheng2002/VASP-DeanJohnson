@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "batch": "Ca_M1_OH_H2O_reopt_20261015",
+  "status": "INPUT_PREPARATION_PENDING_SUBMISSION",
+  "model": "M1_OH_H2O",
+  "stoichiometry": {
+    "Mg": 95,
+    "Ca": 1,
+    "O": 2,
+    "H": 3
+  },
+  "expected_atoms": 101,
+  "frozen_bottom_metal_atoms": 32,
+  "source": {
+    "production_directory": "Ca_OH_dipole_calibration_20261015",
+    "parent_job_id": "63686231_3",
+    "parent_model": "M1_OH_H2O",
+    "parent_calibration_F_eV": -162.58564174,
+    "parent_calibration_E0_eV": -162.55005424,
+    "parent_calibration_max_free_force_eV_A": 0.06526721593572074,
+    "require_calibration_marker": true,
+    "source_archive": "calculations/Ca_corrosion_20261014/verified_parents_20261014/models/M1_OH_H2O"
+  },
+  "identical_numerical_settings": {
+    "functional": "PBE",
+    "ENCUT_eV": 520,
+    "ISPIN": 1,
+    "ISMEAR": 1,
+    "SIGMA_eV": 0.2,
+    "LREAL": false,
+    "LDIPOL": true,
+    "IDIPOL": 3,
+    "KPOINTS": "Retain the exact P0 calibrated 3x3x1 Gamma input",
+    "DIPOL": "Preserve the exact P0 calibrated fractional-center vector, not previous incorrect old coordinates",
+    "NBANDS": 160,
+    "ISYM": 0,
+    "EDIFF_eV": 1e-7,
+    "original_exact_POTCAR_SHA256": "2f62cba23027f134e5e5c49961c085dd38eededc9046d7bebf475fbded911d01",
+    "NELECT": 215
+  },
+  "relaxation": {
+    "ISIF": 2,
+    "IBRION": 2,
+    "POTIM": 0.1,
+    "NSW": 160,
+    "EDIFFG_eV_A": -0.012,
+    "max_free_force_eV_A_lt": 0.015,
+    "keep_vacuum_cell_and_frozen_layers": true,
+    "do_not_run_NEB": true
+  },
+  "static": {
+    "ISIF": 2,
+    "IBRION": -1,
+    "NSW": 0,
+    "max_free_force_eV_A_lt": 0.02,
+    "require_normal_end_and_last_scf_ediff": true
+  },
+  "slurm": {
+    "partition": "64c512g",
+    "nodes": 1,
+    "ntasks": 64,
+    "mem": "128G",
+    "time": "12:00:00",
+    "job_name": "Ca_M1_OH_H2O_reopt"
+  },
+  "no_duplicate_runs": true,
+  "prohibited": [
+    "Do not resubmit 63686231 or cancelled 63693436",
+    "Do not restart 23 cancelled CaFresh jobs",
+    "Do not run M1_OH or M0 parents",
+    "Do not upload POTCAR or credentials to public GitHub",
+    "Do not compare bare total energies to models of different composition",
+    "Do not auto-submit new water dissociation, 2OH/4OH coverage or NEB"
+  ],
+  "report": "On completion report relax E0/F, static E0/F, max free forces, O-H final geometry, whether intact molecular water remains and corrected difference relative to source P0. For accurate Ca effect require additionally relaxed M1_OH comparison, not automatically run."
+}
