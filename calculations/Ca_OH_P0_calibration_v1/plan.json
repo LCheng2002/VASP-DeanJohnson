@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "scope": "Four fixed-geometry Static calculations calibrating slab LDIPOL and fractional DIPOL for archived Ca OH and OH+H2O endpoints.",
+  "state": "PREPARED_NOT_SUBMITTED",
+  "archive_source": "calculations/Ca_corrosion_20261014/verified_parents_20261014/models",
+  "production_directory": "Ca_OH_P0_calibration_v1",
+  "cancelled_CaFresh_job_ids_not_to_resubmit": [
+    "63681995",
+    "63681996",
+    "63681997",
+    "63682000",
+    "63682002",
+    "63682003",
+    "63682004",
+    "63682005",
+    "63682006",
+    "63682008",
+    "63682009",
+    "63682010",
+    "63682011",
+    "63682012",
+    "63682013",
+    "63682014",
+    "63682015",
+    "63682016",
+    "63682021",
+    "63682022",
+    "63682023",
+    "63682024",
+    "63682026"
+  ],
+  "required_potential_hashes": {
+    "Mg": "f76446a817d42099ee74e0da954cc76e9a08b75a9e1aacd2d683ccd92d4ef4d5",
+    "Ca_sv": "a47365830e737f14e0e6c5cf1ed81b94e081eecf0a33df105380881bc9da05d5",
+    "O": "818f92134a0a090dccd8ba1447fa70422a3b330e708bb4f08108d8ae51209ddf",
+    "H": "030f79b5d3ab3cf0e668861823c8fb652ff669f3e15e46930bd03bfd63a607b6"
+  },
+  "models": {
+    "M0_OH": {
+      "composition": {
+        "Mg": 96,
+        "O": 1,
+        "H": 1
+      },
+      "parent_con_sha256": "9a4566d302c95a1f4250a51917a8823120418442353353f310a4099331cc8d3c",
+      "parent_incar_sha256": "7a285388c8e916745bccb294058de4453735e31848dbb79256ae07147c541bdf",
+      "DIPOL_fractional_z": 0.197492276864,
+      "PAW_labels": [
+        "Mg",
+        "O",
+        "H"
+      ],
+      "combined_POTCAR_sha256": "2a17b55d2e2b2800810e537bcd03086bba46a07f6cb6f7d4f487fdc571396573",
+      "old_F": -146.75880355,
+      "old_E0": -146.71669462
+    },
+    "M1_OH": {
+      "composition": {
+        "Mg": 95,
+        "Ca": 1,
+        "O": 1,
+        "H": 1
+      },
+      "parent_con_sha256": "4f46bf384e9804669a70afcc98ea8596b68646d7ee48b5463fe224b9307c4f94",
+      "parent_incar_sha256": "001fd11e3a10254721a602ba29ae7a1b0c4f1cb94ea60b6d386085c11c9cc6aa",
+      "DIPOL_fractional_z": 0.198756284065,
+      "PAW_labels": [
+        "Mg",
+        "Ca_sv",
+        "O",
+        "H"
+      ],
+      "combined_POTCAR_sha256": "2f62cba23027f134e5e5c49961c085dd38eededc9046d7bebf475fbded911d01",
+      "old_F": -147.67235616,
+      "old_E0": -147.63723064
+    },
+    "M0_OH_H2O": {
+      "composition": {
+        "Mg": 96,
+        "O": 2,
+        "H": 3
+      },
+      "parent_con_sha256": "c861bb86336ae0a6372418fc7e2a52e6fa3c4927e8b4ae328715e1d8159ee7fc",
+      "parent_incar_sha256": "f1d5e3a145dee7f3efe9212ab66c68fd05b06569304bd2d8b91a25312ebf6362",
+      "DIPOL_fractional_z": 0.199510308678,
+      "PAW_labels": [
+        "Mg",
+        "O",
+        "H"
+      ],
+      "combined_POTCAR_sha256": "2a17b55d2e2b2800810e537bcd03086bba46a07f6cb6f7d4f487fdc571396573",
+      "old_F": -161.43577865,
+      "old_E0": -161.39391351
+    },
+    "M1_OH_H2O": {
+      "composition": {
+        "Mg": 95,
+        "Ca": 1,
+        "O": 2,
+        "H": 3
+      },
+      "parent_con_sha256": "34c8ce5b67686d75fd898162b8a746e7826a4b7a0c4a4a31baf26ddbc25ef83d",
+      "parent_incar_sha256": "a12696752c3be5ec84b077100892e07209fb520c9279dd1be8f7c83826c05ebc",
+      "DIPOL_fractional_z": 0.201056409892,
+      "PAW_labels": [
+        "Mg",
+        "Ca_sv",
+        "O",
+        "H"
+      ],
+      "combined_POTCAR_sha256": "2f62cba23027f134e5e5c49961c085dd38eededc9046d7bebf475fbded911d01",
+      "old_F": -162.56747758,
+      "old_E0": -162.53184536
+    }
+  },
+  "common_KPOINTS_sha256": "a002d42f88135bba35c58784d8134c5979f55db063b470597555af8e690d61e9",
+  "numerical_settings": {
+    "GGA": "PE",
+    "ENCUT": 520,
+    "ISPIN": 1,
+    "ISMEAR": 1,
+    "SIGMA": 0.2,
+    "K_mesh": "Gamma 3x3x1",
+    "EDIFF": 1e-7,
+    "LREAL": false,
+    "LDIPOL": true,
+    "IDIPOL": 3,
+    "static_only": true,
+    "free_force_recheck_eV_A": 0.02
+  },
+  "resource": {
+    "Slurm_partition": "64c512g",
+    "Slurm_array": "0-3",
+    "ntasks": 64,
+    "mem_GB": 128,
+    "wall_time": "04:00:00"
+  },
+  "after_run": "Report corrected and original E0 and F double differences, geometry force condition; do NOT automatically launch P1/P2 or cancelled CaFresh work."
+}
