@@ -109,7 +109,7 @@ def check_source():
  need(len(set(s['ids']))==99 and 55 not in s['ids'],'Deleted-H mapping not preserved')
  for filename in ('INCAR','KPOINTS','POTCAR'):
   d=p/'01_relax'/filename
-  need(d.is_file() and d.stat().st_size>40,'Old checkpoint '+filename+' missing')
+  need(d.is_file() and d.stat().st_size>({'KPOINTS':10,'INCAR':40,'POTCAR':100}[filename]),'Old checkpoint '+filename+' missing/empty')
  mg,_=runner.finished('L_MgH2_reference')
  need(39 in mg['ids'] and mg['species'][mg['ids'].index(39)]=='H',
       'MgH2 cleavage reference lost original H39')
