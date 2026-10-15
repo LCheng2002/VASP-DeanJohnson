@@ -1,0 +1,46 @@
+name: Read completed Ca OH P0 calibration results
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/read-ca-oh-p0-calibration-results-20261015.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - name: Read Slurm status and four existing calibration validation records only
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/hpc_ca_read"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/hpc_ca_read-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/hpc_ca_read" "$HOME/.ssh/hpc_ca_read-cert.pub" "$HOME/.ssh/known_hosts"
+          cat > "$RUNNER_TEMP/askpass" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/askpass"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true; rm -f "$HOME/.ssh/hpc_ca_read" "$HOME/.ssh/hpc_ca_read-cert.pub" "$RUNNER_TEMP/askpass"' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/askpass" SSH_ASKPASS_REQUIRE=force ssh-add "$HOME/.ssh/hpc_ca_read" </dev/null
+          echo 'CHECK_ONLY|No sbatch/scancel; canonical finished calibration 63686231'
+          ssh -F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -i "$HOME/.ssh/hpc_ca_read" -o CertificateFile="$HOME/.ssh/hpc_ca_read-cert.pub" "$HPC_USER@sylogin.hpc.sjtu.edu.cn" 'python3 "$HOME/Ca_OH_dipole_calibration_20261015/calibrate.py" --status' | tee p0_results_verified.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: CaOH_P0_63686231_final_results
+          path: p0_results_verified.txt
+          retention-days: 14
