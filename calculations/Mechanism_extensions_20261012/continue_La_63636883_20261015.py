@@ -113,7 +113,8 @@ def check_source():
  mg,_=runner.finished('L_MgH2_reference')
  need(39 in mg['ids'] and mg['species'][mg['ids'].index(39)]=='H',
       'MgH2 cleavage reference lost original H39')
- need(s['mask'].count([False,False,False])>0,'Unexpected fixed constraints in La checkpoint')
+ initial=runner.parse((p/'01_relax/POSCAR').read_text())
+ need(s['mask']==initial['mask'] and s['species']==initial['species'],'Saved CONTCAR no longer matches initial atom roster/constraints')
  return runner,s,meta,state
 def generator_inputs():
  runner,s,meta,state=check_source()
