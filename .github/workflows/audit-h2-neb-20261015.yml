@@ -82,6 +82,27 @@ jobs:
               for p in logs[:12]:
                   if p.is_file() and p.stat().st_size:
                       print('LOG',p.name,'SIZE',p.stat().st_size,'TAIL',p.read_text(errors='replace')[-1700:])
+          import sys
+          sys.path.insert(0,str(R))
+          try:
+              import neb_core as core
+              for sysname in ('Mg','Mg2Ni_region'):
+                  folder=R/sysname/'neb_coarse'
+                  print('BAND_DETAIL',sysname,'EXISTS',folder.is_dir())
+                  if not folder.is_dir():continue
+                  for fname in ('INCAR','vasp.stdout','vasp.stderr'):
+                      p=folder/fname
+                      if p.exists():print('BAND_FILE',sysname,fname,'SIZE',p.stat().st_size,'TAIL',p.read_text(errors='replace')[-4000:])
+                  for i in range(1,6):
+                      q=folder/f'{i:02d}'
+                      try:
+                          initial=core.parse((q/'POSCAR').read_text())
+                          current=core.parse((q/'CONTCAR').read_text())
+                          status=core.output(q,initial['mask'])
+                          xyz=current['xyz'][-2:];sep=float(__import__('numpy').linalg.norm(core.mic(xyz[1]-xyz[0],current['cell'])))
+                          print('NEB_IMAGE_DETAIL',sysname,i,'HH_A',round(sep,5),'STATUS',json.dumps({k:status.get(k) for k in ('F_eV','E0_eV','ionic_steps','last_ediff','normal_end','ionic_converged','vtst_force_max','lclimb','neb_marker','max_free_DFT_force')}),'CONTCAR_MTIME',datetime.datetime.fromtimestamp((q/'CONTCAR').stat().st_mtime).astimezone().isoformat())
+                      except Exception as e:print('NEB_IMAGE_ERROR',sysname,i,repr(e))
+          except Exception as e:print('BAND_AUDIT_EXCEPTION',repr(e))
           print('AUDIT_DONE')
           PY
           cat "$output"
