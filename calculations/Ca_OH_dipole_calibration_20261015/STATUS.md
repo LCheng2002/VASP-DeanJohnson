@@ -66,3 +66,32 @@ Previous Slurm array **63686231** has now completed all four model tasks with **
 A later GitHub workflow [38668900795](https://github.com/LCheng2002/VASP-DeanJohnson/actions/runs/38668900795) inadvertently submitted a second array **63693436** for the same four scientific comparisons, in separate directory `~/Ca_OH_P0_calibration_v1/`. Since all four original calibrations were already completed, the later redundant array was cancelled without modifying original outputs. `sacct` confirmed **63693436_0–_3 all CANCELLED** after about 2 minutes 49 seconds; `squeue` was empty for the duplicate array.
 
 **Use 63686231 as the canonical completed P0 calculation. Do not reuse/restart the redundant 63693436 array.** Actual corrected energy values and geometry force gates should be read from the four original `validation.json` files, rather than inferred from Slurm COMPLETED alone; no P1/P2 continuation was authorized or submitted in this check. The cancelled old `CaFresh` 23-job batch remains cancelled.
+
+## Fixed-geometry P0 numerical outcomes — verified 2026-10-15 10:13:46 CST
+
+This result was read live from the **canonical** `~/Ca_OH_dipole_calibration_20261015/*/validation.json` through read-only [GitHub Actions run 38669730002, attempt 2](https://github.com/LCheng2002/VASP-DeanJohnson/actions/runs/38669730002/attempts/2). The first attempt timed out connecting by SSH and did not retrieve results; retry succeeded. No new VASP or Slurm job was submitted during this status check.
+
+| Model | Old E0 (eV) | New E0 (eV) | ΔE0 (eV) | New F / TOTEN (eV) | New max free-force (eV/Å) | Geometry gate <0.020 |
+|---|---:|---:|---:|---:|---:|---|
+| M0_OH | -146.71669462 | -146.71541142 | +0.00128320 | -146.75752250 | 0.00981093 | PASS |
+| M1_OH | -147.63723064 | -147.67346118 | -0.03623054 | -147.70856646 | **0.02194710** | **FAIL: requires short consistent relaxation** |
+| M0_OH_H2O | -161.39391351 | -161.39047832 | +0.00343519 | -161.43234408 | 0.01693181 | PASS |
+| M1_OH_H2O | -162.53184536 | -162.55005424 | -0.01820888 | -162.58564174 | **0.06526722** | **FAIL: requires short consistent relaxation** |
+
+Every model passed last-SCF EDIFF, VASP normal termination, expected original PAW/NELECT/NBANDS/effective IPSIN/LDIPOL/IDIPOL checks and `CALIBRATION_COMPLETE` marker. **This marker indicates electronically validated fixed-geometry Static, not that all geometries meet the force gate.** `all_force_gates_passed=false`. Each atom-coordinate output matches its archived Relax CONTCAR within ~8.3e-6 Å; no ionic relaxation occurred in this P0 batch.
+
+The corrected reference-cancelled H2O incremental adsorption **double difference** is:
+
+```text
+DeltaDeltaE0(new) = -0.20152616 eV
+DeltaDeltaF (new) = -0.20225370 eV
+DeltaDeltaE0(old) = -0.21739583 eV
+DeltaDeltaF (old) = -0.21814632 eV
+Shift in E0 double difference = +0.01586967 eV
+```
+
+Because the same isolated H2O reference cancels between M0 and M1, this **double difference** is meaningful within the paired fixed-geometry calculations; individual terms `E(OH+H2O)-E(OH)` are **not absolute water adsorption energies without subtracting E(H2O)**. Ca still stabilizes the OH-covered water endpoint relative to pure Mg by ~0.202 eV, but **this remains a fixed-geometry estimate**. Neither faster/slower water dissociation nor corrosion resistance can be concluded from it.
+
+All four runs used effective `ISPIN=1`, `ISMEAR=1`, `SIGMA=0.2`, `LDIPOL=T`, `IDIPOL=3`, proper fractional dipole centers, and 3x3x1 Gamma k mesh. Vacuum-charge cut ratios were ~1e-8 to 7e-8 of density peak, consistent with a very small electronic charge at the correction cut. This supports the numerical dipole setup but does **not** replace a vacuum/dipole-center convergence study.
+
+**Next physically justified calculation:** under the same calibrated dipole settings, do **only two short ionic relaxations** beginning with already completed `M1_OH` and `M1_OH_H2O` calibrated geometries, then evaluate paired Static energies. Do not bypass the force gate. Before final quantitative comparison, make sure M0 controls remain consistent with the chosen relaxed references; optionally re-evaluate the paired M0 statics if numerical settings beyond P0 change. The previously cancelled 23 `CaFresh` tasks remain cancelled. No P1/P2 jobs were automatically submitted.
