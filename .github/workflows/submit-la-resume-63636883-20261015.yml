@@ -1,4 +1,5 @@
 name: Resume only three unfinished LaH3 endpoints after 63636883 timeout
+# Retry after corrected legacy KPOINTS size preflight; prior attempt stopped before sbatch.
 on:
   workflow_dispatch:
   push:
