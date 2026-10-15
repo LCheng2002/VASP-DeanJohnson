@@ -1,0 +1,90 @@
+name: Reoptimize M1 OH H2O only then Static
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/submit-ca-m1-oh-h2o-reopt-20261015.yml']
+permissions:
+  contents: read
+concurrency:
+  group: Ca-M1-OH-H2O-single-model-reopt-20261015
+  cancel-in-progress: false
+jobs:
+  submit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate single-model scientific scope and Python input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile calculations/Ca_M1_OH_H2O_reopt_20261015/reopt.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('calculations/Ca_M1_OH_H2O_reopt_20261015')
+          p=json.loads((root/'plan.json').read_text())
+          assert p['model']=='M1_OH_H2O' and p['expected_atoms']==101
+          assert p['stoichiometry']=={'Mg':95,'Ca':1,'O':2,'H':3}
+          assert p['source']['parent_job_id']=='63686231_3'
+          assert p['source']['parent_calibration_max_free_force_eV_A']>0.06
+          assert not list(root.rglob('POTCAR'))
+          assert p['relaxation']['max_free_force_eV_A_lt']<=0.015
+          assert p['static']['max_free_force_eV_A_lt']==0.02
+          print('SCOPE_OK|M1_OH_H2O only; one new Relax and one matched Static')
+          PY
+      - name: Precheck P0 source and submit only one guarded Slurm job
+        shell: bash
+        env:
+          HPC_USER: ${{ vars.HPC_USER || 'deanfilan' }}
+          HPC_SSH_KEY: ${{ secrets.HPC_SSH_KEY }}
+          HPC_SSH_CERT: ${{ secrets.HPC_SSH_CERT }}
+          HPC_SSH_PASSPHRASE: ${{ secrets.HPC_SSH_PASSPHRASE }}
+          HPC_KNOWN_HOSTS: ${{ secrets.HPC_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          for n in HPC_USER HPC_SSH_KEY HPC_SSH_CERT HPC_SSH_PASSPHRASE HPC_KNOWN_HOSTS; do
+            test -n "${!n:-}" || { echo "MISSING_CONFIG|$n"; exit 1; }
+          done
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          printf '%s\n' "$HPC_SSH_KEY" > "$HOME/.ssh/ca_m1_reopt"
+          printf '%s\n' "$HPC_SSH_CERT" > "$HOME/.ssh/ca_m1_reopt-cert.pub"
+          printf '%s\n' "$HPC_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/ca_m1_reopt" "$HOME/.ssh/ca_m1_reopt-cert.pub" "$HOME/.ssh/known_hosts"
+          cat > "$RUNNER_TEMP/askpass" <<'ASKPASS'
+          #!/bin/sh
+          printf '%s' "$HPC_SSH_PASSPHRASE"
+          ASKPASS
+          chmod 700 "$RUNNER_TEMP/askpass"
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null 2>&1 || true; rm -f "$HOME/.ssh/ca_m1_reopt" "$HOME/.ssh/ca_m1_reopt-cert.pub" "$RUNNER_TEMP/askpass"' EXIT
+          DISPLAY=:0 SSH_ASKPASS="$RUNNER_TEMP/askpass" SSH_ASKPASS_REQUIRE=force ssh-add "$HOME/.ssh/ca_m1_reopt" </dev/null
+          opts=(-F /dev/null -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -i "$HOME/.ssh/ca_m1_reopt" -o CertificateFile="$HOME/.ssh/ca_m1_reopt-cert.pub")
+          remote="$HPC_USER@sylogin.hpc.sjtu.edu.cn"
+          stage="VASP/github_jobs/Ca_M1_OH_H2O_reopt_20261015/$GITHUB_SHA"
+          echo 'STAGE|Upload only the reviewed plan and driver, NOT POTCAR or source geometry'
+          ssh "${opts[@]}" "$remote" "mkdir -p \"\$HOME/$stage\""
+          tar -cf - \
+            calculations/Ca_M1_OH_H2O_reopt_20261015/plan.json \
+            calculations/Ca_M1_OH_H2O_reopt_20261015/reopt.py \
+            | ssh "${opts[@]}" "$remote" "cd \"\$HOME/$stage\" && tar -xf -"
+          echo 'STAGE|Read-only P0 parent checks'
+          ssh "${opts[@]}" "$remote" "cd \"\$HOME/$stage\" && python3 calculations/Ca_M1_OH_H2O_reopt_20261015/reopt.py --precheck" | tee ca_m1_parent_check.txt
+          echo 'STAGE|Submit one Relax->Static task only'
+          ssh "${opts[@]}" "$remote" "cd \"\$HOME/$stage\" && python3 calculations/Ca_M1_OH_H2O_reopt_20261015/reopt.py --submit" | tee ca_m1_reopt_submission.txt
+          echo 'STAGE|Verify actual Slurm job ID and current state'
+          ssh "${opts[@]}" "$remote" 'python3 "$HOME/Ca_M1_OH_H2O_reopt_20261015/reopt.py" --status' | tee ca_m1_reopt_status.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: CaM1_OH_H2O_reopt_submission_20261015
+          path: |
+            ca_m1_parent_check.txt
+            ca_m1_reopt_submission.txt
+            ca_m1_reopt_status.txt
+          retention-days: 14
