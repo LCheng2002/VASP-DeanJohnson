@@ -60,8 +60,8 @@ def lib():
  need(names==['L_vMg_near','L_vMg_far','L_vLa','L_MgH2_vMg','L_transfer'],
       'Original La child roster changed')
  return module
-def parent_valid(name,runner):
- d=SOURCE/name
+def parent_valid(name,runner,root=SOURCE):
+ d=root/name
  need((d/'VERIFIED_FINISHED').is_file(),'Parent or finished child missing validated marker: '+name)
  for stage,limit in (('01_relax',.015),('02_static',.02)):
   p=d/stage/'validation.json'
@@ -215,7 +215,7 @@ def submit():
 def checked_stage(name):
  need((STAGE/name/'VERIFIED_FINISHED').exists(),'Parent resumed L_vLa not verified')
  runner=lib();runner.ROOT=STAGE
- s,meta=parent_valid(name,runner)
+ s,meta=parent_valid(name,runner,root=STAGE)
  return runner,s,meta
 def run_simple(name):
  need(os.environ.get('SLURM_NTASKS')=='64','Job does not have 64 MPI tasks')
