@@ -1,0 +1,91 @@
+AUDIT_AT 2026-10-15T12:10:30.178207+08:00 HOST sylogin4.pi.sjtu.edu.cn ROOT /dssg/home/acct-fph112sjtu/deanfilan/H2_dissociation_compare_20261013
+ROOT_EXISTS True
+COMMAND sacct -X -P -n -j 63614945,63614946,63614947,63614948,63614949 -o JobID,JobName%30,State,ExitCode,Elapsed,Start,End
+EXIT 0
+63614946|h2neb_H2|COMPLETED|0:0|00:13:35|2026-10-13T11:42:54|2026-10-13T11:56:29
+63614948|h2neb_Mg|TIMEOUT|0:0|1-00:00:12|2026-10-14T11:19:39|2026-10-15T11:19:51
+63614949|h2neb_Mg2Ni|TIMEOUT|0:0|1-00:00:21|2026-10-14T11:19:59|2026-10-15T11:20:20
+63614945_0|h2neb_refs|COMPLETED|0:0|00:18:24|2026-10-13T23:34:12|2026-10-13T23:52:36
+63614945_1|h2neb_refs|COMPLETED|0:0|02:57:18|2026-10-13T23:40:56|2026-10-14T02:38:14
+63614947_0|h2neb_endpoints|COMPLETED|0:0|02:56:21|2026-10-14T06:30:32|2026-10-14T09:26:53
+63614947_1|h2neb_endpoints|COMPLETED|0:0|03:54:20|2026-10-14T06:42:16|2026-10-14T10:36:36
+
+COMMAND squeue -r -h -j 63614945,63614946,63614947,63614948,63614949 -o %i|%j|%T|%M|%R
+EXIT 0
+
+JSON submission.json {"jobs": {"refs": "63614945", "H2": "63614946", "endpoints": "63614947", "Mg": "63614948", "Mg2Ni": "63614949"}, "all_submitted": true, "submitted_at": "2026-10-13 11:41:36 CST", "path_count": 2, "moving_images_each": 5, "neb_mpi_ranks": 60, "no_original_jobs_modified": true}
+JSON manifest.json {"backend": {"module": "vasp/6.3.2-vtst-intel-2021.4.0", "path": "/dssg/opt/icelake/linux-centos8-icelake/oneapi-2021.4.0/vasp/vasp.6.3.2-vtst/bin/vasp_std", "sha256": "454da6713051a916308a37843d23fb41cd31161285dcf09606a830a9f470a106", "feature_markers": {"LCLIMB": true, "ICHAIN": true, "IOPT": true}}, "scope": "2 paths;2 clean slabs+H2;4 endpoints;5 moving images per path;NEB then CI-NEB"}
+FLAG Mg .neb_started 4096
+FLAG Mg .endpoints_started 4096
+FLAG Mg ENDPOINTS_VERIFIED 0
+FLAG Mg clean/VERIFIED_FINISHED 0
+FLAG Mg molecule/VERIFIED_FINISHED 0
+FLAG Mg product/VERIFIED_FINISHED 0
+DIR Mg clean/relax
+FILES {'POSCAR': 1599, 'CONTCAR': 3239, 'OSZICAR': 14480, 'OUTCAR': 971400, 'WAVECAR': 387190816, 'validation.json': 492}
+DIR Mg clean/static
+FILES {'POSCAR': 1606, 'CONTCAR': 3239, 'OSZICAR': 2616, 'OUTCAR': 145236, 'WAVECAR': 387190816, 'validation.json': 491}
+DIR Mg molecule/relax
+FILES {'POSCAR': 1721, 'CONTCAR': 3494, 'OSZICAR': 98760, 'OUTCAR': 6653013, 'WAVECAR': 387190816, 'validation.json': 1421}
+DIR Mg molecule/static
+FILES {'POSCAR': 1721, 'CONTCAR': 3494, 'OSZICAR': 2709, 'OUTCAR': 152804, 'WAVECAR': 387190816, 'validation.json': 1420}
+DIR Mg product/relax
+FILES {'POSCAR': 1721, 'CONTCAR': 3494, 'OSZICAR': 61435, 'OUTCAR': 3431867, 'WAVECAR': 387190816, 'validation.json': 1429}
+DIR Mg product/static
+FILES {'POSCAR': 1728, 'CONTCAR': 3494, 'OSZICAR': 2895, 'OUTCAR': 157852, 'WAVECAR': 387190816, 'validation.json': 1425}
+DIR Mg neb_coarse
+IMAGE Mg neb_coarse 1 {'POSCAR': 1736, 'CONTCAR': 3494, 'OSZICAR': 150072, 'OUTCAR': 14065919, 'WAVECAR': 0}
+IMAGE Mg neb_coarse 2 {'POSCAR': 1733, 'CONTCAR': 3494, 'OSZICAR': 194619, 'OUTCAR': 15179439, 'WAVECAR': 0}
+IMAGE Mg neb_coarse 3 {'POSCAR': 1733, 'CONTCAR': 3494, 'OSZICAR': 262788, 'OUTCAR': 16886918, 'WAVECAR': 0}
+IMAGE Mg neb_coarse 4 {'POSCAR': 1733, 'CONTCAR': 3494, 'OSZICAR': 342223, 'OUTCAR': 18859793, 'WAVECAR': 0}
+IMAGE Mg neb_coarse 5 {'POSCAR': 1728, 'CONTCAR': 3494, 'OSZICAR': 349105, 'OUTCAR': 19029570, 'WAVECAR': 0}
+FLAG Mg2Ni_region .neb_started 4096
+FLAG Mg2Ni_region .endpoints_started 4096
+FLAG Mg2Ni_region ENDPOINTS_VERIFIED 0
+FLAG Mg2Ni_region clean/VERIFIED_FINISHED 0
+FLAG Mg2Ni_region molecule/VERIFIED_FINISHED 0
+FLAG Mg2Ni_region product/VERIFIED_FINISHED 0
+DIR Mg2Ni_region clean/relax
+FILES {'POSCAR': 2655, 'CONTCAR': 5446, 'OSZICAR': 56018, 'OUTCAR': 5081415, 'WAVECAR': 765707296, 'validation.json': 510}
+DIR Mg2Ni_region clean/static
+FILES {'POSCAR': 2656, 'CONTCAR': 5446, 'OSZICAR': 4755, 'OUTCAR': 254575, 'WAVECAR': 765707296, 'validation.json': 509}
+DIR Mg2Ni_region molecule/relax
+FILES {'POSCAR': 2775, 'CONTCAR': 5701, 'OSZICAR': 16875, 'OUTCAR': 1868475, 'WAVECAR': 765707296, 'validation.json': 1439}
+DIR Mg2Ni_region molecule/static
+FILES {'POSCAR': 2776, 'CONTCAR': 5701, 'OSZICAR': 4755, 'OUTCAR': 259711, 'WAVECAR': 765707296, 'validation.json': 1438}
+DIR Mg2Ni_region product/relax
+FILES {'POSCAR': 2776, 'CONTCAR': 5701, 'OSZICAR': 57372, 'OUTCAR': 4719557, 'WAVECAR': 765707296, 'validation.json': 1441}
+DIR Mg2Ni_region product/static
+FILES {'POSCAR': 2776, 'CONTCAR': 5701, 'OSZICAR': 4755, 'OUTCAR': 259790, 'WAVECAR': 765707296, 'validation.json': 1439}
+DIR Mg2Ni_region neb_coarse
+IMAGE Mg2Ni_region neb_coarse 1 {'POSCAR': 2784, 'CONTCAR': 5701, 'OSZICAR': 72350, 'OUTCAR': 7467293, 'WAVECAR': 0}
+IMAGE Mg2Ni_region neb_coarse 2 {'POSCAR': 2784, 'CONTCAR': 5701, 'OSZICAR': 86579, 'OUTCAR': 7828771, 'WAVECAR': 0}
+IMAGE Mg2Ni_region neb_coarse 3 {'POSCAR': 2785, 'CONTCAR': 5701, 'OSZICAR': 89010, 'OUTCAR': 7819782, 'WAVECAR': 0}
+IMAGE Mg2Ni_region neb_coarse 4 {'POSCAR': 2785, 'CONTCAR': 5701, 'OSZICAR': 111237, 'OUTCAR': 8387527, 'WAVECAR': 0}
+IMAGE Mg2Ni_region neb_coarse 5 {'POSCAR': 2785, 'CONTCAR': 5701, 'OSZICAR': 101193, 'OUTCAR': 8129089, 'WAVECAR': 0}
+FLAG H2 clean/VERIFIED_FINISHED 0
+DIR H2 clean/relax
+FILES {'POSCAR': 321, 'CONTCAR': 555, 'OSZICAR': 2709, 'OUTCAR': 80798, 'WAVECAR': 34480640, 'validation.json': 575}
+DIR H2 clean/static
+FILES {'POSCAR': 322, 'CONTCAR': 555, 'OSZICAR': 2709, 'OUTCAR': 80293, 'WAVECAR': 34480640, 'validation.json': 576}
+LOG h2neb_Mg2Ni-63614949_4294967294.err SIZE 116 TAIL [2026-10-15T11:20:20.007] error: *** JOB 63614949 ON node883 CANCELLED AT 2026-10-15T11:20:20 DUE TO TIME LIMIT ***
+
+LOG h2neb_Mg-63614948_4294967294.err SIZE 116 TAIL [2026-10-15T11:19:51.012] error: *** JOB 63614948 ON node729 CANCELLED AT 2026-10-15T11:19:51 DUE TO TIME LIMIT ***
+
+LOG h2neb_endpoints-63614947_1.out SIZE 1215 TAIL STAGE|Mg2Ni_region|Mg2Ni_region/molecule|relax|{"F_eV": -89.65395885, "E0_eV": -89.64008776, "last_ediff": true, "normal_end": true, "ionic_converged": true, "ionic_steps": 16, "vtst_force_max": 0.008953, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.008953059421225798, "verified": true}
+STAGE|Mg2Ni_region|Mg2Ni_region/molecule|static|{"F_eV": -89.65395903, "E0_eV": -89.64008785, "last_ediff": true, "normal_end": true, "ionic_converged": false, "ionic_steps": 1, "vtst_force_max": 0.008976, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.008976805278048533, "verified": true}
+STAGE|Mg2Ni_region|Mg2Ni_region/product|relax|{"F_eV": -90.55592893, "E0_eV": -90.54193016, "last_ediff": true, "normal_end": true, "ionic_converged": true, "ionic_steps": 37, "vtst_force_max": 0.009633, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.009632755005708388, "verified": true}
+STAGE|Mg2Ni_region|Mg2Ni_region/product|static|{"F_eV": -90.55592913, "E0_eV": -90.54193086, "last_ediff": true, "normal_end": true, "ionic_converged": false, "ionic_steps": 1, "vtst_force_max": 0.009479, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.00947871789853459, "verified": true}
+
+LOG h2neb_endpoints-63614947_0.out SIZE 1135 TAIL STAGE|Mg|Mg/molecule|relax|{"F_eV": -37.89789038, "E0_eV": -37.89013332, "last_ediff": true, "normal_end": true, "ionic_converged": true, "ionic_steps": 85, "vtst_force_max": 0.008348, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.008348493576687951, "verified": true}
+STAGE|Mg|Mg/molecule|static|{"F_eV": -37.89789038, "E0_eV": -37.89013331, "last_ediff": true, "normal_end": true, "ionic_converged": false, "ionic_steps": 1, "vtst_force_max": 0.008343, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.00834260738618329, "verified": true}
+STAGE|Mg|Mg/product|relax|{"F_eV": -37.65987746, "E0_eV": -37.65101695, "last_ediff": true, "normal_end": true, "ionic_converged": true, "ionic_steps": 38, "vtst_force_max": 0.005326, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.005326277499342294, "verified": true}
+STAGE|Mg|Mg/product|static|{"F_eV": -37.65987748, "E0_eV": -37.65101689, "last_ediff": true, "normal_end": true, "ionic_converged": false, "ionic_steps": 1, "vtst_force_max": 0.005323, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.005322688230584241, "verified": true}
+
+LOG h2neb_refs-63614945_1.out SIZE 603 TAIL STAGE|Mg2Ni_region|Mg2Ni_region/clean|relax|{"F_eV": -82.86570837, "E0_eV": -82.85186165, "last_ediff": true, "normal_end": true, "ionic_converged": true, "ionic_steps": 42, "vtst_force_max": 0.008395, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.008395233290385681, "verified": true}
+STAGE|Mg2Ni_region|Mg2Ni_region/clean|static|{"F_eV": -82.86570837, "E0_eV": -82.85186171, "last_ediff": true, "normal_end": true, "ionic_converged": false, "ionic_steps": 1, "vtst_force_max": 0.008414, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.008413783572210542, "verified": true}
+
+LOG h2neb_refs-63614945_0.out SIZE 561 TAIL STAGE|Mg|Mg/clean|relax|{"F_eV": -31.1169424, "E0_eV": -31.10922787, "last_ediff": true, "normal_end": true, "ionic_converged": true, "ionic_steps": 12, "vtst_force_max": 0.006142, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.006142000081406708, "verified": true}
+STAGE|Mg|Mg/clean|static|{"F_eV": -31.11694251, "E0_eV": -31.1092281, "last_ediff": true, "normal_end": true, "ionic_converged": false, "ionic_steps": 1, "vtst_force_max": 0.006148, "lclimb": null, "neb_marker": false, "max_free_DFT_force": 0.006148000081327261, "verified": true}
+
+AUDIT_DONE
