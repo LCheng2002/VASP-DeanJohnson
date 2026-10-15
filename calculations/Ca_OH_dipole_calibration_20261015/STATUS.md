@@ -51,3 +51,18 @@ SUBMITTED|CaOH_P0|63686231|array=0-3
 ```bash
 python3 ~/Ca_OH_dipole_calibration_20261015/calibrate.py --status
 ```
+
+## Latest verification — 2026-10-15 10:07 CST
+
+Previous Slurm array **63686231** has now completed all four model tasks with **COMPLETED (0:0)**. Its four model directories each contain the completion marker `CALIBRATION_COMPLETE`. This was independently checked in [GitHub Actions run 38669235325](https://github.com/LCheng2002/VASP-DeanJohnson/actions/runs/38669235325).
+
+| Model | Old task | Slurm |
+|---|---|---|
+| M0_OH | 63686231_0 | COMPLETED (0:0), 00:16:17 |
+| M1_OH | 63686231_1 | COMPLETED (0:0), 00:19:08 |
+| M0_OH_H2O | 63686231_2 | COMPLETED (0:0), 00:18:29 |
+| M1_OH_H2O | 63686231_3 | COMPLETED (0:0), 00:20:01 |
+
+A later GitHub workflow [38668900795](https://github.com/LCheng2002/VASP-DeanJohnson/actions/runs/38668900795) inadvertently submitted a second array **63693436** for the same four scientific comparisons, in separate directory `~/Ca_OH_P0_calibration_v1/`. Since all four original calibrations were already completed, the later redundant array was cancelled without modifying original outputs. `sacct` confirmed **63693436_0–_3 all CANCELLED** after about 2 minutes 49 seconds; `squeue` was empty for the duplicate array.
+
+**Use 63686231 as the canonical completed P0 calculation. Do not reuse/restart the redundant 63693436 array.** Actual corrected energy values and geometry force gates should be read from the four original `validation.json` files, rather than inferred from Slurm COMPLETED alone; no P1/P2 continuation was authorized or submitted in this check. The cancelled old `CaFresh` 23-job batch remains cancelled.
